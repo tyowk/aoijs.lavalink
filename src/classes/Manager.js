@@ -1,31 +1,48 @@
 const { Shoukaku, Connectors } = require('shoukaku');
 const { Queue } = require('./Queue.js');
 const { Functions } = require('./Functions.js');
+const { Playlist } = require('./Playlist.js');
 const { Events } = require('./Events.js');
 const { LoadCommands } = require('aoi.js');
-const { Group } = require('@aoijs/aoi.structures');
+const { Utils, Commands, AoiError } = require('./Utils.js');
 const { join } = require('node:path');
 
+/**
+ * Manager class to handle audio playback and events using Shoukaku.
+ *
+ * @class Manager
+ * @extends Shoukaku
+ * @param {Client} client - The discord client instance.
+ * @param {Object} [options={}] - Configuration options for the manager.
+ * @param {Array} options.nodes - The nodes to connect to for audio playback.
+ * @param {boolean} [options.debug=false] - Flag to enable debug logging.
+ * @throws {AoiError} - Throws an error if the options is not provided.
+ */
 exports.Manager = class Manager extends Shoukaku {
     constructor(client, options = {}) {
-        if (!client) throw new Error('Client instance is not defined.');
-        if (!options.nodes) throw new Error('No nodes provided to connect on.');
+        if (!client) throw new AoiError('Client instance is not defined.', 'AOI_CLIENT_INVALID');
+        if (!options.nodes || !options.nodes.length)
+            throw new AoiError('No nodes provided to connect on.', 'AOI_NODES_INVALID');
+
         options.nodes = Array.isArray(options.nodes) ? options.nodes : [options.nodes];
         options.nodes = options.nodes.map(({ host, port, url, ...nodes }) => ({
             ...nodes,
-            url: (url && !host && !port) ? url : `${host}:${port}`
+            url: url && !host && !port ? url : `${host}:${port}`,
         }));
+
         options.maxQueueSize = options.maxQueueSize || 100;
         options.maxPlaylistSize = options.maxPlaylistSize || 100;
         options.debug = options.debug || false;
-        options.searchEngine = options.searchEngine?.toLowerCase()
-            .replace('youtube', 'ytsearch')
-            .replace('spotify', 'spsearch')
-            .replace('soundcloud', 'scsearch')
-            .replace('deezer', 'dzsearch')
-            .replace('applemusic', 'amsearch')
-            .replace('youtubemusic', 'ytmsearch') || 'ytsearch';
-        
+        options.searchEngine =
+            options.searchEngine
+                ?.toLowerCase()
+                .replace('youtube', 'ytsearch')
+                .replace('spotify', 'spsearch')
+                .replace('soundcloud', 'scsearch')
+                .replace('deezer', 'dzsearch')
+                .replace('applemusic', 'amsearch')
+                .replace('youtubemusic', 'ytmsearch') || 'ytsearch';
+
         super(new Connectors.DiscordJS(client), options.nodes, {
             moveOnDisconnect: options.moveOnDisconnect || false,
             resume: options.resume || false,
@@ -37,33 +54,15 @@ exports.Manager = class Manager extends Shoukaku {
             userAgent: options.userAgent || 'aoijs.lavalink',
             voiceConnectionTimeout: options.voiceConnectionTimeout || 15,
             structures: options.structures || {},
-            nodeResolver: (nodes) => {
+            nodeResolver: nodes => {
                 return [...nodes.values()]
                     .filter(node => node.state === 2)
                     .sort((a, b) => a.penalties - b.penalties)
                     .shift();
             },
         });
-        
-        this.cmd = {
-            trackStart: new Group(),
-            trackEnd: new Group(),
-            queueStart: new Group(),
-            queueEnd: new Group(),
-            trackStuck: new Group(),
-            trackPaused: new Group(),
-            trackResumed: new Group(),
-            nodeConnect: new Group(),
-            nodeReconnect: new Group(),
-            nodeDisconnect: new Group(),
-            nodeError: new Group(),
-            nodeDestroy: new Group(),
-            nodeRaw: new Group(),
-            socketClosed: new Group(),
-            playerCreate: new Group(),
-            playerDestroy: new Group()
-        };
 
+        this.cmd = new Commands();
         this.client = client;
         this.client.shoukaku = this;
         this.client.queue = new Queue(this.client, options);
@@ -71,48 +70,97 @@ exports.Manager = class Manager extends Shoukaku {
         this.client.voiceEvent = this.voiceEvent.bind(this);
         this.client.music = {
             ...options,
-            utils: require('./Utils.js').Utils,
-            cmd: this.cmd
+            utils: new Utils(this),
+            cmd: this.cmd,
         };
-        
+
+        if (options.playlist && typeof options.playlist === 'object') {
+            this.playlist = new Playlist(this, options.playlist);
+        }
+
         new Functions(this.client, join(__dirname, '..', 'functions'), options.debug);
         new Events(this);
-        Object.keys(this.cmd).forEach((event) => this.#bindEvents(event));
+        Object.keys(this.cmd).forEach(event => this.#bindEvents(event));
     }
 
+    /**
+     * Binds player events to their respective handlers.
+     *
+     * @param {string} event - The name of the event to bind.
+     */
     #bindEvents(event) {
-        this.on(event, async (player, track, dispatcher) => {
+        this.on(event, async ({ player, track, dispatcher, ...nodeEvent }) => {
             const commands = this.cmd[event];
             if (!commands) return;
             for (const cmd of commands.values()) {
-                const guild = this.client.guilds.cache.get(player?.guildId);
-                let channel = this.client.channels.cache.get(cmd.channel) || this.client.channels.cache.get(dispatcher?.channelId);
+                let guild = this.client.guilds.cache.get(player?.guildId);
+                let channel =
+                    this.client.channels.cache.get(cmd.channel) ||
+                    this.client.channels.cache.get(dispatcher?.channelId);
                 if (!cmd.__compiled__) {
-                    if (cmd.channel?.startsWith("$")) {
-                        channel = this.client.channels.cache.get((await this.client.functionManager.interpreter(
-                            this.client, { guild, channel }, [], { code: cmd.channel, name: 'NameParser' },
-                            undefined, true, undefined, { player, track, dispatcher }
-                        ))?.code);
-                    };
+                    if (cmd.channel?.startsWith('$')) {
+                        channel = this.client.channels.cache.get(
+                            (
+                                await this.client.functionManager.interpreter(
+                                    this.client,
+                                    { guild, channel },
+                                    [],
+                                    { code: cmd.channel, name: 'NameParser' },
+                                    undefined,
+                                    true,
+                                    undefined,
+                                    {},
+                                )
+                            )?.code,
+                        );
+                    }
                     if (!channel) channel = this.client.channels.cache.get(dispatcher?.channelId);
+                    if (!guild && channel) guild = channel.guild;
                     await this.client.functionManager.interpreter(
-                        this.client, { guild, channel }, [], cmd,
-                        undefined, false, channel, { player, track, dispatcher }
+                        this.client,
+                        { guild, channel },
+                        [],
+                        cmd,
+                        undefined,
+                        false,
+                        channel,
+                        { player, track, dispatcher, nodeEvent },
                     );
                 } else {
-                    const client = this.client;
-                    await cmd.__compiled__({ client, channel, guild, player, track, dispatcher });
-                };
-            };
+                    await cmd.__compiled__({
+                        client: this.client,
+                        channel,
+                        guild,
+                        player,
+                        track,
+                        dispatcher,
+                        nodeEvent,
+                    });
+                }
+            }
         });
     }
 
+    /**
+     * Loads voice events from a specified directory.
+     *
+     * @param {string} dir - The directory to load commands from.
+     * @param {boolean} [debug=this.client.music.debug] - Flag to enable debug logging.
+     * @returns {Manager} - The current instance of the Manager.
+     */
     loadVoiceEvents(dir, debug = this.client.music.debug || false) {
         if (!this.client.loader) this.client.loader = new LoadCommands(this.client);
         this.client.loader.load(this.cmd, dir, debug);
         return this;
     }
 
+    /**
+     * Handles voice events by setting the command for the specified event.
+     *
+     * @param {string} name - The name of the event.
+     * @param {Object} [evt={}] - The event data.
+     * @returns {Manager} - The current instance of the Manager.
+     */
     voiceEvent(name, evt = {}) {
         if (!evt || !evt.code) return;
         const cmd = this.cmd[name];
@@ -120,14 +168,14 @@ exports.Manager = class Manager extends Shoukaku {
         cmd.set(cmd.size, evt);
         return this;
     }
-    
+
     trackStart(cmd) {
         this.voiceEvent('trackStart', cmd);
         return this;
     }
 
     trackEnd(cmd) {
-        this.voiceEvent('trackStart', cmd);
+        this.voiceEvent('trackEnd', cmd);
         return this;
     }
 
@@ -181,11 +229,6 @@ exports.Manager = class Manager extends Shoukaku {
         return this;
     }
 
-    nodeRaw(cmd) {
-        this.voiceEvent('nodeRaw', cmd);
-        return this;
-    }
-
     socketClosed(cmd) {
         this.voiceEvent('socketClosed', cmd);
         return this;
@@ -198,6 +241,21 @@ exports.Manager = class Manager extends Shoukaku {
 
     playerDestroy(cmd) {
         this.voiceEvent('playerDestroy', cmd);
+        return this;
+    }
+
+    playerException(cmd) {
+        this.voiceEvent('playerException', cmd);
+        return this;
+    }
+
+    playerUpdate(cmd) {
+        this.voiceEvent('playerUpdate', cmd);
+        return this;
+    }
+
+    nodeDebug(cmd) {
+        this.voiceEvent('nodeDebug', cmd);
         return this;
     }
 };

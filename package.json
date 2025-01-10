@@ -1,6 +1,6 @@
 {
     "name": "aoijs.lavalink",
-    "version": "4.0.0",
+    "version": "4.5.0",
     "description": "A package for integrating Lavalink with Aoi.js to enable music streaming in Discord bots.",
     "type": "commonjs",
     "main": "src/index.js",
@@ -15,31 +15,42 @@
         "bdfd",
         "aoi.music"
     ],
+    "scripts": {
+        "format": "npx prettier src --write",
+        "dev": "node test/index.js"
+    },
     "author": "Tyowk <tyowk@outlook.com>",
     "license": "MIT",
     "dependencies": {
+        "@aoijs/aoi.structures": "^1.0.0",
         "chalk": "^4.1.2",
         "shoukaku": "^4.1.1",
-        "@aoijs/aoi.structures": "^1.0.0"
+        "cheerio": "^1.0.0",
+        "encoding": "^0.1.13",
+        "node-fetch": "^2.6.1"
     },
     "devDependencies": {
-        "aoi.js": "^6.9.0"
+        "aoi.js": "^6.9.0",
+        "prettier": "^3.4.2"
     },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/tyowk/aoijs.lavalink.git"
     },
-    "funding": [{
-        "type": "individual",
-        "url": "https://trakteer.id/tyowk"
-    },{
-        "type": "patreon",
-        "url": "https://www.patreon.com/tyowk_official"
-    }],
+    "funding": [
+        {
+            "type": "individual",
+            "url": "https://trakteer.id/tyowk"
+        },
+        {
+            "type": "patreon",
+            "url": "https://www.patreon.com/tyowk_dev"
+        }
+    ],
     "bugs": {
         "url": "https://github.com/tyowk/aoijs.lavalink/issues"
     },
-    "homepage": "https://github.com/tyowk/aoijs.lavalink",
+    "homepage": "https://lavalink.noujs.my.id",
     "files": [
         "src",
         "README.md",

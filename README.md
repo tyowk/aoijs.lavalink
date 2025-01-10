@@ -1,6 +1,13 @@
+<img src="https://lavalink.noujs.my.id/_astro/lavalink.YmUXcbpu_2fJgCa.webp" width="150">
+
 # aoijs.lavalink
 
 A package for integrating Lavalink with Aoi.js to enable music streaming in Discord bots.
+
+- **[ Documentation ](https://lavalink.noujs.my.id)**
+- **[ Support Server ](https://discord.gg/HMUfMXDQsV)**
+- **[ NPM ](https://npmjs.org/package/aoijs.lavalink)**
+- **[ GitHub ](https://github.com/tyowk/aoijs.lavalink)**
 
 ---
 
@@ -9,6 +16,7 @@ A package for integrating Lavalink with Aoi.js to enable music streaming in Disc
 ```bash
 npm install aoijs.lavalink
 ```
+
 ---
 
 ## Setup
@@ -23,88 +31,20 @@ const client = new AoiClient({ ... });
 
 const voice = new Manager(client, {
     nodes: [{
-        name: 'my lavalink node',              // A custom name for the Lavalink node (can be any string).
-        host: 'yourdomain.com',                // URL to your Lavalink node. Replace with your actual Lavalink server URL.
-        port: 0000,                            // Your lavalink server port.
-        auth: 'youshallnotpass',               // Authentication password for the Lavalink node.
-        secure: false                          // Set to true if your Lavalink server uses SSL/TLS (HTTPS).
+        name: 'my lavalink node',  // A custom name for the Lavalink node (can be any string).
+        host: 'yourdomain.com',    // URL to your Lavalink node. Replace with your actual Lavalink server URL.
+        port: 0000,                // Your lavalink server port.
+        auth: 'youshallnotpass',   // Authentication password for the Lavalink node.
+        secure: false              // Set to true if your Lavalink server uses SSL/TLS (HTTPS).
     }],
-    maxQueueSize: 100,                         // Maximum number of tracks that can be queued for playback.                       # default is 100
-    maxPlaylistSize: 100,                      // Maximum number of tracks that can be in a playlist.                             # default is 100
-    searchEngine: 'ytsearch',                  // Default search engine. You can set this to 'ytsearch' or 'scsearch' or others.  # default is ytsearch
-    debug: false                               // Whether to enable debug logs for the music client. default is false.            # default is false
+    maxQueueSize: 100,             // Maximum number of tracks that can be queued for playback. (default is 100)
+    maxPlaylistSize: 100,          // Maximum number of tracks that can be in a playlist. (default is 100)
+    searchEngine: 'ytsearch',      // Default search engine. You can set this to 'ytsearch' or 'scsearch' or others. (default is ytsearch)
+    debug: false                   // Whether to enable debug logs for the music client. default is false. (default is false)
 });
 ```
 
 see [here](https://guide.shoukaku.shipgirl.moe/guides/2-options/) for more client options.
-
----
-
-<details>
-<summary>
-<h2>Functions</h2>
-</summary>
-
-
-These are the **core music functions** available for the bot. 
-
-```bash
-$autoPlay
-$clearQueue
-$connect
-$currentTrackDuration
-$destroyPlayer
-$disconnect
-$getFilter
-$hasPlayer
-$isCurrentExist
-$isPreviousExist
-$isSeekable
-$isStream
-$joinVc
-$leaveVc
-$loadTrackType
-$loopMode
-$loopStatus
-$pauseTrack
-$playTrack
-$playerStatus
-$previousTrack
-$queue
-$queueLength
-$removeSong
-$replayTrack
-$resetFilter
-$resumeTrack
-$search
-$seek
-$setFilter
-$shuffleQueue
-$skipTo
-$skipTrack
-$songInfo
-$stopPlayer
-$stopTrack
-$unShuffleQueue
-$volume 
-```
-
-**Other functions:**
-
-```bash
-$deleteNowPlaying
-$errorReason
-$lavalinkInfo
-$maxPlaylistSize
-$maxQueueSize
-$nodeName
-$playerChannelId
-$playerPing
-$prettyBytes
-$searchEngine
-$setNowPlaying
-```
-</details>
 
 ---
 
@@ -120,30 +60,6 @@ voice.<eventName>({          // The event type, e.g., when a track starts playin
     code: `$songInfo[title]` // The action to take when the event is triggered. Here it will return the title of the song.
 });
 ```
-<details>
-<summary>
-<h3>Available Events</h3>
-</summary>
-
-```javascript
-+ trackStart
-+ trackEnd
-+ queueStart
-+ queueEnd
-+ trackStuck
-+ trackPaused
-+ trackResumed
-+ nodeConnect
-+ nodeReconnect
-+ nodeDisconnect
-+ nodeError
-+ nodeDestroy
-+ nodeRaw
-+ socketClosed
-+ playerCreate
-+ playerDestroy 
-```
-</details>
 
 ---
 
@@ -159,12 +75,20 @@ voice.loadVoiceEvents('./voice/', false);
 **Example Event File** (in `/voice/trackStart.js`):
 
 ```js
-module.exports = [{
-    channel: '$channelId',    // The ID of the channel where the event will trigger (can be dynamic or static).
-    type: 'trackStart',       // The event type, e.g., when a track starts playing ('trackStart').
-    code: `$songInfo[title]`  // The action to take when the event is triggered. Here it will return the title of the song.
-}]
+module.exports = [
+    {
+        channel: '$channelId', // The ID of the channel where the event will trigger (can be dynamic or static).
+        type: 'trackStart', // The event type, e.g., when a track starts playing ('trackStart').
+        code: `$songInfo[title]`, // The action to take when the event is triggered. Here it will return the title of the song.
+    },
+];
 ```
+
+---
+
+## Notice
+
+- **Reading Functions**: Currently aoi.js reads `$` functions from bottom to top.
 
 ---
 
@@ -175,9 +99,10 @@ module.exports = [{
 <br>
 <br>
 <br>
-<img src="https://aoi.js.org/_astro/icon_new.C4KTn9Lv_Z232q1W.webp" width="100">
+<img src="https://lavalink.noujs.my.id/_astro/lavabird.DpnUPx13_ZBEKd4.webp" width="100">
 <br>
-<a href="https://aoi.js.org/invite">
-<img src="https://img.shields.io/discord/773352845738115102?logo=discord&logoColor=white&color=3182b0&style=for-the-badge">
-</a>
+
+**[ Documentation ](https://aoi.js.org/)** <br>
+**[ Support Server ](https://discord.gg/HMUfMXDQsV)**
+
 </div>
