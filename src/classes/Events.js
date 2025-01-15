@@ -52,9 +52,9 @@ exports.Events = class Events {
         if (!dispatcher || !client) throw new AoiError('Dispatcher is not defined.');
 
         if (dispatcher.previous) dispatcher.history.push(dispatcher.previous);
-        if (dispatcher.loop === 'song') dispatcher.queue.unshift(track);
-        else if (dispatcher.loop === 'queue') dispatcher.queue.push(track);
-        else dispatcher.previous = track;
+        if (dispatcher.loop === 'song' && track) dispatcher.queue.unshift(track);
+        else if (dispatcher.loop === 'queue' && track) dispatcher.queue.push(track);
+        else track ? dispatcher.previous = track : null;
 
         if (dispatcher.autoplay) await dispatcher.Autoplay(track);
         if (!dispatcher.queue.length) client.emit('queueEnd', { player, track, dispatcher });
