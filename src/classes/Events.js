@@ -49,20 +49,18 @@ exports.Events = class Events {
      * @throws {AoiError} - Throws an error if the method failed to execute.
      */
     async trackEnd(player, track, dispatcher, client = dispatcher?.client?.shoukaku) {
-        if (!dispatcher) throw new AoiError('Dispatcher is not defined.');
-
-        if (dispatcher.loop === 'song') dispatcher.queue.unshift(track);
-        else if (dispatcher.loop === 'queue') dispatcher.queue.push(track);
-
-        if (dispatcher.autoplay) await dispatcher.Autoplay(track);
-
-        if (!dispatcher.queue.length) client.emit('queueEnd', { player, track, dispatcher });
+        if (!dispatcher || !client) throw new AoiError('Dispatcher is not defined.');
 
         if (dispatcher.previous) dispatcher.history.push(dispatcher.previous);
+        if (dispatcher.loop === 'song') dispatcher.queue.unshift(track);
+        else if (dispatcher.loop === 'queue') dispatcher.queue.push(track);
+        else dispatcher.previous = track;
 
-        dispatcher.previous = dispatcher.current;
+        if (dispatcher.autoplay) await dispatcher.Autoplay(track);
+        if (!dispatcher.queue.length) client.emit('queueEnd', { player, track, dispatcher });
         dispatcher.current = null;
-        if (dispatcher.history.length >= 101) {
+        
+        while (dispatcher.history.length > 100) {
             dispatcher.history.shift();
         }
 
