@@ -11,7 +11,7 @@ module.exports = async d => {
     const player = d.client.queue.get(d.guild.id);
     if (!player) return d.client.returnCode(d, data);
 
-    const channel = await d.util.getChannel(d, channelId);
+    const channel = d.client.channels.cache.get(d, channelId);
     if (channel && channel?.id === channelId) {
         player.channelId = channel.id;
     } else {
