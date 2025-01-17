@@ -1,6 +1,4 @@
 const { Group } = require('@aoijs/aoi.structures');
-const { load } = require('cheerio');
-const fetch = require('node-fetch');
 
 /**
  * Custom Error class
@@ -15,6 +13,9 @@ class AoiError extends Error {
         this.name = this.constructor.name;
         this.code = code;
         this.message = message;
+        this.package = 'aoijs.lavalink';
+        this.support = 'https://discord.gg/hyQYXcVnmZ';
+        this.time = new Date().toISOString();
         Error.captureStackTrace(this, this.constructor);
     }
 }
@@ -25,21 +26,16 @@ exports.AoiError = AoiError;
  * Utils class providing utility functions for time formatting and manipulation.
  *
  * @class Utils
- * @params {Client} client - The discord client instance.
  */
-exports.Utils = class Utils {
-    constructor(manager) {
-        this.client = manager?.client;
-        this.manager = manager;
-    }
-
+class Utils {
     /**
      * Formats a duration in milliseconds into a human-readable string.
      *
+     * @static
      * @param {number} ms - The duration in milliseconds.
      * @returns {string} - The formatted time string (e.g., "1h 30m 15s").
      */
-    formatTime(ms) {
+    static formatTime(ms) {
         const minute = 60 * 1000;
         const hour = 60 * minute;
         const day = 24 * hour;
@@ -57,11 +53,12 @@ exports.Utils = class Utils {
     /**
      * Splits an array into chunks of a specified size.
      *
+     * @static
      * @param {Array} array - The array to be chunked.
      * @param {number} size - The size of each chunk.
      * @returns {Array[]} - An array of chunked arrays.
      */
-    chunk(array, size) {
+    static chunk(array, size) {
         const chunked = [];
         let index = 0;
         while (index < array.length) {
@@ -74,11 +71,12 @@ exports.Utils = class Utils {
     /**
      * Splits an text into chunks of a specified size.
      *
+     * @static
      * @param {string} text - The text to be chunked.
      * @param {number} size - The size of each chunk.
      * @returns {Array[]} - An array of chunked text.
      */
-    textChunk(text, maxLength = 1024) {
+    static textChunk(text, maxLength = 1024) {
         maxLength = Number(maxLength);
         if (!text || isNaN(maxLength)) return null;
         const chunks = [];
@@ -104,10 +102,11 @@ exports.Utils = class Utils {
     /**
      * Parses a time string into milliseconds.
      *
+     * @static
      * @param {string} string - The time string to parse (e.g., "1h 30m 15s").
      * @returns {number} - The total time in milliseconds.
      */
-    parseTime(string) {
+    static parseTime(string) {
         const time = string.match(/([0-9]+[d,h,m,s])/g);
         if (!time) return 0;
         let ms = 0;
@@ -121,7 +120,9 @@ exports.Utils = class Utils {
         }
         return ms;
     }
-};
+}
+
+exports.Utils = Utils;
 
 /**
  * Commands class to build aoi.js command handler.
@@ -161,12 +162,8 @@ exports.Commands = class Commands {
  * @throws {AoiError} - Throws an error if the track is not provided.
  */
 exports.Track = class Track {
-    constructor(track, user, client) {
+    constructor(track, user) {
         if (!track) throw new AoiError('Track not provided!', 'AOI_TRACK_INVALID');
-
-        if (user && user.displayAvatarURL) user.avatar = user.displayAvatarURL();
-
-        if (user && user.bannerURL) user.banner = user.bannerURL();
 
         (this.encoded = track.encoded),
             (this.info = {
@@ -174,11 +171,19 @@ exports.Track = class Track {
                 artist: track.info.author,
                 thumbnail: track.info.artworkUrl,
                 url: track.info.uri,
-                duration: client.music.utils.formatTime(track.info.length) || 0,
+                duration: Utils.formatTime(track.info.length) || '0s',
                 durationMs: track.info.length,
-                requester: { ...user },
-                userdata: { ...track.userData },
-                plugininfo: { ...track.pluginInfo },
+                requester: {
+                    ...user,
+                    avatar: typeof user?.displayAvatarURL === 'function' ? user?.displayAvatarURL() : user?.avatar,
+                    banner: typeof user?.bannerURL === 'function' ? user?.bannerURL() : user?.banner,
+                },
+                userdata: {
+                    ...track.userData,
+                },
+                plugininfo: {
+                    ...track.pluginInfo,
+                },
             });
     }
 };
@@ -189,17 +194,16 @@ exports.Track = class Track {
  * @class Lyrics
  */
 exports.Lyrics = class Lyrics {
-    constructor() {}
-
     /**
      * Search a lyrics of a given song.
      *
+     * @static
      * @async
      * @param {string} query - The song title.
      * @returns {Object} - Return the lyrics and other information.
      * @throws {AoiError} - Throws an error if the song is not provided.
      */
-    async search(query) {
+    static async search(query) {
         if (!query) throw new AoiError('Song title not provided!', 'AOI_TITLE_INVALID');
 
         query = query
@@ -211,32 +215,21 @@ exports.Lyrics = class Lyrics {
             .replace(/  +/g, ' ')
             .trim();
 
-        const html = await fetch(
-            `https://www.google.com/search?q=${encodeURIComponent(query)}+lyrics&ie=UTF-8&tob=true`,
-        ).then(x => x.textConverted());
+        let response = await fetch(
+            `https://lyrics.lewdhutao.my.eu.org/musixmatch/lyrics?title=${encodeURIComponent(query)}`,
+        );
 
-        const $ = load(html);
-
-        const lyrics = $('div[class="hwc"]')
-            .find('div[class="BNeawe tAd8D AP7Wnd"]')
-            .map((i, value) => $(value))
-            .get();
-
-        const title = $('span[class="BNeawe tAd8D AP7Wnd"]')?.text();
-        const artist = $('span[class="BNeawe s3v9rd AP7Wnd"]')
-            .map((i, value) => $(value))
-            .get();
-
-        const source = $('span[class="uEec3 AP7Wnd"]')?.text();
-
-        if (!lyrics?.[0]) return;
+        if (!response.ok) return {};
+        response = await response.json();
 
         return {
             query,
-            title,
-            artist: artist[1]?.text(),
-            lyrics: lyrics[0]?.text(),
-            source,
+            title: response.track_name,
+            artist: response.artist_name,
+            thumbnail: response.artwork_url,
+            source: response.search_engine,
+            id: response.track_id,
+            lyrics: response.lyrics,
         };
     }
 };

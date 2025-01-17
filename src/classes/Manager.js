@@ -70,7 +70,7 @@ exports.Manager = class Manager extends Shoukaku {
         this.client.voiceEvent = this.voiceEvent.bind(this);
         this.client.music = {
             ...options,
-            utils: new Utils(this),
+            utils: Utils,
             cmd: this.cmd,
         };
 
@@ -92,18 +92,23 @@ exports.Manager = class Manager extends Shoukaku {
         this.on(event, async ({ player, track, dispatcher, ...nodeEvent }) => {
             const commands = this.cmd[event];
             if (!commands) return;
+
             for (const cmd of commands.values()) {
+                if (!cmd) continue;
                 let guild = this.client.guilds.cache.get(player?.guildId);
+                const member = guild?.members?.cache?.get(track?.info?.requester?.id);
+                const author = member?.user || this.client.users.cache.get(track?.info?.requester?.id);
                 let channel =
-                    this.client.channels.cache.get(cmd.channel) ||
+                    this.client.channels.cache.get(cmd?.channel) ||
                     this.client.channels.cache.get(dispatcher?.channelId);
-                if (!cmd.__compiled__) {
-                    if (cmd.channel?.startsWith('$')) {
+
+                if (!cmd?.__compiled__ && typeof cmd?.__compiled__ !== 'function') {
+                    if (cmd.channel?.includes('$')) {
                         channel = this.client.channels.cache.get(
                             (
                                 await this.client.functionManager.interpreter(
                                     this.client,
-                                    { guild, channel },
+                                    { guild, channel, member, author },
                                     [],
                                     { code: cmd.channel, name: 'NameParser' },
                                     undefined,
@@ -114,11 +119,13 @@ exports.Manager = class Manager extends Shoukaku {
                             )?.code,
                         );
                     }
+
                     if (!channel) channel = this.client.channels.cache.get(dispatcher?.channelId);
                     if (!guild && channel) guild = channel.guild;
+
                     await this.client.functionManager.interpreter(
                         this.client,
-                        { guild, channel },
+                        { guild, channel, member, author },
                         [],
                         cmd,
                         undefined,
@@ -131,6 +138,8 @@ exports.Manager = class Manager extends Shoukaku {
                         client: this.client,
                         channel,
                         guild,
+                        member,
+                        author,
                         player,
                         track,
                         dispatcher,

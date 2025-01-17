@@ -25,24 +25,28 @@ exports.Functions = class Functions {
                 const filePath = join(basePath, file);
                 if (!statSync(filePath).isDirectory() && file.endsWith('.js')) {
                     const func = require(filePath);
-                    if (typeof func !== 'function') {
-                        if (debug) this.#debug('error', file);
-                        continue;
-                    }
+                    const name = file?.replaceAll('.js', '');
 
-                    const name = file.split('.')[0];
-                    if (debug) this.#debug('success', file);
-                    client.functionManager.createFunction({
-                        name: `$${name}`,
-                        type: 'djs',
-                        code: func,
-                    });
+                    if (typeof func !== 'function' && typeof func === 'object' && !Array.isArray(func)) {
+                        client.functionManager.createFunction(func);
+                        if (debug) this.#debug('success', func?.name || name);
+                    } else if (typeof func === 'function') {
+                        client.functionManager.createFunction({
+                            name: `$${name}`,
+                            type: 'djs',
+                            code: func,
+                        });
+
+                        if (debug) this.#debug('success', name);
+                    } else {
+                        this.#debug('error', name);
+                    }
                 } else {
                     new this.constructor(client, filePath, debug);
                 }
             }
         } catch (err) {
-            console.error(err);
+            this.#debug('error', 'ALL', err);
         }
     }
 
@@ -52,12 +56,12 @@ exports.Functions = class Functions {
      * @param {string} type - The type of debug message ('success' or 'error').
      * @param {string} file - The name of the file being processed.
      */
-    #debug(type, file) {
-        const name = file.split('.')[0];
+    #debug(type, name, err) {
         if (type === 'success') {
             console.log(`[${blue('DEBUG')}] :: Function loaded: ${cyan(`$${name}`)}`);
         } else if (type === 'error') {
             console.log(`[${blue('DEBUG')}] :: Failed to Load: ${red(`$${name}`)}`);
+            if (err) console.error(err);
         }
     }
 };

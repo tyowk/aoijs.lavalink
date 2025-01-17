@@ -1,6 +1,6 @@
 {
     "name": "aoijs.lavalink",
-    "version": "4.6.0",
+    "version": "4.7m.0",
     "description": "A package for integrating Lavalink with Aoi.js to enable music streaming in Discord bots.",
     "type": "commonjs",
     "main": "src/index.js",
@@ -24,10 +24,7 @@
     "dependencies": {
         "@aoijs/aoi.structures": "^1.0.0",
         "chalk": "^4.1.2",
-        "shoukaku": "^4.1.1",
-        "cheerio": "^1.0.0",
-        "encoding": "^0.1.13",
-        "node-fetch": "^2.6.1"
+        "shoukaku": "^4.1.1"
     },
     "devDependencies": {
         "aoi.js": "^6.9.0",

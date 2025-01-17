@@ -54,12 +54,12 @@ exports.Events = class Events {
         if (dispatcher.previous) dispatcher.history.push(dispatcher.previous);
         if (dispatcher.loop === 'song' && track) dispatcher.queue.unshift(track);
         else if (dispatcher.loop === 'queue' && track) dispatcher.queue.push(track);
-        else track ? dispatcher.previous = track : null;
+        else track ? (dispatcher.previous = track) : null;
 
         if (dispatcher.autoplay) await dispatcher.Autoplay(track);
         if (!dispatcher.queue.length) client.emit('queueEnd', { player, track, dispatcher });
         dispatcher.current = null;
-        
+
         while (dispatcher.history.length > 100) {
             dispatcher.history.shift();
         }

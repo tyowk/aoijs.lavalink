@@ -243,7 +243,7 @@ exports.Dispatcher = class Dispatcher {
      * @throws {AoiError} - Throws an error if the track is not provided.
      */
     buildTrack(track, user) {
-        return new Track(track, user, this.client);
+        return new Track(track, user);
     }
 
     /**
