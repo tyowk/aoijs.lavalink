@@ -15,7 +15,7 @@ module.exports = d => {
     if (humanize === 'false') {
         data.result = player.player.position || 0;
     } else {
-        data.result = d.client.music.utils.formatTime(player.player.position || 0);
+        data.result = d.client.music.utils.formatTime(player.player.position || 0) || '0s';
     }
 
     return {

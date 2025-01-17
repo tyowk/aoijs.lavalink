@@ -206,7 +206,8 @@ exports.Lyrics = class Lyrics {
      */
     static async search(query) {
         try {
-            if (!query && typeof query !== 'string') throw new AoiError('Song title not provided!', 'AOI_TITLE_INVALID');
+            if (!query && typeof query !== 'string')
+                throw new AoiError('Song title not provided!', 'AOI_TITLE_INVALID');
 
             query = query
                 ?.toLowerCase()
