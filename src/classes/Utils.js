@@ -1,4 +1,5 @@
 const { Group } = require('@aoijs/aoi.structures');
+const YoutubeMusic = require('ytmusic-api');
 
 /**
  * Custom Error class
@@ -204,33 +205,39 @@ exports.Lyrics = class Lyrics {
      * @throws {AoiError} - Throws an error if the song is not provided.
      */
     static async search(query) {
-        if (!query) throw new AoiError('Song title not provided!', 'AOI_TITLE_INVALID');
+        try {
+            if (!query && typeof query !== 'string') throw new AoiError('Song title not provided!', 'AOI_TITLE_INVALID');
 
-        query = query
-            .toLowerCase()
-            .replace(
-                /((\[|\()(?!.*?(remix|edit|remake)).*?(\]|\))|\/+|-+| x |,|"|video oficial|official lyric video| ft.?|\|+|yhlqmdlg|x100pre|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF]|\u274C)/g,
-                '',
-            )
-            .replace(/  +/g, ' ')
-            .trim();
+            query = query
+                ?.toLowerCase()
+                ?.replace(
+                    /((\[|\()(?!.*?(remix|edit|remake)).*?(\]|\))|\/+|-+| x |,|"|video oficial|official lyric video| ft.?|\|+|yhlqmdlg|x100pre|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF]|\u274C)/g,
+                    '',
+                )
+                ?.replace(/  +/g, ' ')
+                ?.trim();
 
-        let response = await fetch(
-            `https://lyrics.lewdhutao.my.eu.org/musixmatch/lyrics?title=${encodeURIComponent(query)}`,
-        );
+            const ytm = new YoutubeMusic();
+            await ytm.initialize();
+            const song = await ytm.searchSongs(query);
+            const data = song[0];
+            const lyrics_array = await ytm.getLyrics(data.videoId);
 
-        if (!response.ok) return {};
-        response = await response.json();
-
-        return {
-            query,
-            title: response.track_name,
-            artist: response.artist_name,
-            thumbnail: response.artwork_url,
-            source: response.search_engine,
-            id: response.track_id,
-            lyrics: response.lyrics,
-        };
+            return {
+                query,
+                title: data?.name,
+                artist: data?.artist?.name,
+                artistUrl: data?.artist?.artistId ? `https://youtube.com/channel/${data?.artist?.artistId}` : null,
+                thumbnail: data?.thumbnails?.[1]?.url,
+                id: data?.videoId,
+                duration: data?.duration ? Utils.formatTime((data?.duration * 1000).toFixed()) : null,
+                durationMs: data?.duration ? (data?.duration * 1000).toFixed() : null,
+                url: data?.videoId ? `https://youtube.com/watch?v=${data.videoId}` : null,
+                lyrics: lyrics_array?.length > 0 ? lyrics_array?.join('\n') : null,
+            };
+        } catch (error) {
+            throw new AoiError(error.message, 'AOI_LYRICS_ERROR');
+        }
     }
 };
 

@@ -24,7 +24,8 @@
     "dependencies": {
         "@aoijs/aoi.structures": "^1.0.0",
         "chalk": "^4.1.2",
-        "shoukaku": "^4.1.1"
+        "shoukaku": "^4.1.1",
+        "ytmusic-api": "^5.2.2"
     },
     "devDependencies": {
         "aoi.js": "^6.9.0",
