@@ -8,7 +8,7 @@ module.exports = async d => {
     if (!manager) return d.aoiError.fnError(d, 'custom', {}, `Voice manager is not defined.`);
 
     const player = d.client.queue.get(d.guild.id);
-    if (!player || player?.nowPlaying || player?.nowPlaying?.channel || !player?.nowPlaying?.message)
+    if (!player || !player?.nowPlaying || !player?.nowPlaying?.channel || !player?.nowPlaying?.message)
         return d.client.returnCode(d, data);
 
     try {
@@ -25,6 +25,8 @@ module.exports = async d => {
 
         await msg.delete();
     } catch {}
+
+    player.nowPlaying = null;
     return {
         code: d.util.setCode(data),
     };
