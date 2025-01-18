@@ -11,8 +11,8 @@ module.exports = async d => {
     if (!player || !player?.nowPlaying || !player?.nowPlaying?.channel || !player?.nowPlaying?.message)
         return d.client.returnCode(d, data);
 
+    const nowPlaying = player.nowPlaying;
     try {
-        const nowPlaying = player.nowPlaying;
         const channel =
             d.client.channels.cache.get(nowPlaying.channel) ||
             (await d.client.channels.fetch(nowPlaying.channel));
