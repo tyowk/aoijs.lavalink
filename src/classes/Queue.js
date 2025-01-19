@@ -42,6 +42,7 @@ exports.Queue = class Queue extends Group {
                 shardId: guild.shard.id,
                 deaf: true,
             });
+
             dispatcher = new Dispatcher({
                 client: this.client,
                 guildId: guild.id,
@@ -49,6 +50,7 @@ exports.Queue = class Queue extends Group {
                 player,
                 node,
             });
+
             this.set(guild.id, dispatcher);
             this.client.shoukaku.emit('playerCreate', {
                 player: dispatcher?.player,
@@ -72,7 +74,6 @@ exports.Queue = class Queue extends Group {
     async search(query, type) {
         const node = this.client.shoukaku.getIdealNode();
         const regex = /^https?:\/\//;
-        let result;
         type = type
             ?.toLowerCase()
             .replace('youtube', 'ytsearch')
@@ -83,12 +84,11 @@ exports.Queue = class Queue extends Group {
             .replace('youtubemusic', 'ytmsearch');
 
         try {
-            result = await node.rest.resolve(
+            return await node.rest.resolve(
                 regex.test(query) ? query : `${(type ? type : this.options.searchEngine) || 'ytsearch'}:${query}`,
             );
         } catch (err) {
             return null;
         }
-        return result;
     }
 };

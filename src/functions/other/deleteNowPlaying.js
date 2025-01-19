@@ -11,15 +11,15 @@ module.exports = async d => {
     if (!player || !player?.nowPlaying || !player?.nowPlaying?.channel || !player?.nowPlaying?.message)
         return d.client.returnCode(d, data);
 
-    const nowPlaying = player.nowPlaying;
+    const nowPlaying = player?.nowPlaying;
     try {
+        if (!nowPlaying && typeof nowPlaying !== 'object') return d.client.returnCode(d, data);
+
         const channel =
-            d.client.channels.cache.get(nowPlaying.channel) ||
-            (await d.client.channels.fetch(nowPlaying.channel));
+            d.client.channels.cache.get(nowPlaying?.channel) || (await d.client.channels.fetch(nowPlaying?.channel));
 
         const msg = channel
-            ? channel.messages.cache.get(nowPlaying.message) ||
-              (await channel.messages.fetch(nowPlaying.message))
+            ? channel.messages.cache.get(nowPlaying?.message) || (await channel.messages.fetch(nowPlaying?.message))
             : null;
 
         if (!msg || !msg.deletable || msg.author.id !== d.client.user.id) return d.client.returnCode(d, data);
@@ -27,9 +27,8 @@ module.exports = async d => {
         await msg.delete();
     } catch {}
 
-    if (nowPlaying.message === player.nowPlaying.message)
-        player.nowPlaying = null;
-    
+    if (nowPlaying?.message === player.nowPlaying?.message) player.nowPlaying = null;
+
     return {
         code: d.util.setCode(data),
     };

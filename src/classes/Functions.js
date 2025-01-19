@@ -25,14 +25,14 @@ exports.Functions = class Functions {
                 const filePath = join(basePath, file);
                 if (!statSync(filePath).isDirectory() && file.endsWith('.js')) {
                     const func = require(filePath);
-                    const name = file?.replaceAll('.js', '');
+                    const name = `$${file?.replaceAll('.js', '')}`;
 
                     if (typeof func !== 'function' && typeof func === 'object' && !Array.isArray(func)) {
                         client.functionManager.createFunction(func);
                         if (debug) this.#debug('success', func?.name || name);
                     } else if (typeof func === 'function') {
                         client.functionManager.createFunction({
-                            name: `$${name}`,
+                            name,
                             type: 'djs',
                             code: func,
                         });
@@ -58,9 +58,10 @@ exports.Functions = class Functions {
      */
     #debug(type, name, err) {
         if (type === 'success') {
-            console.log(`[${blue('DEBUG')}] :: Function loaded: ${cyan(`$${name}`)}`);
+            console.log(`[${blue('DEBUG')}] :: Function loaded: ${cyan(name)}`);
+            if (err) console.error(err);
         } else if (type === 'error') {
-            console.log(`[${blue('DEBUG')}] :: Failed to Load: ${red(`$${name}`)}`);
+            console.log(`[${blue('DEBUG')}] :: Failed to Load: ${red(name)}`);
             if (err) console.error(err);
         }
     }

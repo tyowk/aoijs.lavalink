@@ -42,13 +42,25 @@ exports.Dispatcher = class Dispatcher {
                         track: this.current,
                         dispatcher: this,
                     });
-                this.client.shoukaku.emit('trackStart', { player: this.player, track: this.current, dispatcher: this });
+                this.client.shoukaku.emit('trackStart', {
+                    player: this.player,
+                    track: this.current,
+                    dispatcher: this,
+                });
             })
             .on('end', () => {
-                this.client.shoukaku.emit('trackEnd', { player: this.player, track: this.current, dispatcher: this });
+                this.client.shoukaku.emit('trackEnd', {
+                    player: this.player,
+                    track: this.current,
+                    dispatcher: this,
+                });
             })
             .on('stuck', () => {
-                this.client.shoukaku.emit('trackStuck', { player: this.player, track: this.current, dispatcher: this });
+                this.client.shoukaku.emit('trackStuck', {
+                    player: this.player,
+                    track: this.current,
+                    dispatcher: this,
+                });
             })
             .on('closed', () => {
                 this.client.shoukaku.emit('socketClosed', {
@@ -108,7 +120,7 @@ exports.Dispatcher = class Dispatcher {
         this.current = this.queue.length !== 0 ? this.queue.shift() : this.queue[0];
         if (!this.current) return;
         this.player.playTrack({ track: { encoded: this.current?.encoded } });
-        if (this.history.length >= 101) {
+        while (this.history.length > 100) {
             this.history.shift();
         }
     }
@@ -323,7 +335,6 @@ exports.Dispatcher = class Dispatcher {
     async search(query, type) {
         const node = this.client.shoukaku.getIdealNode();
         const regex = /^https?:\/\//;
-        let result;
         type = type
             ?.toLowerCase()
             .replace('youtube', 'ytsearch')
@@ -334,12 +345,11 @@ exports.Dispatcher = class Dispatcher {
             .replace('youtubemusic', 'ytmsearch');
 
         try {
-            result = await node.rest.resolve(
+            return await node.rest.resolve(
                 regex.test(query) ? query : `${(type ? type : this.options.searchEngine) || 'ytsearch'}:${query}`,
             );
         } catch (err) {
             return null;
         }
-        return result;
     }
 };
