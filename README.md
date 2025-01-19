@@ -5,7 +5,7 @@
 A package for integrating Lavalink with Aoi.js to enable music streaming in Discord bots.
 
 - **[ Documentation ](https://lavalink.noujs.my.id)**
-- **[ Support Server ](https://discord.gg/HMUfMXDQsV)**
+- **[ Support Server ](https://discord.com/invite/hyQYXcVnmZ)**
 - **[ NPM ](https://npmjs.org/package/aoijs.lavalink)**
 - **[ GitHub ](https://github.com/tyowk/aoijs.lavalink)**
 
@@ -48,12 +48,20 @@ see [here](https://guide.shoukaku.shipgirl.moe/guides/2-options/) for more clien
 
 ---
 
+## Playlist
+
+This feature allows users to create and manage playlists, enhancing their music experience.
+
+**See the [documentation](https://lavalink.noujs.my.id/guides/playlist) for more information and guides**
+
+---
+
 ## Events
 
 You can listen to various events such as when a track starts, when the player is paused, etc., and respond to them with custom code.
 
 ```js
-const voice = new Manager({ ... });
+const voice = new Manager(<Client>, { ... });
 
 voice.<eventName>({          // The event type, e.g., when a track starts playing ('trackStart').
     channel: '$channelId',   // The ID of the channel where the event will trigger (can be dynamic or static).
@@ -66,7 +74,7 @@ voice.<eventName>({          // The event type, e.g., when a track starts playin
 ## Handlers
 
 ```js
-const voice = new Manager({ ... });
+const voice = new Manager(<Client>, { ... });
 
 // Load custom music event handlers from a directory. 'false' disables debug logs.
 voice.loadVoiceEvents('./voice/', false);
@@ -102,7 +110,7 @@ module.exports = [
 <img src="https://lavalink.noujs.my.id/_astro/lavabird.DpnUPx13_ZBEKd4.webp" width="100">
 <br>
 
-**[ Documentation ](https://aoi.js.org/)** <br>
-**[ Support Server ](https://discord.gg/HMUfMXDQsV)**
+**[ Documentation ](https://lavalink.noujs.my.id)** <br>
+**[ Support Server ](https://discord.com/invite/hyQYXcVnmZ)**
 
 </div>
