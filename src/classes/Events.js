@@ -22,7 +22,7 @@ exports.Events = class Events {
             client.on('nodeConnect', ({ name }) => log(`[${blue('DEBUG')}] :: Node "${cyan(name)}" connected`));
             client.on('nodeReconnect', ({ name }) => log(`[${blue('DEBUG')}] :: Node "${yellow(name)}" reconnected`));
             client.on('nodeError', ({ name, error }) => log(`[${blue('DEBUG')}] :: Node "${red(name)}" error:`, error));
-            client.on('nodeDestroy', ({ name, _, reason }) =>
+            client.on('nodeDestroy', ({ name, code, reason }) =>
                 log(`[${blue('DEBUG')}] :: Node "${red(name)}" destroyed with code: ${code}, reason: ${reason}`),
             );
             client.on('nodeDisconnect', ({ name }) => log(`[${blue('DEBUG')}] :: Node "${red(name)}" disconnected`));
