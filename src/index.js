@@ -32,7 +32,7 @@ exports.Functions = require('./classes/Functions.js').Functions;
  * Contains various data filters as an object.
  * @type {Filters}
  */
-exports.Filters = require('./classes/Filters.js');
+exports.Filters = require('./classes/Filters.js').Filters;
 
 /**
  * Utility functions for the application.
