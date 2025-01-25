@@ -32,6 +32,7 @@ exports.Manager = class Manager extends Shoukaku {
 
         options.maxQueueSize = options.maxQueueSize || 100;
         options.maxPlaylistSize = options.maxPlaylistSize || 100;
+        options.noLimitVolume = options.noLimitVolume || false;
         options.debug = options.debug || false;
         options.searchEngine =
             options.searchEngine
