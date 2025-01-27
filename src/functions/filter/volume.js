@@ -17,7 +17,7 @@ module.exports = d => {
     } else {
         const { noLimitVolume, maxVolume } = d.client.music;
         if (isNaN(value)) return d.aoiError.fnError(d, 'custom', {}, `Please provide a valid number.`);
-        if ((noLimitVolume !== true) && value > maxVolume) return d.aoiError.fnError(d, 'custom', {}, `The volume can't be higher than 200.`);
+        if ((noLimitVolume !== true) && value > maxVolume) return d.aoiError.fnError(d, 'custom', {}, `The volume can't be higher than ${maxVolume}.`);
         if ((noLimitVolume !== true) && value < 0) return d.aoiError.fnError(d, 'custom', {}, `The volume can't be lower than 0.`);
         player.volume(value);
     }
