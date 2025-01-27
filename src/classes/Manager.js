@@ -30,9 +30,11 @@ exports.Manager = class Manager extends Shoukaku {
             url: url && !host && !port ? url : `${host}:${port}`,
         }));
 
-        options.maxQueueSize = options.maxQueueSize || 100;
-        options.maxPlaylistSize = options.maxPlaylistSize || 100;
+        options.maxQueueSize = isNaN(options.maxQueueSize) ? 100 : options.maxQueueSize;
+        options.maxPlaylistSize = isNaN(options.maxPlaylistSize) ? 100 : options.maxPlaylistSize;
         options.noLimitVolume = options.noLimitVolume || false;
+        options.defaultVolume = isNaN(options.defaultVolume) ? 100 : options.defaultVolume;
+        options.maxVolume = isNaN(options.maxVolume) ? 200 : options.maxVolume;
         options.debug = options.debug || false;
         options.searchEngine =
             options.searchEngine
@@ -52,7 +54,7 @@ exports.Manager = class Manager extends Shoukaku {
             reconnectInterval: options.reconnectInterval || 5,
             reconnectTries: options.reconnectTries || 3,
             restTimeout: options.restTimeout || 60,
-            userAgent: options.userAgent || 'aoijs.lavalink',
+            userAgent: (options.userAgent === '(auto)') ? 'aoijs.lavalink' : options.userAgent,
             voiceConnectionTimeout: options.voiceConnectionTimeout || 15,
             structures: options.structures || {},
             nodeResolver: nodes => {
