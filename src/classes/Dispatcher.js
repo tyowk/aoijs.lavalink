@@ -105,7 +105,8 @@ exports.Dispatcher = class Dispatcher {
         if (!value) {
             return this.currentVolume;
         }
-        if (isNaN(value)) return;
+        
+        if (isNaN(value) || this.currentVolume === value) return;
         this.player.setGlobalVolume(value);
         this.currentVolume = value;
     }
@@ -266,6 +267,7 @@ exports.Dispatcher = class Dispatcher {
     async isPlaying() {
         if (this.queue.length && !this.current && !this.player.paused) {
             this.play();
+            this.volume(this.client.music.defaultVolume);
         }
     }
 
