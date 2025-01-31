@@ -32,7 +32,6 @@ exports.Dispatcher = class Dispatcher {
         this.autoplay = false;
         this.autoplayType = this.client?.music?.searchEngine || 'ytsearch';
         this.currentVolume = 100;
-        this.repeat = 0;
 
         this.player
             .on('start', () => {
@@ -102,10 +101,7 @@ exports.Dispatcher = class Dispatcher {
      * @returns {number|undefined} - The current volume if no value is provided, otherwise undefined.
      */
     volume(value) {
-        if (!value) {
-            return this.currentVolume;
-        }
-
+        if (!value) return this.currentVolume;
         if (isNaN(value) || this.currentVolume === value) return;
         this.player.setGlobalVolume(value);
         this.currentVolume = value;
@@ -135,11 +131,19 @@ exports.Dispatcher = class Dispatcher {
         if (!this.paused) {
             this.player.setPaused(true);
             this.paused = true;
-            this.client.shoukaku.emit('trackPaused', { player: this.player, track: this.current, dispatcher: this });
+            this.client.shoukaku.emit('trackPaused', {
+                player: this.player,
+                track: this.current,
+                dispatcher: this
+            });
         } else {
             this.player.setPaused(false);
             this.paused = false;
-            this.client.shoukaku.emit('trackResumed', { player: this.player, track: this.current, dispatcher: this });
+            this.client.shoukaku.emit('trackResumed', {
+                player: this.player,
+                track: this.current,
+                dispatcher: this
+            });
         }
     }
 
@@ -158,8 +162,7 @@ exports.Dispatcher = class Dispatcher {
      * Plays the previous track in the history.
      */
     previousTrack() {
-        if (!this.player) return;
-        if (!this.previous) return;
+        if (!this.player || !this.previous) return;
         this.queue.unshift(this.current);
         this.queue.unshift(this.previous);
         this.current = this.history.pop() || null;
@@ -175,8 +178,11 @@ exports.Dispatcher = class Dispatcher {
         this.history = [];
         this.client.shoukaku.leaveVoiceChannel(this.guildId);
         this.client.queue.delete(this.guildId);
-        if (this.stopped) return;
-        this.client.shoukaku.emit('playerDestroy', { player: this.player, track: this.current, dispatcher: this });
+        this.client.shoukaku.emit('playerDestroy', {
+            player: this.player,
+            track: this.current,
+            dispatcher: this
+        });
     }
 
     /**
@@ -187,7 +193,6 @@ exports.Dispatcher = class Dispatcher {
     setShuffle(shuffle) {
         if (!this.player) return;
         this.shuffle = shuffle;
-
         if (shuffle) {
             this.queue = this.queue.sort(() => Math.random() - 0.5);
         } else {
@@ -211,7 +216,6 @@ exports.Dispatcher = class Dispatcher {
             }
         }
 
-        this.repeat = this.repeat === 1 ? 0 : this.repeat;
         this.player.stopTrack();
     }
 
@@ -234,7 +238,6 @@ exports.Dispatcher = class Dispatcher {
         this.history = new History();
         this.loop = 'off';
         this.autoplay = false;
-        this.repeat = 0;
         this.stopped = true;
         this.player.stopTrack();
     }
@@ -242,7 +245,7 @@ exports.Dispatcher = class Dispatcher {
     /**
      * Sets the loop state for the player.
      *
-     * @param {string} loop - The loop state ('off', 'repeat', 'queue').
+     * @param {string} loop - The loop state ('off', 'song', 'queue').
      */
     setLoop(loop) {
         this.loop = loop;
@@ -284,11 +287,13 @@ exports.Dispatcher = class Dispatcher {
         const resolve = await this.node.rest.resolve(
             `${type || this.autoplayType}:${song?.info?.author || song?.info?.title}`
         );
+        
         if (!resolve || !resolve?.data || !Array.isArray(resolve.data)) return this.stop();
         const metadata = resolve.data;
         let choosed = null;
-        const maxAttempts = 10;
+        const maxAttempts = metadata.length || 10;
         let attempts = 0;
+        
         while (attempts < maxAttempts) {
             const potentialChoice = this.buildTrack(
                 metadata[Math.floor(Math.random() * metadata.length)],
@@ -297,13 +302,17 @@ exports.Dispatcher = class Dispatcher {
 
             if (
                 !this.queue.some(s => s.encoded === potentialChoice.encoded) &&
-                !this.history.some(s => s.encoded === potentialChoice.encoded)
+                !this.history.some(s => s.encoded === potentialChoice.encoded) &&
+                !this.previous?.encoded === potentialChoice.encoded &&
+                !this.current?.encoded === potentialChoice.encoded
             ) {
                 choosed = potentialChoice;
                 break;
             }
+            
             attempts++;
         }
+        
         if (choosed) {
             this.queue.push(choosed);
             this.isPlaying();
