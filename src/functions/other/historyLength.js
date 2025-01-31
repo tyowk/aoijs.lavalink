@@ -11,6 +11,6 @@ module.exports = d => {
 
     data.result = player?.history?.length || 0;
     return {
-        code: d.util.setCode(data),
+        code: d.util.setCode(data)
     };
 };

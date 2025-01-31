@@ -18,7 +18,7 @@ module.exports = async d => {
             d,
             'custom',
             {},
-            `Invalid channel type: ${ChannelType[voiceChannel.type]}, must be voice or stage channel.`,
+            `Invalid channel type: ${ChannelType[voiceChannel.type]}, must be voice or stage channel.`
         );
 
     let player = d.client.queue.get(d.guild.id);
@@ -30,10 +30,10 @@ module.exports = async d => {
         d.channel,
         d.client.shoukaku.getIdealNode(),
         deaf === 'true',
-        mute === 'true',
+        mute === 'true'
     );
 
     return {
-        code: d.util.setCode(data),
+        code: d.util.setCode(data)
     };
 };

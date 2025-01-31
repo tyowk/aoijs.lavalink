@@ -12,12 +12,12 @@ module.exports = d => {
     player.filter = null;
     player.player?.update(
         {
-            filters: {},
+            filters: {}
         },
-        true,
+        true
     );
 
     return {
-        code: d.util.setCode(data),
+        code: d.util.setCode(data)
     };
 };

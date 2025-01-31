@@ -14,6 +14,6 @@ module.exports = d => {
     data.result = player?.current?.info?.isStream ? true : false;
 
     return {
-        code: d.util.setCode(data),
+        code: d.util.setCode(data)
     };
 };

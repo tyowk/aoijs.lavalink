@@ -14,6 +14,6 @@ module.exports = async d => {
     d.client.shoukaku.nodes?.delete(name);
 
     return {
-        code: d.util.setCode(data),
+        code: d.util.setCode(data)
     };
 };

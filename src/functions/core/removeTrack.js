@@ -19,6 +19,6 @@ module.exports = d => {
     player.remove(Number(index) - 1);
 
     return {
-        code: d.util.setCode(data),
+        code: d.util.setCode(data)
     };
 };

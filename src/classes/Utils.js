@@ -177,14 +177,14 @@ exports.Track = class Track {
                 requester: {
                     ...user,
                     avatar: typeof user?.displayAvatarURL === 'function' ? user?.displayAvatarURL() : user?.avatar,
-                    banner: typeof user?.bannerURL === 'function' ? user?.bannerURL() : user?.banner,
+                    banner: typeof user?.bannerURL === 'function' ? user?.bannerURL() : user?.banner
                 },
                 userdata: {
-                    ...track.userData,
+                    ...track.userData
                 },
                 plugininfo: {
-                    ...track.pluginInfo,
-                },
+                    ...track.pluginInfo
+                }
             });
     }
 };
@@ -213,7 +213,7 @@ exports.Lyrics = class Lyrics {
                 ?.toLowerCase()
                 .replace(
                     /((\[|\()(?!.*?(remix|edit|remake)).*?(\]|\))|\/+|-+| x |,|"|video oficial|official lyric video| ft.?|\|+|yhlqmdlg|x100pre|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF]|\u274C)/g,
-                    '',
+                    ''
                 )
                 .replace(/  +/g, ' ')
                 .trim();
@@ -234,7 +234,7 @@ exports.Lyrics = class Lyrics {
                 duration: data?.duration ? Utils.formatTime((data?.duration * 1000).toFixed()) : null,
                 durationMs: data?.duration ? (data?.duration * 1000).toFixed() : null,
                 url: data?.videoId ? `https://youtube.com/watch?v=${data.videoId}` : null,
-                lyrics: lyrics_array?.length > 0 ? lyrics_array?.join('\n') : null,
+                lyrics: lyrics_array?.length > 0 ? lyrics_array?.join('\n') : null
             };
         } catch (error) {
             throw new AoiError(error.message, 'AOI_LYRICS_ERROR');

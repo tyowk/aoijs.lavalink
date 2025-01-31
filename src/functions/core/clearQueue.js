@@ -14,6 +14,6 @@ module.exports = d => {
     player.queue = new Queue();
 
     return {
-        code: d.util.setCode(data),
+        code: d.util.setCode(data)
     };
 };

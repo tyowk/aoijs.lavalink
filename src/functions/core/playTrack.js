@@ -60,7 +60,7 @@ module.exports = async d => {
                     d,
                     'custom',
                     {},
-                    `The maximum playlist load size is reached: ${maxPlaylistSize}`,
+                    `The maximum playlist load size is reached: ${maxPlaylistSize}`
                 );
             }
 
@@ -101,6 +101,6 @@ module.exports = async d => {
     if (debug === 'true') data.result = debugResult;
 
     return {
-        code: d.util.setCode(data),
+        code: d.util.setCode(data)
     };
 };

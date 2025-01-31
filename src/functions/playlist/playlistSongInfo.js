@@ -44,7 +44,7 @@ module.exports = async d => {
             isPreview: pluginInfo?.isPreview,
             artist: trackInfo.author,
             'artist.artworkUrl': pluginInfo?.artistArtworkUrl,
-            'artist.url': pluginInfo?.artistUrl,
+            'artist.url': pluginInfo?.artistUrl
         };
 
         return trackData[type];
@@ -58,6 +58,6 @@ module.exports = async d => {
     data.result = getResult(res);
 
     return {
-        code: d.util.setCode(data),
+        code: d.util.setCode(data)
     };
 };

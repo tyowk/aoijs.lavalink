@@ -63,6 +63,6 @@ module.exports = d => {
 
     data.result = result;
     return {
-        code: d.util.setCode(data),
+        code: d.util.setCode(data)
     };
 };

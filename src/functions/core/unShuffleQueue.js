@@ -13,6 +13,6 @@ module.exports = d => {
     player.setShuffle(false);
 
     return {
-        code: d.util.setCode(data),
+        code: d.util.setCode(data)
     };
 };

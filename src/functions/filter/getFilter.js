@@ -12,6 +12,6 @@ module.exports = d => {
     if (player.filter) data.result = player.filter;
 
     return {
-        code: d.util.setCode(data),
+        code: d.util.setCode(data)
     };
 };

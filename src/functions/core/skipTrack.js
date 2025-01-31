@@ -12,6 +12,6 @@ module.exports = d => {
     player.skip();
 
     return {
-        code: d.util.setCode(data),
+        code: d.util.setCode(data)
     };
 };

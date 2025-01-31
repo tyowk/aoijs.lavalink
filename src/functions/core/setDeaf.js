@@ -18,6 +18,6 @@ module.exports = d => {
     connection.setDeaf(state === 'true');
 
     return {
-        code: d.util.setCode(data),
+        code: d.util.setCode(data)
     };
 };

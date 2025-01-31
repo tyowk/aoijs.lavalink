@@ -49,7 +49,7 @@ module.exports = async d => {
             isPreview: pluginInfo?.isPreview,
             artist: trackInfo.artist,
             'artist.artworkUrl': pluginInfo?.artistArtworkUrl,
-            'artist.url': pluginInfo?.artistUrl,
+            'artist.url': pluginInfo?.artistUrl
         };
 
         return Object.entries(replace).reduce((formatted, [key, value]) => {
@@ -66,6 +66,6 @@ module.exports = async d => {
     data.result = pages[page - 1];
 
     return {
-        code: d.util.setCode(data),
+        code: d.util.setCode(data)
     };
 };

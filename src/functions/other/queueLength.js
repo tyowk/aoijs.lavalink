@@ -11,6 +11,6 @@ module.exports = d => {
 
     data.result = player?.queue?.length || 0;
     return {
-        code: d.util.setCode(data),
+        code: d.util.setCode(data)
     };
 };

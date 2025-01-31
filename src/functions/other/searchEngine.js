@@ -24,6 +24,6 @@ module.exports = d => {
     }
 
     return {
-        code: d.util.setCode(data),
+        code: d.util.setCode(data)
     };
 };

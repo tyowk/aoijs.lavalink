@@ -11,6 +11,6 @@ module.exports = d => {
     data.result = d.client.queue.get(guildId ? guildId : d.guild?.id) ? true : false;
 
     return {
-        code: d.util.setCode(data),
+        code: d.util.setCode(data)
     };
 };

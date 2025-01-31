@@ -48,7 +48,7 @@ module.exports = d => {
             'requester.id': requester.id,
             'requester.avatar': requester.avatar,
             'requester.banner': requester.banner,
-            'requester.mention': requester.id ? `<@${requester.id}>` : null,
+            'requester.mention': requester.id ? `<@${requester.id}>` : null
         };
 
         return trackData[type];
@@ -73,6 +73,6 @@ module.exports = d => {
     }
 
     return {
-        code: d.util.setCode(data),
+        code: d.util.setCode(data)
     };
 };

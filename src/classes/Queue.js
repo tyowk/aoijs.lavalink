@@ -41,7 +41,7 @@ exports.Queue = class Queue extends Group {
                 channelId: voice.id,
                 shardId: guild.shard?.id,
                 deaf,
-                mute,
+                mute
             });
 
             dispatcher = new Dispatcher({
@@ -49,14 +49,14 @@ exports.Queue = class Queue extends Group {
                 guildId: guild.id,
                 channelId: channel.id,
                 player,
-                node,
+                node
             });
 
             this.set(guild.id, dispatcher);
             this.client.shoukaku.emit('playerCreate', {
                 player: dispatcher?.player,
                 track: dispatcher?.current,
-                dispatcher,
+                dispatcher
             });
             return dispatcher;
         } else {
@@ -86,7 +86,7 @@ exports.Queue = class Queue extends Group {
 
         try {
             return await node.rest.resolve(
-                regex.test(query) ? query : `${(type ? type : this.options.searchEngine) || 'ytsearch'}:${query}`,
+                regex.test(query) ? query : `${(type ? type : this.options.searchEngine) || 'ytsearch'}:${query}`
             );
         } catch (err) {
             return null;

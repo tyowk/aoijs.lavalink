@@ -12,7 +12,7 @@ module.exports = async d => {
         format = '{position}. {title} | {artist}',
         limit = 10,
         separator = '\n',
-        page = 1,
+        page = 1
     ] = data.inside.splits;
 
     const manager = d.client.shoukaku;
@@ -75,7 +75,7 @@ module.exports = async d => {
                     isPreview: pluginInfo?.isPreview,
                     artist: trackInfo.author,
                     'artist.artworkUrl': pluginInfo?.artistArtworkUrl,
-                    'artist.url': pluginInfo?.artistUrl,
+                    'artist.url': pluginInfo?.artistUrl
                 };
 
                 return Object.entries(replace).reduce((formatted, [key, value]) => {
@@ -93,6 +93,6 @@ module.exports = async d => {
     }
 
     return {
-        code: d.util.setCode(data),
+        code: d.util.setCode(data)
     };
 };

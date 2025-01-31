@@ -27,7 +27,7 @@ exports.Manager = class Manager extends Shoukaku {
         options.nodes = Array.isArray(options.nodes) ? options.nodes : [options.nodes];
         options.nodes = options.nodes.map(({ host, port, url, ...nodes }) => ({
             ...nodes,
-            url: url && !host && !port ? url : `${host}:${port}`,
+            url: url && !host && !port ? url : `${host}:${port}`
         }));
 
         options.maxQueueSize = isNaN(options.maxQueueSize) ? 100 : options.maxQueueSize;
@@ -62,7 +62,7 @@ exports.Manager = class Manager extends Shoukaku {
                     .filter(node => node.state === 2)
                     .sort((a, b) => a.penalties - b.penalties)
                     .shift();
-            },
+            }
         });
 
         this.cmd = new Commands();
@@ -74,7 +74,7 @@ exports.Manager = class Manager extends Shoukaku {
         this.client.music = {
             ...options,
             utils: Utils,
-            cmd: this.cmd,
+            cmd: this.cmd
         };
 
         if (options.playlist && typeof options.playlist === 'object') {
@@ -116,9 +116,9 @@ exports.Manager = class Manager extends Shoukaku {
                                 undefined,
                                 true,
                                 undefined,
-                                {},
+                                {}
                             )
-                        )?.code,
+                        )?.code
                     );
                 }
 
@@ -133,7 +133,7 @@ exports.Manager = class Manager extends Shoukaku {
                     undefined,
                     false,
                     channel,
-                    { player, track, dispatcher, nodeEvent },
+                    { player, track, dispatcher, nodeEvent }
                 );
             }
         });

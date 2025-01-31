@@ -33,6 +33,6 @@ module.exports = d => {
     player.queue.splice(to, 0, track);
 
     return {
-        code: d.util.setCode(data),
+        code: d.util.setCode(data)
     };
 };

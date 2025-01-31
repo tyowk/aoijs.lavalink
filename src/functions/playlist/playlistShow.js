@@ -8,7 +8,7 @@ module.exports = async d => {
         page = 1,
         limit = 10,
         format = '{position}. {name}  |  {length} song(s)',
-        separator = '\n',
+        separator = '\n'
     ] = data.inside.splits;
 
     const manager = d.client.shoukaku;
@@ -28,7 +28,7 @@ module.exports = async d => {
         const replace = {
             position: (index + 1)?.toLocaleString(),
             name: list.name,
-            length: list.length,
+            length: list.length
         };
 
         return Object.entries(replace).reduce((formatted, [key, value]) => {
@@ -45,6 +45,6 @@ module.exports = async d => {
     data.result = pages[page - 1];
 
     return {
-        code: d.util.setCode(data),
+        code: d.util.setCode(data)
     };
 };
