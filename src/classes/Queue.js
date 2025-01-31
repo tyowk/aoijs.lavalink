@@ -41,7 +41,7 @@ exports.Queue = class Queue extends Group {
                 channelId: voice.id,
                 shardId: guild.shard?.id,
                 deaf,
-                mute
+                mute,
             });
 
             dispatcher = new Dispatcher({

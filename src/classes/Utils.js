@@ -222,9 +222,7 @@ exports.Lyrics = class Lyrics {
             await ytm.initialize();
             const song = await ytm.searchSongs(query);
             const data = song[0];
-            const lyrics_array = data?.videoId
-                ? await ytm.getLyrics(data?.videoId)
-                : [];
+            const lyrics_array = data?.videoId ? await ytm.getLyrics(data?.videoId) : [];
 
             return {
                 query,

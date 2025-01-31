@@ -29,8 +29,8 @@ module.exports = async d => {
         voiceChannel,
         d.channel,
         d.client.shoukaku.getIdealNode(),
-        (deaf === 'true'),
-        (mute === 'true')
+        deaf === 'true',
+        mute === 'true',
     );
 
     return {

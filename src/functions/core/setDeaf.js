@@ -10,12 +10,12 @@ module.exports = d => {
 
     if (!state || state === '' || (state !== 'true' && state !== 'false'))
         return d.aoiError.fnError(d, 'custom', {}, 'Invalid deafen state provided. must be boolean!');
-    
+
     const player = d.client.queue.get(guildId ? guildId : d.guild.id);
     const connection = manager.connections.get(guildId ? guildId : d.guild.id);
     if (!player || !connection) return d.aoiError.fnError(d, 'custom', {}, `There is no player for this guild.`);
 
-    connection.setDeaf((state === 'true'));
+    connection.setDeaf(state === 'true');
 
     return {
         code: d.util.setCode(data),

@@ -105,7 +105,7 @@ exports.Dispatcher = class Dispatcher {
         if (!value) {
             return this.currentVolume;
         }
-        
+
         if (isNaN(value) || this.currentVolume === value) return;
         this.player.setGlobalVolume(value);
         this.currentVolume = value;
