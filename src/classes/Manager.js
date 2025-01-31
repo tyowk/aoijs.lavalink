@@ -105,50 +105,36 @@ exports.Manager = class Manager extends Shoukaku {
                     this.client.channels.cache.get(cmd?.channel) ||
                     this.client.channels.cache.get(dispatcher?.channelId);
 
-                if (!cmd?.__compiled__ && typeof cmd?.__compiled__ !== 'function') {
-                    if (cmd.channel?.includes('$')) {
-                        channel = this.client.channels.cache.get(
-                            (
-                                await this.client.functionManager.interpreter(
-                                    this.client,
-                                    { guild, channel, member, author },
-                                    [],
-                                    { code: cmd.channel, name: 'NameParser' },
-                                    undefined,
-                                    true,
-                                    undefined,
-                                    {},
-                                )
-                            )?.code,
-                        );
-                    }
-
-                    if (!channel) channel = this.client.channels.cache.get(dispatcher?.channelId);
-                    if (!guild && channel) guild = channel.guild;
-
-                    await this.client.functionManager.interpreter(
-                        this.client,
-                        { guild, channel, member, author },
-                        [],
-                        cmd,
-                        undefined,
-                        false,
-                        channel,
-                        { player, track, dispatcher, nodeEvent },
+                if (cmd.channel?.includes('$')) {
+                    channel = this.client.channels.cache.get(
+                        (
+                            await this.client.functionManager.interpreter(
+                                this.client,
+                                { guild, channel, member, author },
+                                [],
+                                { code: cmd.channel, name: 'NameParser' },
+                                undefined,
+                                true,
+                                undefined,
+                                {},
+                            )
+                        )?.code,
                     );
-                } else {
-                    await cmd.__compiled__({
-                        client: this.client,
-                        channel,
-                        guild,
-                        member,
-                        author,
-                        player,
-                        track,
-                        dispatcher,
-                        nodeEvent,
-                    });
                 }
+
+                if (!channel) channel = this.client.channels.cache.get(dispatcher?.channelId);
+                if (!guild && channel) guild = channel.guild;
+
+                await this.client.functionManager.interpreter(
+                    this.client,
+                    { guild, channel, member, author },
+                    [],
+                    cmd,
+                    undefined,
+                    false,
+                    channel,
+                    { player, track, dispatcher, nodeEvent },
+                );
             }
         });
     }
