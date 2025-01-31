@@ -121,7 +121,8 @@ exports.Dispatcher = class Dispatcher {
         this.current = this.queue.length !== 0 ? this.queue.shift() : this.queue[0];
         if (!this.current) return;
         this.player.playTrack({ track: { encoded: this.current?.encoded } });
-        while (this.history.length > 100) {
+        const { maxHistorySize } = this.client.music;
+        while (this.history.length > maxHistorySize) {
             this.history.shift();
         }
     }
