@@ -38,10 +38,11 @@ const voice = new Manager(client, {
         secure: false              // Set to true if your Lavalink server uses SSL/TLS (HTTPS).
     }],
 
-    maxQueueSize: 100,             // Maximum number of tracks that can be queued for playback. (default is 100)
-    maxPlaylistSize: 100,          // Maximum number of tracks that can be in a playlist. (default is 100)
-    searchEngine: 'youtube',       // Default search engine. You can set this to 'soundcloud' or 'spotify' or others. (default is youtube)
-    debug: false,                  // Whether to enable debug logs for the music client. default is false. (default is false)
+    maxQueueSize: 100,             // Maximum number of tracks that can be queued for playback (default is 100)
+    maxPlaylistSize: 100,          // Maximum number of tracks that can be in a playlist (default is 100)
+    maxHistorySize: 100,           // Maximum number of tracks that can be saved in the history (default is 100)
+    searchEngine: 'youtube',       // Default search engine. You can set this to 'soundcloud' or 'spotify' or others (default is youtube)
+    debug: false,                  // Whether to enable debug logs for the music client (default is false)
     defaultVolume: 75,             // Set default volume when the player created (default is 100)
     maxVolume: 200,                // Maximum volume player can handle (default is 200)
     noLimitVolume: false           // Whether to enable no limit volume (not recommended) (default is false)
