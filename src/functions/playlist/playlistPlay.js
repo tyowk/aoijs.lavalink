@@ -49,6 +49,10 @@ module.exports = async d => {
         player.isPlaying();
     }
 
+    while (player.queue.length > maxQueueSize) {
+        player.queue.pop();
+    }
+
     return {
         code: d.util.setCode(data)
     };
