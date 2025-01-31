@@ -32,6 +32,7 @@ exports.Manager = class Manager extends Shoukaku {
 
         options.maxQueueSize = isNaN(options.maxQueueSize) ? 100 : options.maxQueueSize;
         options.maxPlaylistSize = isNaN(options.maxPlaylistSize) ? 100 : options.maxPlaylistSize;
+        options.maxHistorySize = isNaN(options.maxHistorySize) ? 100 : options.maxHistorySize;
         options.noLimitVolume = options.noLimitVolume || false;
         options.defaultVolume = isNaN(options.defaultVolume) ? 100 : options.defaultVolume;
         options.maxVolume = isNaN(options.maxVolume) ? 200 : options.maxVolume;
