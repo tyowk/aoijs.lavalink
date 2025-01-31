@@ -19,10 +19,8 @@ module.exports = async d => {
     const player = d.client.queue.get(d.guild.id);
     if (!player) return d.aoiError.fnError(d, 'custom', {}, `There is no player for this guild.`);
     if (player.channelId !== d.channel?.id && d.channel?.id) player.channelId = d.channel.id;
-
-    const maxQueueSize = Number(d.client.music.maxQueueSize) || 100;
-    const maxPlaylistSize = Number(d.client.music.maxPlaylistSize) || 100;
-
+    const { maxQueueSize, maxPlaylistSize } = d.client.music;
+    
     if (!isNaN(index)) {
         if (player.queue.length >= maxQueueSize)
             return d.aoiError.fnError(d, 'custom', {}, `The maximum queue load size is reached: ${maxQueueSize}`);
