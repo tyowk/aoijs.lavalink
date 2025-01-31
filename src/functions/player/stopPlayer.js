@@ -13,6 +13,6 @@ module.exports = d => {
     player.stop();
 
     return {
-        code: d.util.setCode(data),
+        code: d.util.setCode(data)
     };
 };

@@ -12,6 +12,6 @@ module.exports = async d => {
     data.result = node ? true : false;
 
     return {
-        code: d.util.setCode(data),
+        code: d.util.setCode(data)
     };
 };

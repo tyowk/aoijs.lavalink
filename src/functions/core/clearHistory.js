@@ -15,6 +15,6 @@ module.exports = d => {
     player.history = new History();
 
     return {
-        code: d.util.setCode(data),
+        code: d.util.setCode(data)
     };
 };

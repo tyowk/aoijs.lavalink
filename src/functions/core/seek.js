@@ -21,6 +21,6 @@ module.exports = d => {
     player.seek(time);
 
     return {
-        code: d.util.setCode(data),
+        code: d.util.setCode(data)
     };
 };

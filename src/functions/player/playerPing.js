@@ -9,6 +9,6 @@ module.exports = async d => {
     const player = d.client.queue.get(d.guild.id);
     data.result = player?.player?.ping || -1;
     return {
-        code: d.util.setCode(data),
+        code: d.util.setCode(data)
     };
 };

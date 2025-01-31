@@ -20,7 +20,7 @@ exports.Playlist = class Playlist {
         if (!options.database && !manager.client?.db)
             throw new AoiError(
                 'Database instance is not defined, playlist feature required database!',
-                'PLAYLIST_DATABASE_INVALID',
+                'PLAYLIST_DATABASE_INVALID'
             );
 
         if (!options || typeof options !== 'object')
@@ -233,7 +233,7 @@ exports.Playlist = class Playlist {
         if (!id) throw new AoiError('User  ID is required', 'PLAYLIST_ID_INVALID');
 
         const playlists = await this.database.all(this.options.table, data =>
-            data?.key?.includes(id ? `_playlist_${id}` : id),
+            data?.key?.includes(id ? `_playlist_${id}` : id)
         );
 
         return Array.isArray(playlists) ? playlists?.filter(Boolean)?.length : 0;
@@ -251,7 +251,7 @@ exports.Playlist = class Playlist {
         if (!id) throw new AoiError('User  ID is required', 'PLAYLIST_ID_INVALID');
 
         const playlists = await this.database.all(this.options.table, data =>
-            data?.key?.includes(id ? `playlist_${id}` : id),
+            data?.key?.includes(id ? `playlist_${id}` : id)
         );
 
         return Array.isArray(playlists)
@@ -263,7 +263,7 @@ exports.Playlist = class Playlist {
 
                       return {
                           name: row.key?.replaceAll(id ? `_playlist_${id}` : id, ''),
-                          length: row.value?.length,
+                          length: row.value?.length
                       };
                   })
                   .filter(Boolean)

@@ -30,6 +30,6 @@ module.exports = async d => {
     if (nowPlaying?.message === player.nowPlaying?.message) player.nowPlaying = null;
 
     return {
-        code: d.util.setCode(data),
+        code: d.util.setCode(data)
     };
 };

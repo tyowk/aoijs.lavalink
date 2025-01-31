@@ -40,47 +40,47 @@ exports.Dispatcher = class Dispatcher {
                     this.client.shoukaku.emit('queueStart', {
                         player: this.player,
                         track: this.current,
-                        dispatcher: this,
+                        dispatcher: this
                     });
                 this.client.shoukaku.emit('trackStart', {
                     player: this.player,
                     track: this.current,
-                    dispatcher: this,
+                    dispatcher: this
                 });
             })
             .on('end', () => {
                 this.client.shoukaku.emit('trackEnd', {
                     player: this.player,
                     track: this.current,
-                    dispatcher: this,
+                    dispatcher: this
                 });
             })
             .on('stuck', () => {
                 this.client.shoukaku.emit('trackStuck', {
                     player: this.player,
                     track: this.current,
-                    dispatcher: this,
+                    dispatcher: this
                 });
             })
             .on('closed', () => {
                 this.client.shoukaku.emit('socketClosed', {
                     player: this.player,
                     track: this.current,
-                    dispatcher: this,
+                    dispatcher: this
                 });
             })
             .on('exception', () => {
                 this.client.shoukaku.emit('playerException', {
                     player: this.player,
                     track: this.current,
-                    dispatcher: this,
+                    dispatcher: this
                 });
             })
             .on('update', () => {
                 this.client.shoukaku.emit('playerUpdate', {
                     player: this.player,
                     track: this.current,
-                    dispatcher: this,
+                    dispatcher: this
                 });
             });
     }
@@ -105,7 +105,7 @@ exports.Dispatcher = class Dispatcher {
         if (!value) {
             return this.currentVolume;
         }
-        
+
         if (isNaN(value) || this.currentVolume === value) return;
         this.player.setGlobalVolume(value);
         this.currentVolume = value;
@@ -281,7 +281,7 @@ exports.Dispatcher = class Dispatcher {
     async Autoplay(song, type) {
         if (!song) return;
         const resolve = await this.node.rest.resolve(
-            `${type || this.autoplayType}:${song?.info?.author || song?.info?.title}`,
+            `${type || this.autoplayType}:${song?.info?.author || song?.info?.title}`
         );
         if (!resolve || !resolve?.data || !Array.isArray(resolve.data)) return this.stop();
         const metadata = resolve.data;
@@ -291,7 +291,7 @@ exports.Dispatcher = class Dispatcher {
         while (attempts < maxAttempts) {
             const potentialChoice = this.buildTrack(
                 metadata[Math.floor(Math.random() * metadata.length)],
-                this.current?.info?.requester || this.previous?.info?.requester || this.client.user,
+                this.current?.info?.requester || this.previous?.info?.requester || this.client.user
             );
 
             if (
@@ -348,7 +348,7 @@ exports.Dispatcher = class Dispatcher {
 
         try {
             return await node.rest.resolve(
-                regex.test(query) ? query : `${(type ? type : this.options.searchEngine) || 'ytsearch'}:${query}`,
+                regex.test(query) ? query : `${(type ? type : this.options.searchEngine) || 'ytsearch'}:${query}`
             );
         } catch (err) {
             return null;

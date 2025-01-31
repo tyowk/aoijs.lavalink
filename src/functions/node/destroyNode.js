@@ -14,6 +14,6 @@ module.exports = async d => {
     node?.disconnect();
 
     return {
-        code: d.util.setCode(data),
+        code: d.util.setCode(data)
     };
 };

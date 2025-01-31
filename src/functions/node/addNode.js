@@ -29,12 +29,12 @@ module.exports = async d => {
         name,
         url: `${host}:${port}`,
         auth,
-        secure,
+        secure
     });
 
     if (returnNode === 'true') data.result = typeof node === 'object' ? JSON.stringify(node) : node;
 
     return {
-        code: d.util.setCode(data),
+        code: d.util.setCode(data)
     };
 };

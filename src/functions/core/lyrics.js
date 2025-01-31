@@ -12,7 +12,7 @@ module.exports = async d => {
         .toLowerCase()
         .replace(
             /((\[|\()(?!.*?(remix|edit|remake)).*?(\]|\))|\/+|-+| x |,|"|video oficial|official lyric video| ft.?|\|+|yhlqmdlg|x100pre|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF]|\u274C)/g,
-            '',
+            ''
         )
         .replace(/  +/g, ' ')
         .trim();
@@ -25,6 +25,6 @@ module.exports = async d => {
     data.result = result?.[property];
 
     return {
-        code: d.util.setCode(data),
+        code: d.util.setCode(data)
     };
 };

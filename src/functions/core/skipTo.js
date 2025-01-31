@@ -19,6 +19,6 @@ module.exports = d => {
     player.skip(Number(index));
 
     return {
-        code: d.util.setCode(data),
+        code: d.util.setCode(data)
     };
 };

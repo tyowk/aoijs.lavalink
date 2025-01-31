@@ -17,6 +17,6 @@ module.exports = d => {
     player.seek(0);
 
     return {
-        code: d.util.setCode(data),
+        code: d.util.setCode(data)
     };
 };

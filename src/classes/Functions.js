@@ -15,7 +15,7 @@ exports.Functions = class Functions {
         if (!basePath || !client) return;
         client.returnCode = (d, data) => {
             return {
-                code: d.util.setCode(data),
+                code: d.util.setCode(data)
             };
         };
 
@@ -34,7 +34,7 @@ exports.Functions = class Functions {
                         client.functionManager.createFunction({
                             name,
                             type: 'djs',
-                            code: func,
+                            code: func
                         });
 
                         if (debug) this.#debug('success', name);

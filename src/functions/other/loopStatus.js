@@ -13,6 +13,6 @@ module.exports = d => {
     data.result = player.loop;
 
     return {
-        code: d.util.setCode(data),
+        code: d.util.setCode(data)
     };
 };

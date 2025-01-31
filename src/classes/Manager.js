@@ -27,7 +27,7 @@ exports.Manager = class Manager extends Shoukaku {
         options.nodes = Array.isArray(options.nodes) ? options.nodes : [options.nodes];
         options.nodes = options.nodes.map(({ host, port, url, ...nodes }) => ({
             ...nodes,
-            url: url && !host && !port ? url : `${host}:${port}`,
+            url: url && !host && !port ? url : `${host}:${port}`
         }));
 
         options.maxQueueSize = isNaN(options.maxQueueSize) ? 100 : options.maxQueueSize;
@@ -54,7 +54,7 @@ exports.Manager = class Manager extends Shoukaku {
             reconnectInterval: options.reconnectInterval || 5,
             reconnectTries: options.reconnectTries || 3,
             restTimeout: options.restTimeout || 60,
-            userAgent: (options.userAgent === '(auto)') ? 'aoijs.lavalink' : options.userAgent,
+            userAgent: options.userAgent === '(auto)' ? 'aoijs.lavalink' : options.userAgent,
             voiceConnectionTimeout: options.voiceConnectionTimeout || 15,
             structures: options.structures || {},
             nodeResolver: nodes => {
@@ -62,7 +62,7 @@ exports.Manager = class Manager extends Shoukaku {
                     .filter(node => node.state === 2)
                     .sort((a, b) => a.penalties - b.penalties)
                     .shift();
-            },
+            }
         });
 
         this.cmd = new Commands();
@@ -74,7 +74,7 @@ exports.Manager = class Manager extends Shoukaku {
         this.client.music = {
             ...options,
             utils: Utils,
-            cmd: this.cmd,
+            cmd: this.cmd
         };
 
         if (options.playlist && typeof options.playlist === 'object') {
@@ -105,50 +105,36 @@ exports.Manager = class Manager extends Shoukaku {
                     this.client.channels.cache.get(cmd?.channel) ||
                     this.client.channels.cache.get(dispatcher?.channelId);
 
-                if (!cmd?.__compiled__ && typeof cmd?.__compiled__ !== 'function') {
-                    if (cmd.channel?.includes('$')) {
-                        channel = this.client.channels.cache.get(
-                            (
-                                await this.client.functionManager.interpreter(
-                                    this.client,
-                                    { guild, channel, member, author },
-                                    [],
-                                    { code: cmd.channel, name: 'NameParser' },
-                                    undefined,
-                                    true,
-                                    undefined,
-                                    {},
-                                )
-                            )?.code,
-                        );
-                    }
-
-                    if (!channel) channel = this.client.channels.cache.get(dispatcher?.channelId);
-                    if (!guild && channel) guild = channel.guild;
-
-                    await this.client.functionManager.interpreter(
-                        this.client,
-                        { guild, channel, member, author },
-                        [],
-                        cmd,
-                        undefined,
-                        false,
-                        channel,
-                        { player, track, dispatcher, nodeEvent },
+                if (cmd.channel?.includes('$')) {
+                    channel = this.client.channels.cache.get(
+                        (
+                            await this.client.functionManager.interpreter(
+                                this.client,
+                                { guild, channel, member, author },
+                                [],
+                                { code: cmd.channel, name: 'NameParser' },
+                                undefined,
+                                true,
+                                undefined,
+                                {}
+                            )
+                        )?.code
                     );
-                } else {
-                    await cmd.__compiled__({
-                        client: this.client,
-                        channel,
-                        guild,
-                        member,
-                        author,
-                        player,
-                        track,
-                        dispatcher,
-                        nodeEvent,
-                    });
                 }
+
+                if (!channel) channel = this.client.channels.cache.get(dispatcher?.channelId);
+                if (!guild && channel) guild = channel.guild;
+
+                await this.client.functionManager.interpreter(
+                    this.client,
+                    { guild, channel, member, author },
+                    [],
+                    cmd,
+                    undefined,
+                    false,
+                    channel,
+                    { player, track, dispatcher, nodeEvent }
+                );
             }
         });
     }

@@ -15,10 +15,10 @@ module.exports = async d => {
 
     player.nowPlaying = {
         message: messageId,
-        channel: player.channelId || d.channel.id,
+        channel: player.channelId || d.channel.id
     };
 
     return {
-        code: d.util.setCode(data),
+        code: d.util.setCode(data)
     };
 };
