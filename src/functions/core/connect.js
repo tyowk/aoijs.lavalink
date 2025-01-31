@@ -5,7 +5,7 @@ const { ChannelType } = require('discord.js');
  */
 module.exports = async d => {
     const data = d.util.aoiFunc(d);
-    let [voiceId] = data.inside.splits;
+    let [voiceId, deaf = 'true', mute = 'false'] = data.inside.splits;
 
     const manager = d.client.shoukaku;
     if (!manager) return d.aoiError.fnError(d, 'custom', {}, `Voice manager is not defined.`);
@@ -24,7 +24,14 @@ module.exports = async d => {
     let player = d.client.queue.get(d.guild.id);
     if (player) player.destroy();
 
-    player = await d.client.queue.create(d.guild, voiceChannel, d.channel, d.client.shoukaku.getIdealNode());
+    player = await d.client.queue.create(
+        d.guild,
+        voiceChannel,
+        d.channel,
+        d.client.shoukaku.getIdealNode(),
+        (deaf === 'true'),
+        (mute === 'true')
+    );
 
     return {
         code: d.util.setCode(data),
