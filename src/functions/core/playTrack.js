@@ -94,6 +94,10 @@ module.exports = async d => {
         }
     }
 
+    while (player.queue.length > maxQueueSize) {
+        player.queue.pop();
+    };
+
     if (debug === 'true') data.result = debugResult;
 
     return {
