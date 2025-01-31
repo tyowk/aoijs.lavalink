@@ -1,4 +1,4 @@
-<img src="https://lavalink.noujs.my.id/_astro/lavalink.YmUXcbpu_2fJgCa.webp" width="150">
+<img src="https://cdn.noujs.my.id/guild/lavalink.png" width="150">
 
 # aoijs.lavalink
 
@@ -107,7 +107,7 @@ module.exports = [
 <br>
 <br>
 <br>
-<img src="https://lavalink.noujs.my.id/_astro/lavabird.DpnUPx13_ZBEKd4.webp" width="100">
+<img src="https://cdn.noujs.my.id/guild/lavabird.png" width="100">
 <br>
 
 **[ Documentation ](https://lavalink.noujs.my.id)** <br>
