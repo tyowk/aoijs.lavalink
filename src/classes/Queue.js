@@ -28,7 +28,7 @@ exports.Queue = class Queue extends Group {
      * @returns {Dispatcher} - The created dispatcher instance.
      * @throws {AoiError} - Throws an error if no voice or text channel is provided.
      */
-    async create(guild, voice, channel, givenNode) {
+    async create(guild, voice, channel, givenNode, deaf = true, mute = false) {
         let dispatcher = this.get(guild.id);
         if (!voice) throw new AoiError('No voice channel was provided', 'AOI_VOICE_INVALID');
         if (!channel) throw new AoiError('No text channel was provided', 'AOI_TEXT_INVALID');
@@ -39,8 +39,9 @@ exports.Queue = class Queue extends Group {
             const player = await this.client.shoukaku.joinVoiceChannel({
                 guildId: guild.id,
                 channelId: voice.id,
-                shardId: guild.shard.id,
-                deaf: true,
+                shardId: guild.shard?.id,
+                deaf,
+                mute
             });
 
             dispatcher = new Dispatcher({
