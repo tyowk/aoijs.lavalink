@@ -284,17 +284,17 @@ exports.Dispatcher = class Dispatcher {
      */
     async Autoplay(song, type) {
         if (!song) return;
-        const resolve = await this.node.rest.resolve(
-            `${type || this.autoplayType}:${song?.info?.author || song?.info?.title}`
+        const resolve = await this.search(
+            song?.info?.author || song?.info?.title,
+            type || this.autoplayType
         );
         
-        if (!resolve || !resolve?.data || !Array.isArray(resolve.data)) return this.stop();
+        if (!resolve || !resolve?.data || !Array.isArray(resolve.data)) return;
         const metadata = resolve.data;
         let choosed = null;
-        const maxAttempts = metadata.length || 10;
-        let attempts = 0;
+        let maxAttempts = metadata.length > 15 ? 15 : metadata.length;
         
-        while (attempts < maxAttempts) {
+        while (maxAttempts > 0) {
             const potentialChoice = this.buildTrack(
                 metadata[Math.floor(Math.random() * metadata.length)],
                 this.current?.info?.requester || this.previous?.info?.requester || this.client.user
@@ -303,24 +303,23 @@ exports.Dispatcher = class Dispatcher {
             if (
                 !this.queue.some(s => s.encoded === potentialChoice.encoded) &&
                 !this.history.some(s => s.encoded === potentialChoice.encoded) &&
-                !this.previous?.encoded === potentialChoice.encoded &&
-                !this.current?.encoded === potentialChoice.encoded
+                this.previous?.encoded !== potentialChoice.encoded &&
+                this.current?.encoded !== potentialChoice.encoded
             ) {
                 choosed = potentialChoice;
                 break;
             }
             
-            attempts++;
+            maxAttempts--;
         }
         
         if (choosed) {
             this.queue.push(choosed);
-            this.isPlaying();
-            return;
+            return this.isPlaying();
         }
 
-        if (!this.queue.length) this.stop();
-        return;
+        if (!this.queue.length && !this.current)
+            return this.stop();
     }
 
     /**
