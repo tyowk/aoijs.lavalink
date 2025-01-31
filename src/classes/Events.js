@@ -48,7 +48,7 @@ exports.Events = class Events {
      * @param {Shoukaku} [client=dispatcher.client.shoukaku] - The Shoukaku client instance, defaults to the dispatcher’s client.
      * @throws {AoiError} - Throws an error if the method failed to execute.
      */
-    async trackEnd(player, track, dispatcher, client = dispatcher?.client?.shoukaku) {
+    async trackEnd(player, track, dispatcher, client = dispatcher.client.shoukaku) {
         if (!dispatcher || !client) throw new AoiError('Dispatcher is not defined.');
 
         if (dispatcher.previous) dispatcher.history.push(dispatcher.previous);
@@ -60,7 +60,8 @@ exports.Events = class Events {
         if (!dispatcher.queue.length) client.emit('queueEnd', { player, track, dispatcher });
         dispatcher.current = null;
 
-        while (dispatcher.history.length > 100) {
+        const { maxHistorySize } = dispatcher.client.music;
+        while (dispatcher.history.length > maxHistorySize) {
             dispatcher.history.shift();
         }
 
