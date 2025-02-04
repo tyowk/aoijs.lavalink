@@ -58,11 +58,10 @@ exports.Events = class Events {
             if (!dispatcher.queue.length) client.emit('queueEnd', { player, track, dispatcher });
             dispatcher.current = null;
 
-            const { maxHistorySize } = dispatcher.client.music;
-            while (dispatcher.history.length > maxHistorySize) {
-                dispatcher.history.shift();
-            }
-
+            const { maxHistorySize, deleteNowPlaying } = dispatcher.client.music;
+            while (dispatcher.history.length > maxHistorySize) dispatcher.history.shift();
+	    if (deleteNowPlaying) await this.deleteNowPlaying(dispatcher, dispatcher.client);
+		
             await dispatcher.play();
 	} catch (err) {
 	    if (dispatcher?.client?.music?.debug !== true) return;
