@@ -1,5 +1,6 @@
 const { blue, cyan, yellow, red } = require('chalk');
 const { AoiError, Track } = require('./Utils.js');
+const { setTimeout: Timeout } = require('timers/promise');
 
 /**
  * Events class to handle various events related to the music player.
@@ -15,7 +16,7 @@ exports.Events = class Events {
         };
 
         client.on('trackEnd', async ({ player, track, dispatcher }) => await this.trackEnd(player, track, dispatcher));
-        client.client.on('raw',  (d) => this.voiceState(d, client, client.client));
+        client.client.on('raw',  async (data) => await this.voiceState(data, client, client.client));
 
         if (client?.client?.music?.debug === true) {
             client.on('nodeConnect', ({ name }) => log(`[${blue('DEBUG')}] :: Node "${cyan(name)}" connected`));
@@ -73,15 +74,16 @@ exports.Events = class Events {
      * @param {Shoukaku} manager - The manager instance.
      * @param {Client} client - The discord client.
      */
-    voiceState(data, manager, client) {
+    async voiceState(data, manager, client) {
         try {
+	    await Timeout(1500);
 	    if ('t' in data && !['VOICE_STATE_UPDATE', 'VOICE_SERVER_UPDATE'].includes(data.t)) return;
 	    const update = 'd' in data ? data.d : data;
 	    if (!update || (!('token' in update) && !('session_id' in update))) return;
 
 	    const player = client.queue.get(update.guild_id);
             const connection = manager.connections.get(update.guild_id);
-	    if (!player || 'token' in update || update.user_id !== client.user.id) return;
+	    if (!player || !connection || 'token' in update || update.user_id !== client.user.id) return;
         
 	    if (update.channel_id && connection.lastChannelId !== update.channel_id)
                 return manager.emit('playerMove', player.player, player.current, player);
