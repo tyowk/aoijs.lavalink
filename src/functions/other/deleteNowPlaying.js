@@ -4,6 +4,9 @@
 module.exports = async d => {
     const data = d.util.aoiFunc(d);
 
+    const { deleteNowPlaying } = d.client.music;
+    if (deleteNowPlaying) return;
+    
     const manager = d.client.shoukaku;
     if (!manager) return d.aoiError.fnError(d, 'custom', {}, `Voice manager is not defined.`);
 
