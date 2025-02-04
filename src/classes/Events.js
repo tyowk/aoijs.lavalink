@@ -47,23 +47,27 @@ exports.Events = class Events {
      * @throws {AoiError} - Throws an error if the method failed to execute.
      */
     async trackEnd(player, track, dispatcher, client = dispatcher.client.shoukaku) {
-        if (!dispatcher || !client) throw new AoiError('Dispatcher is not defined.');
+	try {
+            if (!dispatcher || !client) throw new AoiError('Dispatcher is not defined.');
+            if (dispatcher.previous) dispatcher.history.push(dispatcher.previous);
+            if (dispatcher.loop === 'song' && track instanceof Track) dispatcher.queue.unshift(track);
+            else if (dispatcher.loop === 'queue' && track instanceof Track) dispatcher.queue.push(track);
+            else track instanceof Track ? (dispatcher.previous = track) : null;
 
-        if (dispatcher.previous) dispatcher.history.push(dispatcher.previous);
-        if (dispatcher.loop === 'song' && track instanceof Track) dispatcher.queue.unshift(track);
-        else if (dispatcher.loop === 'queue' && track instanceof Track) dispatcher.queue.push(track);
-        else track instanceof Track ? (dispatcher.previous = track) : null;
+            if (dispatcher.autoplay) await dispatcher.Autoplay(track);
+            if (!dispatcher.queue.length) client.emit('queueEnd', { player, track, dispatcher });
+            dispatcher.current = null;
 
-        if (dispatcher.autoplay) await dispatcher.Autoplay(track);
-        if (!dispatcher.queue.length) client.emit('queueEnd', { player, track, dispatcher });
-        dispatcher.current = null;
+            const { maxHistorySize } = dispatcher.client.music;
+            while (dispatcher.history.length > maxHistorySize) {
+                dispatcher.history.shift();
+            }
 
-        const { maxHistorySize } = dispatcher.client.music;
-        while (dispatcher.history.length > maxHistorySize) {
-            dispatcher.history.shift();
-        }
-
-        await dispatcher.play();
+            await dispatcher.play();
+	} catch (err) {
+	    if (dispatcher?.client?.music?.debug !== true) return;
+            console.error(err);
+	}
     }
 
     /**
@@ -79,16 +83,19 @@ exports.Events = class Events {
 	    await Timeout(1500);
 	    if ('t' in data && !['VOICE_STATE_UPDATE', 'VOICE_SERVER_UPDATE'].includes(data.t)) return;
 	    const update = 'd' in data ? data.d : data;
-	    if (!update || (!('token' in update) && !('session_id' in update))) return;
+	    if (!update || (!('token' in update) && !('session_id' in update)))
+		return;
 
 	    const player = client.queue.get(update.guild_id);
             const connection = manager.connections.get(update.guild_id);
-	    if (!player || !connection || 'token' in update || update.user_id !== client.user.id) return;
+	    if (!player || !connection || 'token' in update || update.user_id !== client.user.id)
+		return;
         
-	    if (update.channel_id && connection.lastChannelId !== update.channel_id)
+	    if (update.channel_id && player && connection.lastChannelId && connection.lastChannelId !== update.channel_id)
                 return manager.emit('playerMove', player.player, player.current, player);
         
-            return player.destroy();
+            if (!update.channel_id && player)
+		return player.destroy();
         } catch (err) {
             if (client?.music?.debug !== true) return;
             console.error(err);
