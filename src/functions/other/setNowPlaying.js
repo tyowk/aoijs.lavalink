@@ -17,7 +17,10 @@ module.exports = async d => {
         message: messageId,
         channel: player.channelId || d.channel.id,
         isDeleted: false,
-        last: player.nowPlaying
+        last: {
+            message: player.nowPlaying?.message,
+            channel: player.nowPlaying?.channel
+        }
     };
 
     return {
