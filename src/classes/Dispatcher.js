@@ -363,4 +363,28 @@ exports.Dispatcher = class Dispatcher {
             return null;
         }
     }
+
+    /**
+     * Delete now playing message that already set before.
+     *
+     * @async
+     */
+    async deleteNowPlaying() {
+        let nowPlaying = this.nowPlaying;
+        if (!nowPlaying || typeof nowPlaying !== 'object') return;
+        
+        try {
+            const channel = this.client.channels.cache.get(nowPlaying.channel) || await this.client.channels.fetch(nowPlaying.channel);
+            if (!channel) return;
+
+            const msg = channel.messages.cache.get(nowPlaying.message) || await channel.messages.fetch(nowPlaying.message);
+            if (!msg || !msg.deletable || msg.author.id !== d.client.user.id) return;
+
+            await msg.delete();
+        } catch {};
+
+        if (!player.nowPlaying.isDeleted && player.nowPlaying.message === nowPlaying.message) {
+            player.nowPlaying.isDeleted = true;
+        }
+    }
 };
