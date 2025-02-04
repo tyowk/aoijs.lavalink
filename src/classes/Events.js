@@ -14,21 +14,14 @@ exports.Events = class Events {
             console.log(...msg);
         };
 
-        client.on('trackEnd', async ({ player, track, dispatcher }) => {
-            await this.trackEnd(player, track, dispatcher);
-        });
-
-        client.client.on('raw', async  (d) => {
-            await this.voiceState(d, client, client.client);
-        });
+        client.on('trackEnd', async ({ player, track, dispatcher }) => await this.trackEnd(player, track, dispatcher));
+        client.client.on('raw',  (d) => this.voiceState(d, client, client.client));
 
         if (client?.client?.music?.debug === true) {
             client.on('nodeConnect', ({ name }) => log(`[${blue('DEBUG')}] :: Node "${cyan(name)}" connected`));
             client.on('nodeReconnect', ({ name }) => log(`[${blue('DEBUG')}] :: Node "${yellow(name)}" reconnected`));
             client.on('nodeError', ({ name, error }) => log(`[${blue('DEBUG')}] :: Node "${red(name)}" error:`, error));
-            client.on('nodeDestroy', ({ name, code, reason }) =>
-                log(`[${blue('DEBUG')}] :: Node "${red(name)}" destroyed with code: ${code}, reason: ${reason}`)
-            );
+            client.on('nodeDestroy', ({ name, code, reason }) => log(`[${blue('DEBUG')}] :: Node "${red(name)}" destroyed with code: ${code} & reason: ${reason}`));
             client.on('nodeDisconnect', ({ name }) => log(`[${blue('DEBUG')}] :: Node "${red(name)}" disconnected`));
             client.on('nodeDebug', ({ name, info }) => log(`[${blue('DEBUG')}] :: "${cyan(name)}" debug: ${info}`));
         }
@@ -72,46 +65,32 @@ exports.Events = class Events {
         await dispatcher.play();
     }
 
-    async voiceState(data, manager, client) {
-		if ("t" in data && !["VOICE_STATE_UPDATE", "VOICE_SERVER_UPDATE"].includes(data.t)) return;
-		const update = "d" in data ? data.d : data;
-		if (!update || (!("token" in update) && !("session_id" in update))) return;
+    /**
+     * Handles raw voice state event.
+     *
+     * @async
+     * @param {Object} data - The event data.
+     * @param {Shoukaku} manager - The manager instance.
+     * @param {Client} client - The discord client.
+     */
+    voiceState(data, manager, client) {
+        try {
+		    if ('t' in data && !['VOICE_STATE_UPDATE', 'VOICE_SERVER_UPDATE'].includes(data.t)) return;
+		    const update = 'd' in data ? data.d : data;
+		    if (!update || (!('token' in update) && !('session_id' in update))) return;
 
-		const player = client.queue.get(update.guild_id);
-        const connection = manager.connections.get(update.guild_id);
-		if (!player) return;
+		    const player = client.queue.get(update.guild_id);
+            const connection = manager.connections.get(update.guild_id);
+	    	if (!player || 'token' in update || update.user_id !== client.user.id) return;
         
-		if ("token" in update) {
-			const { token, endpoint } = update;
-            const { sessionId } = player.node;
-
-			return await player.node.rest.updatePlayer({
-				playerOptions: {
-                    voice: {
-                        token,
-                        endpoint,
-                        sessionId
-                    }
-                }
-			});
-		}
-
-		if (update.user_id !== client.user.id) return;
-		if (update.channel_id) {
-			if (player.channelId !== update.channel_id) {
-				manager.emit('playerMove', player.player, player.current, player);
-			}
-
-			player.voiceState.sessionId = update.session_id;
-			player.voiceChannelId = update.channel_id;
-			return;
-		}
-
-		this.emit("playerDisconnect", player, player.voiceChannelId);
-		player.voiceChannelId = null;
-		player.voiceState = Object.assign({});
-		player.destroy();
-		return;
+		    if (update.channel_id && connection.channelId !== update.channel_id)
+                return manager.emit('playerMove', player.player, player.current, player);
+        
+		    return player.destroy();
+        } catch (err) {
+            if (client?.music?.debug !== true) return;
+            console.error(err);
+        };
 	}
 }
 
