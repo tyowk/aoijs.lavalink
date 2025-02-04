@@ -75,23 +75,21 @@ exports.Events = class Events {
      */
     voiceState(data, manager, client) {
         try {
-		    if ('t' in data && !['VOICE_STATE_UPDATE', 'VOICE_SERVER_UPDATE'].includes(data.t)) return;
-		    const update = 'd' in data ? data.d : data;
-		    if (!update || (!('token' in update) && !('session_id' in update))) return;
+	    if ('t' in data && !['VOICE_STATE_UPDATE', 'VOICE_SERVER_UPDATE'].includes(data.t)) return;
+	    const update = 'd' in data ? data.d : data;
+	    if (!update || (!('token' in update) && !('session_id' in update))) return;
 
-		    const player = client.queue.get(update.guild_id);
+	    const player = client.queue.get(update.guild_id);
             const connection = manager.connections.get(update.guild_id);
-	    	if (!player || 'token' in update || update.user_id !== client.user.id) return;
+	    if (!player || 'token' in update || update.user_id !== client.user.id) return;
         
-		    if (update.channel_id && connection.channelId !== update.channel_id)
+	    if (update.channel_id && connection.lastChannelId !== update.channel_id)
                 return manager.emit('playerMove', player.player, player.current, player);
         
-		    return player.destroy();
+            return player.destroy();
         } catch (err) {
             if (client?.music?.debug !== true) return;
             console.error(err);
         };
-	}
+    }
 }
-
-    
