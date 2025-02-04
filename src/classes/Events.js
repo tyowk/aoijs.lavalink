@@ -79,7 +79,7 @@ exports.Events = class Events {
      */
     async voiceState(data, manager, client) {
         try {
-	    await Timeout(1500);
+	    await Timeout(1000);
 	    if ('t' in data && !['VOICE_STATE_UPDATE', 'VOICE_SERVER_UPDATE'].includes(data.t)) return;
 	    const update = 'd' in data ? data.d : data;
 	    if (!update || (!('token' in update) && !('session_id' in update)))
