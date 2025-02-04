@@ -1,6 +1,6 @@
 const { blue, cyan, yellow, red } = require('chalk');
 const { AoiError, Track } = require('./Utils.js');
-const { setTimeout: Timeout } = require('timers/promise');
+const { setTimeout: Timeout } = require('timers/promises');
 
 /**
  * Events class to handle various events related to the music player.
