@@ -16,6 +16,7 @@ module.exports = async d => {
     player.nowPlaying = {
         message: messageId,
         channel: player.channelId || d.channel.id,
+        isDeleted: false,
         last: {
             message: player.nowPlaying?.message ? player.nowPlaying?.message : null,
             channel: player.nowPlaying?.channel ? player.nowPlaying?.channel : null
