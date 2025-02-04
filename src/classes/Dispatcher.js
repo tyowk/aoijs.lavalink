@@ -373,7 +373,7 @@ exports.Dispatcher = class Dispatcher {
         let nowPlaying = this.nowPlaying;
         if (!nowPlaying || typeof nowPlaying !== 'object') return;
         
-        try {
+        //try {
             const channel = this.client.channels.cache.get(nowPlaying.channel) || await this.client.channels.fetch(nowPlaying.channel);
             if (!channel) return;
 
@@ -381,7 +381,7 @@ exports.Dispatcher = class Dispatcher {
             if (!msg || !msg.deletable || msg.author.id !== d.client.user.id) return;
 
             await msg.delete();
-        } catch {};
+      //  } catch {};
 
         if (!this.nowPlaying.isDeleted && this.nowPlaying.message === nowPlaying.message) {
             this.nowPlaying.isDeleted = true;
