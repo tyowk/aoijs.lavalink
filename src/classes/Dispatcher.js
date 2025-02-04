@@ -383,8 +383,8 @@ exports.Dispatcher = class Dispatcher {
             await msg.delete();
         } catch {};
 
-        if (!player.nowPlaying.isDeleted && player.nowPlaying.message === nowPlaying.message) {
-            player.nowPlaying.isDeleted = true;
+        if (!this.nowPlaying.isDeleted && this.nowPlaying.message === nowPlaying.message) {
+            this.nowPlaying.isDeleted = true;
         }
     }
 };
