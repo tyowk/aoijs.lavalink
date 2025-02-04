@@ -33,10 +33,11 @@ exports.Manager = class Manager extends Shoukaku {
         options.maxQueueSize = isNaN(options.maxQueueSize) ? 100 : options.maxQueueSize;
         options.maxPlaylistSize = isNaN(options.maxPlaylistSize) ? 100 : options.maxPlaylistSize;
         options.maxHistorySize = isNaN(options.maxHistorySize) ? 100 : options.maxHistorySize;
-        options.noLimitVolume = options.noLimitVolume || false;
+        options.noLimitVolume = options.noLimitVolume ?? false;
+        options.deleteNowPlaying = options.deleteNowPlaying ?? true;
         options.defaultVolume = isNaN(options.defaultVolume) ? 100 : options.defaultVolume;
         options.maxVolume = isNaN(options.maxVolume) ? 200 : options.maxVolume;
-        options.debug = options.debug || false;
+        options.debug = options.debug ?? false;
         options.searchEngine =
             options.searchEngine
                 ?.toLowerCase()
@@ -48,16 +49,16 @@ exports.Manager = class Manager extends Shoukaku {
                 .replace('youtubemusic', 'ytmsearch') || 'ytsearch';
 
         super(new Connectors.DiscordJS(client), options.nodes, {
-            moveOnDisconnect: options.moveOnDisconnect || false,
-            resume: options.resume || false,
-            resumeByLibrary: options.resumeByLibrary || false,
-            resumeTimeout: options.resumeTimeout || 30,
-            reconnectInterval: options.reconnectInterval || 5,
-            reconnectTries: options.reconnectTries || 3,
-            restTimeout: options.restTimeout || 60,
+            moveOnDisconnect: options.moveOnDisconnect ?? false,
+            resume: options.resume ?? false,
+            resumeByLibrary: options.resumeByLibrary ?? false,
+            resumeTimeout: options.resumeTimeout ?? 30,
+            reconnectInterval: options.reconnectInterval ?? 5,
+            reconnectTries: options.reconnectTries ?? 3,
+            restTimeout: options.restTimeout ?? 60,
             userAgent: options.userAgent === '(auto)' ? 'aoijs.lavalink' : options.userAgent,
             voiceConnectionTimeout: options.voiceConnectionTimeout || 15,
-            structures: options.structures || {},
+            structures: options.structures ?? {},
             nodeResolver: nodes => {
                 return [...nodes.values()]
                     .filter(node => node.state === 2)

@@ -15,7 +15,12 @@ module.exports = async d => {
 
     player.nowPlaying = {
         message: messageId,
-        channel: player.channelId || d.channel.id
+        channel: player.channelId || d.channel.id,
+        isDeleted: false,
+        last: {
+            message: player.nowPlaying?.message,
+            channel: player.nowPlaying?.channel
+        }
     };
 
     return {

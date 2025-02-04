@@ -25,31 +25,72 @@ The setup is used to initialize the bot client and configure the Lavalink music 
 
 ```js
 const { AoiClient } = require('aoi.js');
-const { Manager } = require('aoijs.lavalink'); // Importing the MusicClient for handling Lavalink integration.
+const { Manager } = require('aoijs.lavalink');
 
 const client = new AoiClient({ ... });
 
 const voice = new Manager(client, {
     nodes: [{
-        name: 'my lavalink node',  // A custom name for the Lavalink node (can be any string).
-        host: 'yourdomain.com',    // URL to your Lavalink node. Replace with your actual Lavalink server URL.
-        port: 0000,                // Your lavalink server port.
-        auth: 'youshallnotpass',   // Authentication password for the Lavalink node.
-        secure: false              // Set to true if your Lavalink server uses SSL/TLS (HTTPS).
-    }],
-
-    maxQueueSize: 100,             // Maximum number of tracks that can be queued for playback (default is 100)
-    maxPlaylistSize: 100,          // Maximum number of tracks that can be in a playlist (default is 100)
-    maxHistorySize: 100,           // Maximum number of tracks that can be saved in the history (default is 100)
-    searchEngine: 'youtube',       // Default search engine. You can set this to 'soundcloud' or 'spotify' or others (default is youtube)
-    debug: false,                  // Whether to enable debug logs for the music client (default is false)
-    defaultVolume: 75,             // Set default volume when the player created (default is 100)
-    maxVolume: 200,                // Maximum volume player can handle (default is 200)
-    noLimitVolume: false           // Whether to enable no limit volume (not recommended) (default is false)
+        name: 'my lavalink node',
+        host: 'yourdomain.com',
+        port: 0000,
+        auth: 'youshallnotpass',
+        secure: false
+    }]
 });
 ```
 
+<details>
+<summary><h2>Options</h2><p>Options who have a leading question mark (?) are optional and not required, however if you want to use them, make sure to remove it!</p></summary>
+    
+```js
+new Manager(<Client>, {
+    nodes: [{
+        name: string,
+        host: string,
+        port: number,
+        auth: string,
+        secure: boolean
+    },{ /* add more node */ }],
+
+    maxQueueSize?: number,
+    maxPlaylistSize?: number,
+    maxHistorySize?: number,
+    searchEngine?: string,
+    debug?: boolean,
+    defaultVolume?: number,
+    maxVolume?: number,
+    noLimitVolume?: boolean,
+    deleteNowPlaying?: boolean
+});
+```
+
+### Default Options
+| Option | Type | Default | Description |
+|--------|------|---------|--------------------|
+| nodes | **[`Array`](#node-options)** | | (see below) |
+| maxQueueSize | number | 100 | Maximum number of tracks that can be queued for playback. |
+| maxPlaylistSize | number | 100 | Maximum number of tracks that can be in a playlist. |
+| maxHistorySize | number | 100 | Maximum number of tracks that can be saved in the history. |
+| searchEngine | string | youtube | Default search engine. You can set this to 'soundcloud' or 'spotify' or others. |
+| debug | boolean | false | Whether to enable debug logs for the music client. |
+| defaultVolume | number | 100 | Set default volume when the player created. |
+| maxVolume | number | 200 | Maximum volume player can handle. |
+| noLimitVolume | boolean | false | Whether to enable no limit volume (not recommended). |
+| deleteNowPlaying | number | 200 | Whether to enable auto-delete now playing message when track ends. |
+
+### Node Options
+| Option | Type | Description |
+|--------|------|--------------------|
+| Name | string | custom name for the Lavalink node (can be any string) |
+| host | string | URL to your Lavalink node. Replace with your actual Lavalink server URL. |
+| port | number | Your lavalink server port. |
+| auth | boolean | Authentication password for the Lavalink node. |
+| secure | boolean | Set to true if your Lavalink server uses SSL/TLS (HTTPS). |
+
 see [here](https://guide.shoukaku.shipgirl.moe/guides/2-options/) for more client options.
+
+</details>
 
 ---
 
@@ -88,13 +129,11 @@ voice.loadVoiceEvents('./voice/', false);
 **Example Event File** (in `/voice/trackStart.js`):
 
 ```js
-module.exports = [
-    {
-        channel: '$channelId', // The ID of the channel where the event will trigger (can be dynamic or static).
-        type: 'trackStart', // The event type, e.g., when a track starts playing ('trackStart').
-        code: `$songInfo[title]`, // The action to take when the event is triggered. Here it will return the title of the song.
-    },
-];
+module.exports = [{
+    channel: '$channelId', // The ID of the channel where the event will trigger (can be dynamic or static).
+    type: 'trackStart', // The event type, e.g., when a track starts playing ('trackStart').
+    code: `$songInfo[title]`, // The action to take when the event is triggered. Here it will return the title of the song.
+}];
 ```
 
 ---
