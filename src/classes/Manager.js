@@ -179,16 +179,6 @@ exports.Manager = class Manager extends Shoukaku {
         return this;
     }
 
-    queueStart(cmd) {
-        this.voiceEvent('queueStart', cmd);
-        return this;
-    }
-
-    queueEnd(cmd) {
-        this.voiceEvent('queueEnd', cmd);
-        return this;
-    }
-
     trackStuck(cmd) {
         this.voiceEvent('trackStuck', cmd);
         return this;
@@ -201,6 +191,16 @@ exports.Manager = class Manager extends Shoukaku {
 
     trackResumed(cmd) {
         this.voiceEvent('trackResumed', cmd);
+        return this;
+    }
+
+    queueStart(cmd) {
+        this.voiceEvent('queueStart', cmd);
+        return this;
+    }
+
+    queueEnd(cmd) {
+        this.voiceEvent('queueEnd', cmd);
         return this;
     }
 
@@ -229,6 +229,11 @@ exports.Manager = class Manager extends Shoukaku {
         return this;
     }
 
+    nodeDebug(cmd) {
+        this.voiceEvent('nodeDebug', cmd);
+        return this;
+    }
+
     socketClosed(cmd) {
         this.voiceEvent('socketClosed', cmd);
         return this;
@@ -254,8 +259,8 @@ exports.Manager = class Manager extends Shoukaku {
         return this;
     }
 
-    nodeDebug(cmd) {
-        this.voiceEvent('nodeDebug', cmd);
+    playerMove(cmd) {
+        this.voiceEvent('playerMove', cmd);
         return this;
     }
 };
