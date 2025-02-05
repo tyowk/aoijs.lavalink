@@ -115,6 +115,34 @@ voice.<eventName>({          // The event type, e.g., when a track starts playin
 });
 ```
 
+<details>
+<summary><h3>Available Events</h3><p>Events are used to listen to specific changes of something, such as members or channels, which you then can use for your commands.
+
+This section will list all events.</p></summary>
+    
+```sh
+* trackStart
+* trackEnd
+* trackStuck
+* trackPaused
+* trackResumed
+* queueStart
+* queueEnd
+* nodeConnect
+* nodeReconnect
+* nodeDisconnect
+* nodeError
+* nodeDestroy
+* nodeRaw
+* nodeDebug
+* socketClosed
+* playerCreate
+* playerDestroy
+* playerException
+* playerUpdate
+```
+</details>
+
 ---
 
 ## Handlers
