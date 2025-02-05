@@ -141,6 +141,7 @@ exports.Commands = class Commands {
         this.playerDestroy = new Group();
         this.playerException = new Group();
         this.playerUpdate = new Group();
+        this.playerMove = new Group();
         this.queueStart = new Group();
         this.queueEnd = new Group();
         this.socketClosed = new Group();
