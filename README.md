@@ -133,13 +133,13 @@ This section will list all events.</p></summary>
 * nodeDisconnect
 * nodeError
 * nodeDestroy
-* nodeRaw
 * nodeDebug
 * socketClosed
 * playerCreate
 * playerDestroy
 * playerException
 * playerUpdate
+* playerMove
 ```
 </details>
 
