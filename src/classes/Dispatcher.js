@@ -35,6 +35,7 @@ exports.Dispatcher = class Dispatcher {
 
         this.player
             .on('start', () => {
+                if (this.paused) this.paused = false;
                 if (!this.history.length)
                     this.client.shoukaku.emit('queueStart', {
                         player: this.player,
@@ -117,6 +118,7 @@ exports.Dispatcher = class Dispatcher {
         this.current = this.queue.length !== 0 ? this.queue.shift() : this.queue[0];
         if (!this.current) return;
         this.player.playTrack({ track: { encoded: this.current?.encoded } });
+        if (this.paused) this.paused = false;
         const { maxHistorySize } = this.client.music;
         while (this.history.length > maxHistorySize) {
             this.history.shift();
@@ -168,6 +170,7 @@ exports.Dispatcher = class Dispatcher {
         this.current = this.history.pop() || null;
         this.previous = this.history.pop() || null;
         this.player.stopTrack();
+        if (this.paused) this.paused = false;
     }
 
     /**
@@ -175,7 +178,9 @@ exports.Dispatcher = class Dispatcher {
      */
     destroy() {
         this.queue.length = 0;
-        this.history = [];
+        this.history.length = 0;
+        this.current = null;
+        this.previous = null;
         this.client.shoukaku.leaveVoiceChannel(this.guildId);
         this.client.queue.delete(this.guildId);
         this.client.shoukaku.emit('playerDestroy', {
@@ -212,10 +217,12 @@ exports.Dispatcher = class Dispatcher {
             if (skipto > this.queue.length) {
                 this.queue.length = 0;
             } else {
-                this.queue.splice(0, skipto - 1);
+                const tracks = this.queue.splice(0, skipto - 1);
+                if (this.loop === 'queue') this.queue.push(...tracks);
             }
         }
 
+        if (this.paused) this.paused = false;
         this.player.stopTrack();
     }
 
@@ -234,11 +241,19 @@ exports.Dispatcher = class Dispatcher {
      */
     stop() {
         if (!this.player) return;
-        this.queue = new Queue();
-        this.history = new History();
+        this.queue.length = 0;
+        this.history.length = 0;
         this.loop = 'off';
         this.autoplay = false;
         this.stopped = true;
+        this.paused = false;
+        this.current = null;
+        this.previous = null;
+        this.filter = null;
+        this.nowPlaying = null;
+        this.shuffle = false;
+        this.autoplayType = this.client?.music?.searchEngine || 'ytsearch';
+        this.currentVolume = 100;
         this.player.stopTrack();
     }
 
