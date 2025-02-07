@@ -20,7 +20,7 @@ module.exports = async d => {
     if (!player) return d.aoiError.fnError(d, 'custom', {}, `There is no player for this guild.`);
     if (player.channelId !== d.channel?.id && d.channel?.id) player.channelId = d.channel.id;
     const { maxQueueSize, maxPlaylistSize } = d.client.music;
-    
+
     if (!isNaN(index)) {
         if (player.queue.length >= maxQueueSize)
             return d.aoiError.fnError(d, 'custom', {}, `The maximum queue load size is reached: ${maxQueueSize}`);

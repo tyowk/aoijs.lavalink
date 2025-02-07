@@ -299,16 +299,13 @@ exports.Dispatcher = class Dispatcher {
      */
     async Autoplay(song, type) {
         if (!song) return;
-        const resolve = await this.search(
-            song?.info?.author || song?.info?.title,
-            type || this.autoplayType
-        );
-        
+        const resolve = await this.search(song?.info?.author || song?.info?.title, type || this.autoplayType);
+
         if (!resolve || !resolve?.data || !Array.isArray(resolve.data)) return;
         const metadata = resolve.data;
         let choosed = null;
         let maxAttempts = metadata.length > 15 ? 15 : metadata.length;
-        
+
         while (maxAttempts > 0) {
             const potentialChoice = this.buildTrack(
                 metadata[Math.floor(Math.random() * metadata.length)],
@@ -324,17 +321,16 @@ exports.Dispatcher = class Dispatcher {
                 choosed = potentialChoice;
                 break;
             }
-            
+
             maxAttempts--;
         }
-        
+
         if (choosed) {
             this.queue.push(choosed);
             return this.isPlaying();
         }
 
-        if (!this.queue.length && !this.current)
-            return this.stop();
+        if (!this.queue.length && !this.current) return this.stop();
     }
 
     /**
@@ -387,16 +383,19 @@ exports.Dispatcher = class Dispatcher {
     async deleteNowPlaying() {
         let nowPlaying = this.nowPlaying;
         if (!nowPlaying || typeof nowPlaying !== 'object') return;
-        
+
         try {
-            const channel = this.client.channels.cache.get(nowPlaying.channel) || await this.client.channels.fetch(nowPlaying.channel);
+            const channel =
+                this.client.channels.cache.get(nowPlaying.channel) ||
+                (await this.client.channels.fetch(nowPlaying.channel));
             if (!channel) return;
 
-            const msg = channel.messages.cache.get(nowPlaying.message) || await channel.messages.fetch(nowPlaying.message);
+            const msg =
+                channel.messages.cache.get(nowPlaying.message) || (await channel.messages.fetch(nowPlaying.message));
             if (!msg || !msg.deletable || msg.author.id !== this.client.user.id) return;
 
             await msg.delete();
-        } catch {};
+        } catch {}
 
         if (!this.nowPlaying.isDeleted && this.nowPlaying.message === nowPlaying.message) {
             this.nowPlaying.isDeleted = true;

@@ -62,8 +62,10 @@ new Manager(<Client>, {
     maxVolume?: number,
     noLimitVolume?: boolean,
     deleteNowPlaying?: boolean
+
 });
-```
+
+````
 
 ### Default Options
 | Option | Type | Default | Description |
@@ -113,13 +115,13 @@ voice.<eventName>({          // The event type, e.g., when a track starts playin
     channel: '$channelId',   // The ID of the channel where the event will trigger (can be dynamic or static).
     code: `$songInfo[title]` // The action to take when the event is triggered. Here it will return the title of the song.
 });
-```
+````
 
 <details>
 <summary><h3>Available Events</h3><p>Events are used to listen to specific changes of something, such as members or channels, which you then can use for your commands.
 
 This section will list all events.</p></summary>
-    
+
 ```sh
 * trackStart
 * trackEnd
@@ -141,6 +143,7 @@ This section will list all events.</p></summary>
 * playerUpdate
 * playerMove
 ```
+
 </details>
 
 ---
@@ -148,7 +151,7 @@ This section will list all events.</p></summary>
 ## Handlers
 
 ```js
-const voice = new Manager(<Client>, { ... });
+const voice = new Manager(client, { ... });
 
 // Load custom music event handlers from a directory. 'false' disables debug logs.
 voice.loadVoiceEvents('./voice/', false);
@@ -157,11 +160,13 @@ voice.loadVoiceEvents('./voice/', false);
 **Example Event File** (in `/voice/trackStart.js`):
 
 ```js
-module.exports = [{
-    channel: '$channelId', // The ID of the channel where the event will trigger (can be dynamic or static).
-    type: 'trackStart', // The event type, e.g., when a track starts playing ('trackStart').
-    code: `$songInfo[title]`, // The action to take when the event is triggered. Here it will return the title of the song.
-}];
+module.exports = [
+    {
+        channel: '$channelId', // The ID of the channel where the event will trigger (can be dynamic or static).
+        type: 'trackStart', // The event type, e.g., when a track starts playing ('trackStart').
+        code: `$songInfo[title]` // The action to take when the event is triggered. Here it will return the title of the song.
+    }
+];
 ```
 
 ---
