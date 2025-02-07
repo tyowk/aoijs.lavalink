@@ -10,18 +10,18 @@ We are committed to providing a welcoming and respectful environment for all con
 
 1. **Fork the repo** and clone it to your local machine.
 2. **Create a new branch** for your changes:
-   ```bash
-   git checkout -b feature/my-feature
-   ```
+    ```bash
+    git checkout -b feature/my-feature
+    ```
 3. **Make your changes**. Follow the existing code style and add tests if necessary.
 4. **Commit your changes** with a clear message:
-   ```bash
-   [Fix] Correct typo in README
-   ```
+    ```bash
+    [Fix] Correct typo in README
+    ```
 5. **Push your branch** to your forked repo:
-   ```bash
-   git push origin feature/my-feature
-   ```
+    ```bash
+    git push origin feature/my-feature
+    ```
 6. **Open a pull request** (PR) with a description of what you’ve done.
 
 ## Reporting Issues

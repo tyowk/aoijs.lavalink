@@ -14,7 +14,7 @@ module.exports = async d => {
     if (!player) return d.client.returnCode(d, data);
 
     await player.deleteNowPlaying();
-    
+
     return {
         code: d.util.setCode(data)
     };

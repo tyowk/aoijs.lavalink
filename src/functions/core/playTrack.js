@@ -39,7 +39,7 @@ module.exports = async d => {
     d.data.tracks = res || null;
     if (d.data.tracks && typeof d.data.tracks === 'object') d.data.tracks.query = query?.addBrackets();
     const { maxQueueSize, maxPlaylistSize } = d.client.music;
-    
+
     switch (res?.loadType) {
         case LoadType.TRACK: {
             if (player.queue.length >= maxQueueSize) {
