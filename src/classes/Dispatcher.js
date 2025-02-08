@@ -173,14 +173,29 @@ exports.Dispatcher = class Dispatcher {
         if (this.paused) this.paused = false;
     }
 
+    /*
+     * Clean the player dispatcher cache.
+     */
+    clean() {
+        this.queue.length = 0;
+        this.history.length = 0;
+        this.loop = 'off';
+        this.autoplay = false;
+        this.stopped = true;
+        this.paused = false;
+        this.current = null;
+        this.previous = null;
+        this.filter = null;
+        this.shuffle = false;
+        this.autoplayType = this.client?.music?.searchEngine || 'ytsearch';
+        this.currentVolume = 100;
+    }
+    
     /**
      * Destroys the dispatcher, clearing the queue and history, and leaving the voice channel.
      */
     destroy() {
-        this.queue.length = 0;
-        this.history.length = 0;
-        this.current = null;
-        this.previous = null;
+        this.clean();
         this.client.shoukaku.leaveVoiceChannel(this.guildId);
         this.client.queue.delete(this.guildId);
         this.client.shoukaku.emit('playerDestroy', {
@@ -241,19 +256,7 @@ exports.Dispatcher = class Dispatcher {
      */
     stop() {
         if (!this.player) return;
-        this.queue.length = 0;
-        this.history.length = 0;
-        this.loop = 'off';
-        this.autoplay = false;
-        this.stopped = true;
-        this.paused = false;
-        this.current = null;
-        this.previous = null;
-        this.filter = null;
-        this.nowPlaying = null;
-        this.shuffle = false;
-        this.autoplayType = this.client?.music?.searchEngine || 'ytsearch';
-        this.currentVolume = 100;
+        this.clean();
         this.player.stopTrack();
     }
 
