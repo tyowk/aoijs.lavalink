@@ -62,7 +62,7 @@ exports.Events = class Events {
 
             const { maxHistorySize, deleteNowPlaying } = dispatcher.client.music;
             while (dispatcher.history.length > maxHistorySize) dispatcher.history.shift();
-            if (deleteNowPlaying) await dispatcher.deleteNowPlaying(dispatcher, dispatcher.client);
+            if (deleteNowPlaying) await dispatcher.deleteNowPlaying();
 
             await dispatcher.play();
         } catch (err) {

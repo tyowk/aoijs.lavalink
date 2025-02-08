@@ -271,11 +271,12 @@ exports.Dispatcher = class Dispatcher {
      *
      * @param {Object} track - The track data to build from.
      * @param {Object} user - The user requesting the track.
+     * @param {Object} playlist - The playlist data to build from.
      * @returns {Object} - The constructed track object.
      * @throws {AoiError} - Throws an error if the track is not provided.
      */
-    buildTrack(track, user) {
-        return new Track(track, user);
+    buildTrack(track, user, playlist) {
+        return new Track(track, user, playlist);
     }
 
     /**
@@ -300,7 +301,6 @@ exports.Dispatcher = class Dispatcher {
     async Autoplay(song, type) {
         if (!song) return;
         const resolve = await this.search(song?.info?.author || song?.info?.title, type || this.autoplayType);
-
         if (!resolve || !resolve?.data || !Array.isArray(resolve.data)) return;
         const metadata = resolve.data;
         let choosed = null;

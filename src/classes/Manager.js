@@ -4,7 +4,7 @@ const { Functions } = require('./Functions.js');
 const { Playlist } = require('./Playlist.js');
 const { Events } = require('./Events.js');
 const { LoadCommands } = require('aoi.js');
-const { Utils, Commands, AoiError } = require('./Utils.js');
+const { Track, Utils, Commands, AoiError } = require('./Utils.js');
 const { join } = require('node:path');
 
 /**
@@ -139,6 +139,48 @@ exports.Manager = class Manager extends Shoukaku {
                 );
             }
         });
+    }
+
+    /**
+     * Searches for tracks based on a query and type.
+     *
+     * @async
+     * @param {string} query - The search query for finding tracks.
+     * @param {string} [type] - The type of search engine to use.
+     * @returns {Object|null} - The search result or null if an error occurs.
+     */
+    async search(query, type) {
+        const node = this.getIdealNode();
+        const regex = /^https?:\/\//;
+        type = type
+            ?.toLowerCase()
+            .replace('youtube', 'ytsearch')
+            .replace('spotify', 'spsearch')
+            .replace('soundcloud', 'scsearch')
+            .replace('deezer', 'dzsearch')
+            .replace('applemusic', 'amsearch')
+            .replace('youtubemusic', 'ytmsearch');
+
+        try {
+            return await node.rest.resolve(
+                regex.test(query) ? query : `${(type ? type : this.client.music.searchEngine) || 'ytsearch'}:${query}`
+            );
+        } catch (err) {
+            return null;
+        }
+    }
+
+    /**
+     * Builds a track object with additional user information.
+     *
+     * @param {Object} track - The track data to build from.
+     * @param {Object} user - The user requesting the track.
+     * @param {Object} playlist - The playlist data to build from.
+     * @returns {Object} - The constructed track object.
+     * @throws {AoiError} - Throws an error if the track is not provided.
+     */
+    buildTrack(track, user, playlist) {
+        return new Track(track, user, playlist);
     }
 
     /**

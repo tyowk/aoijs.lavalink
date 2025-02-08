@@ -17,34 +17,35 @@ module.exports = async d => {
 
     const getResult = res => {
         if (!res?.info) return null;
-        const trackInfo = res?.info;
-        const requester = trackInfo?.requester;
-        const pluginInfo = trackInfo?.plugininfo;
+        const trackInfo = track.info;
+        const requester = trackInfo.requester;
+        const pluginInfo = trackInfo.plugininfo;
+        const playlistz = trackInfo.playlist;
 
         const trackData = {
             title: trackInfo.title,
-            artworkUrl: trackInfo.artworkUrl,
-            artwork: trackInfo.artworkUrl,
             thumbnail: trackInfo.artworkUrl,
-            url: trackInfo.uri,
-            uri: trackInfo.uri,
+            url: trackInfo.url,
             duration: d.client.music.utils.formatTime(trackInfo.length),
             author: trackInfo.author,
-            sourceName: trackInfo.sourceName,
-            source: trackInfo.sourceName,
             platform: trackInfo.sourceName,
             identifier: trackInfo.identifier,
             isSeekable: trackInfo.isSeekable,
             isStream: trackInfo.isStream,
-            isrc: trackInfo.isrc || 'N/A',
-            durationMs: trackInfo.length || 'N/A',
-            albumName: pluginInfo?.albumName,
-            albumUrl: pluginInfo?.albumUrl,
-            previewUrl: pluginInfo?.previewUrl,
-            isPreview: pluginInfo?.isPreview,
-            artist: trackInfo.author,
-            'artist.artworkUrl': pluginInfo?.artistArtworkUrl,
-            'artist.url': pluginInfo?.artistUrl
+            isrc: trackInfo.isrc ?? null,
+            durationMs: trackInfo.length ?? 0,
+            albumName: pluginInfo.albumName,
+            albumUrl: pluginInfo.albumUrl,
+            previewUrl: pluginInfo.previewUrl,
+            isPreview: pluginInfo.isPreview,
+            artist: trackInfo.artist,
+            'artist.avatar': pluginInfo.artistArtworkUrl,
+            'artist.url': pluginInfo.artistUrl,
+            'playlist.name': playlistz.name,
+            'playlist.author': playlistz.author,
+            'playlist.thumbnail': playlistz.artworkUrl,
+            'playlist.tracks': playlistz.totalTracks,
+            'playlist.url': playlistz.url
         };
 
         return trackData[type];
