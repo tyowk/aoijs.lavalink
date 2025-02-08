@@ -64,7 +64,11 @@ module.exports = async d => {
 
             for (const track of res.data.tracks) {
                 if (player.queue.length >= maxQueueSize) break;
-                const playlist = player.buildTrack(track, d.author);
+                const playlist = player.buildTrack(track, d.author, {
+                    ...(res.data.info ?? {}),
+                    ...(res.data.pluginInfo ?? {})
+                });
+                
                 player.queue.push(playlist);
             }
 
