@@ -68,7 +68,11 @@ module.exports = async d => {
 
             for (const track of res.data.tracks) {
                 if (playlistLength >= maxSongs) break;
-                tracks.push(new Track(track, d.author, d.client));
+                tracks.push(new Track(track, d.author, {
+                    ...(res.data.info ?? {}),
+                    ...(res.data.pluginInfo ?? {})
+                }));
+                
                 playlistLength++;
             }
 
