@@ -14,30 +14,29 @@ module.exports = d => {
 
     const getResult = res => {
         if (!res) return null;
-        const trackInfo = track.info;
-        const requester = trackInfo.requester;
-        const pluginInfo = trackInfo.plugininfo;
-        const playlist = trackInfo.playlist;
+        const requester = res.requester;
+        const pluginInfo = res.plugininfo;
+        const playlist = res.playlist;
         
         const trackData = {
-            title: trackInfo.title,
-            thumbnail: trackInfo.artworkUrl,
-            url: trackInfo.url,
-            duration: d.client.music.utils.formatTime(trackInfo.length),
-            author: trackInfo.author,
-            platform: trackInfo.sourceName,
-            identifier: trackInfo.identifier,
-            isSeekable: trackInfo.isSeekable,
-            isStream: trackInfo.isStream,
-            isrc: trackInfo.isrc ?? null,
-            durationMs: trackInfo.length ?? 0,
+            title: res.title,
+            thumbnail: res.artworkUrl,
+            url: res.url,
+            duration: d.client.music.utils.formatTime(res.length),
+            author: res.author,
+            platform: res.sourceName,
+            identifier: res.identifier,
+            isSeekable: res.isSeekable,
+            isStream: res.isStream,
+            isrc: res.isrc ?? null,
+            durationMs: res.length ?? 0,
             queueLength: player.queue.length ?? 0,
             historyLength: player.history.length ?? 0,
             albumName: pluginInfo.albumName,
             albumUrl: pluginInfo.albumUrl,
             previewUrl: pluginInfo.previewUrl,
             isPreview: pluginInfo.isPreview,
-            artist: trackInfo.artist,
+            artist: res.artist,
             'artist.avatar': pluginInfo.artistArtworkUrl,
             'artist.url': pluginInfo.artistUrl,
             'requester.username': requester.username,
