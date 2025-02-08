@@ -1,5 +1,5 @@
 const { Dispatcher } = require('./Dispatcher.js');
-const { AoiError } = require('./Utils.js');
+const { Track, AoiError } = require('./Utils.js');
 const { Group } = require('@aoijs/aoi.structures');
 
 /**
@@ -91,5 +91,18 @@ exports.Queue = class Queue extends Group {
         } catch (err) {
             return null;
         }
+    }
+
+    /**
+     * Builds a track object with additional user information.
+     *
+     * @param {Object} track - The track data to build from.
+     * @param {Object} user - The user requesting the track.
+     * @param {Object} playlist - The playlist data to build from.
+     * @returns {Object} - The constructed track object.
+     * @throws {AoiError} - Throws an error if the track is not provided.
+     */
+    buildTrack(track, user, playlist) {
+        return new Track(track, user, playlist);
     }
 };
