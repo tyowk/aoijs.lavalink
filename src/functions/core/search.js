@@ -36,14 +36,7 @@ module.exports = async d => {
     if (d.data.tracks && typeof d.data.tracks === 'object') d.data.tracks.query = query?.addBrackets();
 
     switch (res?.loadType) {
-        case LoadType.ERROR: {
-            d.aoiError.fnError(d, 'custom', {}, `There was an error while searching.`);
-            break;
-        }
-        case LoadType.EMPTY: {
-            d.aoiError.fnError(d, 'custom', {}, `There were no results found.`);
-            break;
-        }
+        case LoadType.ERROR: return d.aoiError.fnError(d, 'custom', {}, `There was an error while searching.`);
         case LoadType.SEARCH: {
             if (!Array.isArray(res.data) || res.data.length === 0)
                 return d.aoiError.fnError(d, 'custom', {}, `There were no results found.`);
@@ -54,32 +47,27 @@ module.exports = async d => {
                 const replace = {
                     position: (index + 1)?.toLocaleString(),
                     title: trackInfo.title,
-                    artworkUrl: trackInfo.artworkUrl,
-                    artwork: trackInfo.artworkUrl,
                     thumbnail: trackInfo.artworkUrl,
                     url: trackInfo.uri,
-                    uri: trackInfo.uri,
                     duration: d.client.music.utils.formatTime(trackInfo.length),
                     author: trackInfo.author,
-                    sourceName: trackInfo.sourceName,
-                    source: trackInfo.sourceName,
                     platform: trackInfo.sourceName,
                     identifier: trackInfo.identifier,
                     isSeekable: trackInfo.isSeekable,
                     isStream: trackInfo.isStream,
-                    isrc: trackInfo.isrc || 'N/A',
-                    durationMs: trackInfo.length || 'N/A',
+                    isrc: trackInfo.isrc,
+                    durationMs: trackInfo.length ?? 0,
                     albumName: pluginInfo?.albumName,
                     albumUrl: pluginInfo?.albumUrl,
                     previewUrl: pluginInfo?.previewUrl,
                     isPreview: pluginInfo?.isPreview,
                     artist: trackInfo.author,
-                    'artist.artworkUrl': pluginInfo?.artistArtworkUrl,
+                    'artist.avatar': pluginInfo?.artistArtworkUrl,
                     'artist.url': pluginInfo?.artistUrl
                 };
 
                 return Object.entries(replace).reduce((formatted, [key, value]) => {
-                    return formatted.replaceAll(`{${key}}`, value);
+                    return formatted.replaceAll(`{${key}}`, value ?? '');
                 }, format);
             });
 
@@ -90,6 +78,8 @@ module.exports = async d => {
             data.result = pages[page - 1];
             break;
         }
+
+        default: return d.aoiError.fnError(d, 'custom', {}, `There were no results found.`);
     }
 
     return {
