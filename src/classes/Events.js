@@ -52,9 +52,7 @@ exports.Events = class Events {
         try {
             if (!dispatcher || !client) throw new AoiError('Dispatcher is not defined.');
             if (dispatcher.previous) dispatcher.history.push(dispatcher.previous);
-            if (dispatcher.loop === 'song' && track instanceof Track) dispatcher.queue.unshift(track);
-            else if (dispatcher.loop === 'queue' && track instanceof Track) dispatcher.queue.push(track);
-            else track instanceof Track ? (dispatcher.previous = track) : null;
+            this.handleLoop(player, track, dispatcher);
 
             if (dispatcher.autoplay) await dispatcher.Autoplay(track);
             if (!dispatcher.queue.length) client.emit('queueEnd', { player, track, dispatcher });
@@ -62,7 +60,7 @@ exports.Events = class Events {
 
             const { maxHistorySize, deleteNowPlaying } = dispatcher.client.music;
             while (dispatcher.history.length > maxHistorySize) dispatcher.history.shift();
-            if (deleteNowPlaying) await dispatcher.deleteNowPlaying(dispatcher, dispatcher.client);
+            if (deleteNowPlaying) await dispatcher.deleteNowPlaying();
 
             await dispatcher.play();
         } catch (err) {
@@ -71,6 +69,30 @@ exports.Events = class Events {
         }
     }
 
+    /**
+     * Handles track looping status.
+     *
+     * @async
+     * @param {Player} player - The player instance that is playing the track.
+     * @param {Track} track - The track that has ended.
+     * @param {Dispatcher} dispatcher - The dispatcher handling the track playback.
+     */
+    handleLoop(player, track, dispatcher) {
+        if (!track instanceof Track) return;
+        
+        if (dispatcher.loop === 'song' || track.repeat > 0) {
+            dispatcher.queue.unshift(track);
+            if (track.repeat > 0) track.repeat--;
+            return;
+        } else if (dispatcher.loop === 'queue') {
+            dispatcher.queue.push(track);
+            return;
+        }
+        
+        dispatcher.previous = track;
+        return;
+    };
+    
     /**
      * Handles raw voice state event.
      *
