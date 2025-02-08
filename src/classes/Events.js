@@ -80,9 +80,9 @@ exports.Events = class Events {
     handleLoop(player, track, dispatcher) {
         if (!track instanceof Track) return;
         
-        if (dispatcher.loop === 'song' || track.repeat > 0) {
+        if (dispatcher.loop === 'song' || track.info.repeat > 0) {
             dispatcher.queue.unshift(track);
-            if (track.repeat > 0) track.repeat--;
+            if (track.info.repeat > 0) track.info.repeat--;
             return;
         } else if (dispatcher.loop === 'queue') {
             dispatcher.queue.push(track);
