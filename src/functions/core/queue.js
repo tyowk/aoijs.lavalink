@@ -20,7 +20,7 @@ module.exports = d => {
         const requester = trackInfo.requester;
         const pluginInfo = trackInfo.plugininfo;
         const playlist = trackInfo.playlist;
-        
+
         const replace = {
             position: (index + 1)?.toLocaleString(),
             title: trackInfo.title,

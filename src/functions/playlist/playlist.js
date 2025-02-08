@@ -26,7 +26,7 @@ module.exports = async d => {
         const requester = trackInfo.requester;
         const pluginInfo = trackInfo.plugininfo;
         const playlistz = trackInfo.playlist;
-        
+
         const replace = {
             position: (index + 1)?.toLocaleString(),
             title: trackInfo.title,

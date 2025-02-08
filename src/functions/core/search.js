@@ -43,12 +43,12 @@ module.exports = async d => {
         case LoadType.EMPTY: {
             return d.aoiError.fnError(d, 'custom', {}, `There were no results found.`);
         }
-        
+
         case LoadType.TRACK: {
             if (!res.data || typeof res.data !== 'object') {
                 return d.aoiError.fnError(d, 'custom', {}, `There were no results found.`);
-            };
-            
+            }
+
             const trackInfo = res.data.info ?? {};
             const pluginInfo = res.data.pluginInfo ?? {};
             const replace = {
@@ -72,23 +72,23 @@ module.exports = async d => {
                 'artist.avatar': pluginInfo.artistArtworkUrl,
                 'artist.url': pluginInfo.artistUrl
             };
-            
+
             data.result = Object.entries(replace).reduce((formatted, [key, value]) => {
-                    return formatted.replaceAll(`{${key}}`, value ?? '');
-                }, format);
+                return formatted.replaceAll(`{${key}}`, value ?? '');
+            }, format);
             break;
         }
-    
+
         case LoadType.PLAYLIST: {
             if (!Array.isArray(res.data.tracks) || res.data.tracks.length === 0) {
                 return d.aoiError.fnError(d, 'custom', {}, `There were no results found.`);
-            };
-            
+            }
+
             const playlist = {
                 ...(res.data.info ?? {}),
                 ...(res.data.pluginInfo ?? {})
             };
-            
+
             const result = res.data.tracks.map((track, index) => {
                 const trackInfo = track.info ?? {};
                 const pluginInfo = track.pluginInfo ?? {};
@@ -131,12 +131,12 @@ module.exports = async d => {
             data.result = pages[page - 1];
             break;
         }
-    
+
         case LoadType.SEARCH: {
             if (!Array.isArray(res.data) || res.data.length === 0) {
                 return d.aoiError.fnError(d, 'custom', {}, `There were no results found.`);
-            };
-            
+            }
+
             const result = res.data.map((track, index) => {
                 const trackInfo = track.info ?? {};
                 const pluginInfo = track.pluginInfo ?? {};

@@ -182,12 +182,8 @@ exports.Track = class Track {
                 plugininfo: track.pluginInfo ?? {},
                 requester: {
                     ...user,
-                    avatar: typeof user?.displayAvatarURL === 'function'
-                        ? user?.displayAvatarURL()
-                        : user?.avatar,
-                    banner: typeof user?.bannerURL === 'function'
-                        ? user?.bannerURL()
-                        : user?.banner
+                    avatar: typeof user?.displayAvatarURL === 'function' ? user?.displayAvatarURL() : user?.avatar,
+                    banner: typeof user?.bannerURL === 'function' ? user?.bannerURL() : user?.banner
                 }
             });
     }
@@ -199,7 +195,6 @@ exports.Track = class Track {
  * @class Lyrics
  */
 exports.Lyrics = class Lyrics {
-    
     /**
      * Search a lyrics of a given song.
      *

@@ -68,7 +68,7 @@ module.exports = async d => {
                     ...(res.data.info ?? {}),
                     ...(res.data.pluginInfo ?? {})
                 });
-                
+
                 player.queue.push(playlist);
             }
 

@@ -17,7 +17,7 @@ module.exports = d => {
         const requester = res.requester;
         const pluginInfo = res.plugininfo;
         const playlist = res.playlist;
-        
+
         const trackData = {
             title: res.title,
             thumbnail: res.artworkUrl,

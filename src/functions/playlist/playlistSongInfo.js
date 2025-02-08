@@ -21,7 +21,7 @@ module.exports = async d => {
         const requester = trackInfo.requester;
         const pluginInfo = trackInfo.plugininfo;
         const playlistz = trackInfo.playlist;
-        
+
         const trackData = {
             title: trackInfo.title,
             thumbnail: trackInfo.artworkUrl,

@@ -70,7 +70,7 @@ exports.Events = class Events {
             console.error(err);
         }
     }
-    
+
     /**
      * Handles raw voice state event.
      *
