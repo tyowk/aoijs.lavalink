@@ -1,4 +1,5 @@
 const { Group } = require('@aoijs/aoi.structures');
+const { version } = require('../../package.json');
 const YoutubeMusic = require('ytmusic-api');
 
 /**
@@ -15,7 +16,8 @@ class AoiError extends Error {
         this.code = code;
         this.message = message;
         this.package = 'aoijs.lavalink';
-        this.support = 'https://discord.gg/hyQYXcVnmZ';
+        this.version = `v${version ?? '0.0.0'}`;
+        this.support = 'discord.gg/hyQYXcVnmZ';
         this.time = new Date().toISOString();
         Error.captureStackTrace(this, this.constructor);
     }
@@ -164,8 +166,8 @@ exports.Commands = class Commands {
  * @throws {AoiError} - Throws an error if the track is not provided.
  */
 exports.Track = class Track {
-    constructor(track, user) {
-        if (!track) throw new AoiError('Track not provided!', 'AOI_TRACK_INVALID');
+    constructor(track, user, playlist) {
+        if (!track || !track.info) throw new AoiError('Track not provided!', 'AOI_TRACK_INVALID');
 
         (this.encoded = track.encoded),
             (this.info = {
@@ -173,18 +175,19 @@ exports.Track = class Track {
                 artist: track.info.author,
                 thumbnail: track.info.artworkUrl,
                 url: track.info.uri,
-                duration: Utils.formatTime(track.info.length) || '0s',
-                durationMs: track.info.length,
+                duration: Utils.formatTime(track.info.length ?? 0),
+                durationMs: track.info.length ?? 0,
+                playlist: playlist ?? {},
+                userdata: track.userData ?? {},
+                plugininfo: track.pluginInfo ?? {},
                 requester: {
                     ...user,
-                    avatar: typeof user?.displayAvatarURL === 'function' ? user?.displayAvatarURL() : user?.avatar,
-                    banner: typeof user?.bannerURL === 'function' ? user?.bannerURL() : user?.banner
-                },
-                userdata: {
-                    ...track.userData
-                },
-                plugininfo: {
-                    ...track.pluginInfo
+                    avatar: typeof user?.displayAvatarURL === 'function'
+                        ? user?.displayAvatarURL()
+                        : user?.avatar,
+                    banner: typeof user?.bannerURL === 'function'
+                        ? user?.bannerURL()
+                        : user?.banner
                 }
             });
     }
@@ -196,6 +199,7 @@ exports.Track = class Track {
  * @class Lyrics
  */
 exports.Lyrics = class Lyrics {
+    
     /**
      * Search a lyrics of a given song.
      *
