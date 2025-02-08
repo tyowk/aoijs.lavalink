@@ -180,7 +180,6 @@ exports.Track = class Track {
                 playlist: playlist ?? {},
                 userdata: track.userData ?? {},
                 plugininfo: track.pluginInfo ?? {},
-                repeat: 0,
                 requester: {
                     ...user,
                     avatar: typeof user?.displayAvatarURL === 'function'
