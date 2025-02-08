@@ -34,7 +34,7 @@ module.exports = d => {
             isStream: trackInfo.isStream,
             isrc: trackInfo.isrc ?? null,
             durationMs: trackInfo.length ?? 0,
-            queueLength: player.history.length ?? 0,
+            queueLength: player.queue.length ?? 0,
             albumName: pluginInfo.albumName,
             albumUrl: pluginInfo.albumUrl,
             previewUrl: pluginInfo.previewUrl,
