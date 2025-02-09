@@ -190,7 +190,7 @@ exports.Dispatcher = class Dispatcher {
         this.autoplayType = this.client?.music?.searchEngine || 'ytsearch';
         this.currentVolume = 100;
     }
-    
+
     /**
      * Destroys the dispatcher, clearing the queue and history, and leaving the voice channel.
      */
