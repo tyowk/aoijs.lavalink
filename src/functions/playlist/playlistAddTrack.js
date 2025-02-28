@@ -4,7 +4,7 @@ const { Track } = require('../../classes/Utils.js');
 /**
  * @param {import("..").Data} d
  */
-module.exports = async d => {
+module.exports = async (d) => {
     const data = d.util.aoiFunc(d);
     if (data.err) return d.error(data.err);
     let [name, query, type = d.client.music.searchEngine, id = d.author?.id, debug = 'false'] = data.inside.splits;
@@ -37,7 +37,7 @@ module.exports = async d => {
     if (d.data.tracks && typeof d.data.tracks === 'object') d.data.tracks.query = query?.addBrackets();
 
     const maxSongs = Number(playlist.maxSongs) || 20;
-    let playlistLength = await playlist.length(name, id).catch(err => {
+    let playlistLength = await playlist.length(name, id).catch((err) => {
         return d.aoiError.fnError(d, 'custom', {}, `${err.message}`);
     });
 
@@ -49,7 +49,7 @@ module.exports = async d => {
             }
 
             const track = new Track(res.data, d.author, d.client);
-            await playlist.addTrack(name, id, track).catch(err => {
+            await playlist.addTrack(name, id, track).catch((err) => {
                 return d.aoiError.fnError(d, 'custom', {}, `${err.message}`);
             });
 
@@ -62,7 +62,7 @@ module.exports = async d => {
                 break;
             }
 
-            let tracks = await playlist.get(name, id).catch(err => {
+            const tracks = await playlist.get(name, id).catch((err) => {
                 return d.aoiError.fnError(d, 'custom', {}, `${err.message}`);
             });
 
@@ -78,7 +78,7 @@ module.exports = async d => {
                 playlistLength++;
             }
 
-            await playlist.update(name, id, tracks).catch(err => {
+            await playlist.update(name, id, tracks).catch((err) => {
                 return d.aoiError.fnError(d, 'custom', {}, `${err.message}`);
             });
 
@@ -92,7 +92,7 @@ module.exports = async d => {
             }
 
             const track = new Track(res.data[0], d.author, d.client);
-            await playlist.addTrack(name, id, track).catch(err => {
+            await playlist.addTrack(name, id, track).catch((err) => {
                 return d.aoiError.fnError(d, 'custom', {}, `${err.message}`);
             });
 

@@ -1,7 +1,7 @@
 /**
  * @param {import("..").Data} d
  */
-module.exports = d => {
+module.exports = (d) => {
     const data = d.util.aoiFunc(d);
     let [name, value] = data.inside.splits;
     value = value?.addBrackets()?.toLowerCase()?.split('.');

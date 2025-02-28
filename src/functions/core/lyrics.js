@@ -3,7 +3,7 @@ const { Lyrics } = require('../../classes/Utils.js');
 /**
  * @param {import("..").Data} d
  */
-module.exports = async d => {
+module.exports = async (d) => {
     const data = d.util.aoiFunc(d);
     if (data.err) return d.error(data.err);
     let [title, property = 'lyrics'] = data.inside.splits;
@@ -14,7 +14,7 @@ module.exports = async d => {
             /((\[|\()(?!.*?(remix|edit|remake)).*?(\]|\))|\/+|-+| x |,|"|video oficial|official lyric video| ft.?|\|+|yhlqmdlg|x100pre|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF]|\u274C)/g,
             ''
         )
-        .replace(/  +/g, ' ')
+        .replace(/ {2,}/g, ' ')
         .trim();
 
     if (!title) return d.aoiError.fnError(d, 'custom', {}, `Please provide a song title you want to retrieve.`);

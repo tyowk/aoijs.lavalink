@@ -1,7 +1,7 @@
 /**
  * @param {import("..").Data} d
  */
-module.exports = d => {
+module.exports = (d) => {
     const data = d.util.aoiFunc(d);
     const [state, guildId] = data.inside.splits;
 

@@ -4,8 +4,8 @@
 
 A package for integrating Lavalink with Aoi.js to enable music streaming in Discord bots.
 
-- **[Documentation](https://lavalink.noujs.my.id)**
-- **[Support Server](https://discord.com/invite/hyQYXcVnmZ)**
+- **[Documentation](https://aoilavalink.vercel.app)**
+- **[Support Server](https://aoi.js.org/invite)**
 - **[NPM](https://npmjs.org/package/aoijs.lavalink)**
 - **[GitHub](https://github.com/tyowk/aoijs.lavalink)**
 
@@ -100,7 +100,7 @@ new Manager(<Client>, {
 
 This feature allows users to create and manage playlists, enhancing their music experience.
 
-**See the [documentation](https://lavalink.noujs.my.id/guides/playlist) for more information and guides**
+**See the [documentation](https://aoilavalink.vercel.app/guides/playlist) for more information and guides**
 
 ---
 
@@ -183,7 +183,7 @@ module.exports = {
 <img src="https://cdn.noujs.my.id/guild/lavabird.png" width="100">
 <br>
 
-**[Documentation](https://lavalink.noujs.my.id)** <br>
-**[Support Server](https://discord.com/invite/hyQYXcVnmZ)**
+**[Documentation](https://aoilavalink.vercel.app)** <br>
+**[Support Server](https://aoi.js.org/invite)**
 
 </div>

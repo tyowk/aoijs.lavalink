@@ -1,7 +1,7 @@
 /**
  * @param {import("..").Data} d
  */
-module.exports = d => {
+module.exports = (d) => {
     const data = d.util.aoiFunc(d);
     const [page = 1, limit = 10, format = '{position}. {title} | {requester.username}', separator = '\n'] =
         data.inside.splits;
@@ -64,7 +64,7 @@ module.exports = d => {
     if (chunks.length === 0) chunks = [[]];
     if (Number(page) < 1 || Number(page) > chunks.length)
         return d.aoiError.fnError(d, 'custom', {}, `Invalid page number.`);
-    let pages = chunks.map(chunk => chunk.join(separator));
+    const pages = chunks.map((chunk) => chunk.join(separator));
 
     data.result = pages[page - 1];
 

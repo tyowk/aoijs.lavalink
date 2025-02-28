@@ -190,7 +190,7 @@ exports.Dispatcher = class Dispatcher {
         this.autoplayType = this.client?.music?.searchEngine || 'ytsearch';
         this.currentVolume = 100;
     }
-    
+
     /**
      * Destroys the dispatcher, clearing the queue and history, and leaving the voice channel.
      */
@@ -316,8 +316,8 @@ exports.Dispatcher = class Dispatcher {
             );
 
             if (
-                !this.queue.some(s => s.encoded === potentialChoice.encoded) &&
-                !this.history.some(s => s.encoded === potentialChoice.encoded) &&
+                !this.queue.some((s) => s.encoded === potentialChoice.encoded) &&
+                !this.history.some((s) => s.encoded === potentialChoice.encoded) &&
                 this.previous?.encoded !== potentialChoice.encoded &&
                 this.current?.encoded !== potentialChoice.encoded
             ) {
@@ -384,7 +384,7 @@ exports.Dispatcher = class Dispatcher {
      * @async
      */
     async deleteNowPlaying() {
-        let nowPlaying = this.nowPlaying;
+        const nowPlaying = this.nowPlaying;
         if (!nowPlaying || typeof nowPlaying !== 'object') return;
 
         try {

@@ -1,0 +1,25 @@
+{
+    "$schema": "https://biomejs.dev/schemas/1.5.3/schema.json",
+    "formatter": {
+        "enabled": true,
+        "formatWithErrors": false,
+        "indentStyle": "space",
+        "indentWidth": 4,
+        "lineWidth": 120,
+        "lineEnding": "lf",
+        "ignore": ["dist"]
+    },
+    "javascript": {
+        "formatter": {
+            "enabled": true,
+            "quoteStyle": "single",
+            "quoteProperties": "asNeeded",
+            "trailingCommas": "none",
+            "semicolons": "always"
+        }
+    },
+    "files": {
+        "ignoreUnknown": true,
+        "maxSize": 1000000
+    }
+}

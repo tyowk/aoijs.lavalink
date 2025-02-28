@@ -12,9 +12,7 @@ const { AoiError, Track } = require('./Utils.js');
 exports.Playlist = class Playlist {
     constructor(manager, options) {
         if (options?.enable !== true) return;
-
         if (!manager) throw new AoiError('Manager instance is not defined.', 'PLAYLIST_MANAGER_INVALID');
-
         if (!manager.client) throw new AoiError('Client instance is not defined.', 'PLAYLIST_CLIENT_INVALID');
 
         if (!options.database && !manager.client?.db)
@@ -232,7 +230,7 @@ exports.Playlist = class Playlist {
     async count(id) {
         if (!id) throw new AoiError('User  ID is required', 'PLAYLIST_ID_INVALID');
 
-        const playlists = await this.database.all(this.options.table, data =>
+        const playlists = await this.database.all(this.options.table, (data) =>
             data?.key?.includes(id ? `_playlist_${id}` : id)
         );
 
@@ -250,13 +248,13 @@ exports.Playlist = class Playlist {
     async show(id) {
         if (!id) throw new AoiError('User  ID is required', 'PLAYLIST_ID_INVALID');
 
-        const playlists = await this.database.all(this.options.table, data =>
+        const playlists = await this.database.all(this.options.table, (data) =>
             data?.key?.includes(id ? `playlist_${id}` : id)
         );
 
         return Array.isArray(playlists)
             ? playlists
-                  .map(row => {
+                  .map((row) => {
                       try {
                           row.value = JSON.parse(row.value);
                       } catch {}
@@ -287,7 +285,7 @@ exports.Playlist = class Playlist {
         if (isNaN(from) || isNaN(to) || from < 1 || to < 1)
             throw new AoiError('Please provide a valid track position', 'PLAYLIST_POSITION_INVALID');
 
-        let playlist = await this.get(name, id);
+        const playlist = await this.get(name, id);
         if (!playlist || !Array.isArray(playlist))
             throw new AoiError(`Playlist "${name}" not found`, 'PLAYLIST_NOT_FOUND');
         if (from > playlist.length || to > playlist.length)

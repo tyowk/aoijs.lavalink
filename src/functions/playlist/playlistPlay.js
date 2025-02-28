@@ -1,7 +1,7 @@
 /**
  * @param {import("..").Data} d
  */
-module.exports = async d => {
+module.exports = async (d) => {
     const data = d.util.aoiFunc(d);
     if (data.err) return d.error(data.err);
     let [name, index, id = d.author?.id] = data.inside.splits;
@@ -25,14 +25,14 @@ module.exports = async d => {
         if (player.queue.length >= maxQueueSize)
             return d.aoiError.fnError(d, 'custom', {}, `The maximum queue load size is reached: ${maxQueueSize}`);
 
-        const track = await playlist.getTrack(name, id, index).catch(err => {
+        const track = await playlist.getTrack(name, id, index).catch((err) => {
             return d.aoiError.fnError(d, 'custom', {}, `${err.message}`);
         });
 
         player.queue.push(track);
         player.isPlaying();
     } else {
-        const tracks = await playlist.get(name, id).catch(err => {
+        const tracks = await playlist.get(name, id).catch((err) => {
             return d.aoiError.fnError(d, 'custom', {}, `${err.message}`);
         });
 

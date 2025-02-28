@@ -16,7 +16,7 @@ exports.Events = class Events {
         };
 
         client.on('trackEnd', async ({ player, track, dispatcher }) => await this.trackEnd(player, track, dispatcher));
-        client.client.on('raw', async data => await this.voiceState(data, client, client.client));
+        client.client.on('raw', async (data) => await this.voiceState(data, client, client.client));
 
         if (client?.client?.music?.debug === true) {
             client.on('nodeConnect', ({ name }) => log(`[${blue('DEBUG')}] :: Node "${cyan(name)}" connected`));

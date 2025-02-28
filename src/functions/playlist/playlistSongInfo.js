@@ -1,7 +1,7 @@
 /**
  * @param {import("..").Data} d
  */
-module.exports = async d => {
+module.exports = async (d) => {
     const data = d.util.aoiFunc(d);
     if (data.err) return d.error(data.err);
 
@@ -15,7 +15,7 @@ module.exports = async d => {
     const playlist = d.client.playlist || manager.playlist;
     if (!playlist) return d.aoiError.fnError(d, 'custom', {}, `Playlist manager is not defined.`);
 
-    const getResult = res => {
+    const getResult = (res) => {
         if (!res?.info) return null;
         const trackInfo = track.info;
         const requester = trackInfo.requester;
@@ -52,7 +52,7 @@ module.exports = async d => {
     };
 
     if (isNaN(index)) return d.aoiError.fnError(d, 'custom', {}, `Please provide a valid number.`);
-    const res = await playlist.getTrack(name, id, index).catch(err => {
+    const res = await playlist.getTrack(name, id, index).catch((err) => {
         return d.aoiError.fnError(d, 'custom', {}, `${err.message}`);
     });
 

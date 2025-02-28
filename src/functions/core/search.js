@@ -3,7 +3,7 @@ const { LoadType } = require('shoukaku');
 /**
  * @param {import("..").Data} d
  */
-module.exports = async d => {
+module.exports = async (d) => {
     const data = d.util.aoiFunc(d);
     if (data.err) return d.error(data.err);
     let [
@@ -126,7 +126,7 @@ module.exports = async d => {
 
             let chunks = d.client.music.utils.chunk(result, Number(limit));
             if (chunks.length === 0) chunks = [[]];
-            let pages = chunks.map(chunk => chunk.join(separator));
+            const pages = chunks.map((chunk) => chunk.join(separator));
 
             data.result = pages[page - 1];
             break;
@@ -169,7 +169,7 @@ module.exports = async d => {
 
             let chunks = d.client.music.utils.chunk(result, Number(limit));
             if (chunks.length === 0) chunks = [[]];
-            let pages = chunks.map(chunk => chunk.join(separator));
+            const pages = chunks.map((chunk) => chunk.join(separator));
 
             data.result = pages[page - 1];
             break;

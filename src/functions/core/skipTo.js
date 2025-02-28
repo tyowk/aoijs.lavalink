@@ -1,10 +1,10 @@
 /**
  * @param {import("..").Data} d
  */
-module.exports = d => {
+module.exports = (d) => {
     const data = d.util.aoiFunc(d);
     if (data.err) return d.error(data.err);
-    let [index] = data.inside.splits;
+    const [index] = data.inside.splits;
 
     const manager = d.client.shoukaku;
     if (!manager) return d.aoiError.fnError(d, 'custom', {}, `Voice manager is not defined.`);

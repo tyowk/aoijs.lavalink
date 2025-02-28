@@ -1,7 +1,7 @@
 /**
  * @param {import("..").Data} d
  */
-module.exports = async d => {
+module.exports = async (d) => {
     const data = d.util.aoiFunc(d);
     let [value, type] = data.inside.splits;
     type = type

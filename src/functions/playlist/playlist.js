@@ -1,7 +1,7 @@
 /**
  * @param {import("..").Data} d
  */
-module.exports = async d => {
+module.exports = async (d) => {
     const data = d.util.aoiFunc(d);
     if (data.err) return d.error(data.err);
     let [name, id = d.author?.id, page = 1, limit = 10, format = '{position}. {title}', separator = '\n'] =
@@ -17,7 +17,7 @@ module.exports = async d => {
     if (isNaN(Number(page)) || isNaN(Number(limit)))
         return d.aoiError.fnError(d, 'custom', {}, `Please provide a valid number.`);
 
-    playlist = await playlist.get(name, id).catch(err => {
+    playlist = await playlist.get(name, id).catch((err) => {
         return d.aoiError.fnError(d, 'custom', {}, `${err.message}`);
     });
 
@@ -64,7 +64,7 @@ module.exports = async d => {
     if (chunks.length === 0) chunks = [[]];
     if (Number(page) < 1 || Number(page) > chunks.length)
         return d.aoiError.fnError(d, 'custom', {}, `Invalid page number.`);
-    let pages = chunks.map(chunk => chunk.join(separator));
+    const pages = chunks.map((chunk) => chunk.join(separator));
 
     data.result = pages[page - 1];
 

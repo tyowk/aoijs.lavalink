@@ -59,9 +59,9 @@ exports.Manager = class Manager extends Shoukaku {
             userAgent: options.userAgent === '(auto)' ? 'aoijs.lavalink' : options.userAgent,
             voiceConnectionTimeout: options.voiceConnectionTimeout || 15,
             structures: options.structures ?? {},
-            nodeResolver: nodes => {
+            nodeResolver: (nodes) => {
                 return [...nodes.values()]
-                    .filter(node => node.state === 2)
+                    .filter((node) => node.state === 2)
                     .sort((a, b) => a.penalties - b.penalties)
                     .shift();
             }
@@ -85,7 +85,7 @@ exports.Manager = class Manager extends Shoukaku {
 
         new Functions(this.client, join(__dirname, '..', 'functions'), options.debug);
         new Events(this);
-        Object.keys(this.cmd).forEach(event => this.#bindEvents(event));
+        Object.keys(this.cmd).forEach((event) => this.#bindEvents(event));
     }
 
     /**

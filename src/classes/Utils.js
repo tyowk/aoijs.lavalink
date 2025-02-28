@@ -215,7 +215,7 @@ exports.Lyrics = class Lyrics {
                     /((\[|\()(?!.*?(remix|edit|remake)).*?(\]|\))|\/+|-+| x |,|"|video oficial|official lyric video| ft.?|\|+|yhlqmdlg|x100pre|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF]|\u274C)/g,
                     ''
                 )
-                .replace(/  +/g, ' ')
+                .replace(/ {2,}/g, ' ')
                 .trim();
 
             const ytm = new YoutubeMusic();
