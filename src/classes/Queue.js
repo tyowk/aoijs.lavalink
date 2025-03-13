@@ -31,7 +31,6 @@ exports.Queue = class Queue extends Group {
     async create(guild, voice, channel, givenNode, deaf = true, mute = false) {
         let dispatcher = this.get(guild.id);
         if (!voice) throw new AoiError('No voice channel was provided', 'AOI_VOICE_INVALID');
-        if (!channel) throw new AoiError('No text channel was provided', 'AOI_TEXT_INVALID');
         if (!guild) throw new AoiError('No guild was provided', 'AOI_GUILD_INVALID');
 
         if (!dispatcher) {
@@ -47,7 +46,7 @@ exports.Queue = class Queue extends Group {
             dispatcher = new Dispatcher({
                 client: this.client,
                 guildId: guild.id,
-                channelId: channel.id,
+                channelId: channel?.id,
                 player,
                 node
             });
