@@ -13,13 +13,13 @@ module.exports = (d) => {
         .replace('youtubemusic', 'ytmsearch');
 
     const manager = d.client.shoukaku;
-    if (!manager) return d.aoiError.fnError(d, 'custom', {}, `Voice manager is not defined.`);
+    if (!manager) return d.aoiError.fnError(d, 'custom', {}, 'Voice manager is not defined.');
 
     if (!value) {
         data.result = d.client.music.searchEngine || 'ytsearch';
     } else {
         if (value && typeof value !== 'string')
-            return d.aoiError.fnError(d, 'custom', {}, `The type of value must be a string.`);
+            return d.aoiError.fnError(d, 'custom', {}, 'The type of value must be a string.');
         d.client.music.searchEngine = value || 'ytsearch';
     }
 

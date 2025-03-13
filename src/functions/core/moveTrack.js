@@ -8,12 +8,12 @@ module.exports = (d) => {
     const [fromIndex, toIndex] = data.inside.splits;
 
     const manager = d.client.shoukaku;
-    if (!manager) return d.aoiError.fnError(d, 'custom', {}, `Voice manager is not defined.`);
+    if (!manager) return d.aoiError.fnError(d, 'custom', {}, 'Voice manager is not defined.');
 
     const player = d.client.queue.get(d.guild.id);
-    if (!player) return d.aoiError.fnError(d, 'custom', {}, `There is no player for this guild.`);
+    if (!player) return d.aoiError.fnError(d, 'custom', {}, 'There is no player for this guild.');
 
-    if (!player.queue.length) return d.aoiError.fnError(d, 'custom', {}, `There are no songs in the queue.`);
+    if (!player.queue.length) return d.aoiError.fnError(d, 'custom', {}, 'There are no songs in the queue.');
 
     if (
         isNaN(Number(fromIndex)) ||
@@ -23,7 +23,7 @@ module.exports = (d) => {
         Number(fromIndex) > player.queue.length ||
         Number(toIndex) > player.queue.length
     ) {
-        return d.aoiError.fnError(d, 'custom', {}, `Invalid track position. Ensure the positions are valid numbers.`);
+        return d.aoiError.fnError(d, 'custom', {}, 'Invalid track position. Ensure the positions are valid numbers.');
     }
 
     const from = Number(fromIndex) - 1;

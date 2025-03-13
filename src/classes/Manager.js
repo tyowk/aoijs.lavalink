@@ -85,7 +85,9 @@ exports.Manager = class Manager extends Shoukaku {
 
         new Functions(this.client, join(__dirname, '..', 'functions'), options.debug);
         new Events(this);
-        Object.keys(this.cmd).forEach((event) => this.#bindEvents(event));
+        for (const event of Object.keys(this.cmd)) {
+            this.#bindEvents(event);
+        }
     }
 
     /**
@@ -149,10 +151,10 @@ exports.Manager = class Manager extends Shoukaku {
      * @param {string} [type] - The type of search engine to use.
      * @returns {Object|null} - The search result or null if an error occurs.
      */
-    async search(query, type) {
+    async search(query, _type) {
         const node = this.getIdealNode();
         const regex = /^https?:\/\//;
-        type = type
+        const type = _type
             ?.toLowerCase()
             .replace('youtube', 'ytsearch')
             .replace('spotify', 'spsearch')
@@ -163,9 +165,9 @@ exports.Manager = class Manager extends Shoukaku {
 
         try {
             return await node.rest.resolve(
-                regex.test(query) ? query : `${(type ? type : this.client.music.searchEngine) || 'ytsearch'}:${query}`
+                regex.test(query) ? query : `${type ? type : this.client.music.searchEngine || 'ytsearch'}:${query}`
             );
-        } catch (err) {
+        } catch {
             return null;
         }
     }

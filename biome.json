@@ -18,6 +18,13 @@
             "semicolons": "always"
         }
     },
+    "linter": {
+        "rules": {
+            "suspicious": {
+                "noGlobalIsNan": "off"
+            }
+        }
+    },
     "files": {
         "ignoreUnknown": true,
         "maxSize": 1000000

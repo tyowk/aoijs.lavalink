@@ -12,13 +12,13 @@ module.exports = async (d) => {
     ] = data.inside.splits;
 
     const manager = d.client.shoukaku;
-    if (!manager) return d.aoiError.fnError(d, 'custom', {}, `Voice manager is not defined.`);
+    if (!manager) return d.aoiError.fnError(d, 'custom', {}, 'Voice manager is not defined.');
 
     let playlist = d.client.playlist || manager.playlist;
-    if (!playlist) return d.aoiError.fnError(d, 'custom', {}, `Playlist manager is not defined.`);
+    if (!playlist) return d.aoiError.fnError(d, 'custom', {}, 'Playlist manager is not defined.');
 
     if (isNaN(Number(page)) || isNaN(Number(limit)))
-        return d.aoiError.fnError(d, 'custom', {}, `Please provide a valid number.`);
+        return d.aoiError.fnError(d, 'custom', {}, 'Please provide a valid number.');
 
     playlist = await playlist.show(id).catch((err) => {
         return d.aoiError.fnError(d, 'custom', {}, `${err.message}`);
@@ -39,7 +39,7 @@ module.exports = async (d) => {
     let chunks = d.client.music.utils.chunk(playlists, Number(limit));
     if (chunks.length === 0) chunks = [[]];
     if (Number(page) < 1 || Number(page) > chunks.length)
-        return d.aoiError.fnError(d, 'custom', {}, `Invalid page number.`);
+        return d.aoiError.fnError(d, 'custom', {}, 'Invalid page number.');
     const pages = chunks.map((chunk) => chunk.join(separator));
 
     data.result = pages[page - 1];

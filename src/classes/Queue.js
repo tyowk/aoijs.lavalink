@@ -59,9 +59,9 @@ exports.Queue = class Queue extends Group {
                 dispatcher
             });
             return dispatcher;
-        } else {
-            return dispatcher;
         }
+
+        return dispatcher;
     }
 
     /**
@@ -72,10 +72,10 @@ exports.Queue = class Queue extends Group {
      * @param {string} [type] - The type of search engine to use (e.g., 'youtube', 'spotify').
      * @returns {Object|null} - The search result or null if an error occurs.
      */
-    async search(query, type) {
+    async search(query, _type) {
         const node = this.client.shoukaku.getIdealNode();
         const regex = /^https?:\/\//;
-        type = type
+        const type = _type
             ?.toLowerCase()
             .replace('youtube', 'ytsearch')
             .replace('spotify', 'spsearch')
@@ -86,9 +86,9 @@ exports.Queue = class Queue extends Group {
 
         try {
             return await node.rest.resolve(
-                regex.test(query) ? query : `${(type ? type : this.options.searchEngine) || 'ytsearch'}:${query}`
+                regex.test(query) ? query : `${type ? type : this.client.music.searchEngine || 'ytsearch'}:${query}`
             );
-        } catch (err) {
+        } catch {
             return null;
         }
     }

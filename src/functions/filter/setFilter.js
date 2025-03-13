@@ -9,14 +9,14 @@ module.exports = async (d) => {
     let [value, custom] = data.inside.splits;
 
     const manager = d.client.shoukaku;
-    if (!manager) return d.aoiError.fnError(d, 'custom', {}, `Voice manager is not defined.`);
+    if (!manager) return d.aoiError.fnError(d, 'custom', {}, 'Voice manager is not defined.');
 
     const player = d.client.queue.get(d.guild.id);
-    if (!player) return d.aoiError.fnError(d, 'custom', {}, `There is no player for this guild.`);
-    if (!value) return d.aoiError.fnError(d, 'custom', {}, `Invalid filter name.`);
+    if (!player) return d.aoiError.fnError(d, 'custom', {}, 'There is no player for this guild.');
+    if (!value) return d.aoiError.fnError(d, 'custom', {}, 'Invalid filter name.');
 
     if (value === 'custom') {
-        if (!custom) return d.aoiError.fnError(d, 'custom', {}, `Please provide a valid custom filter.`);
+        if (!custom) return d.aoiError.fnError(d, 'custom', {}, 'Please provide a valid custom filter.');
         custom = JSON.parse(custom);
         player.player?.update({ filters: custom }, true);
         player.filter = 'custom';

@@ -1,6 +1,6 @@
 const { blue, cyan, yellow, red } = require('chalk');
 const { AoiError, Track } = require('./Utils.js');
-const { setTimeout: Timeout } = require('timers/promises');
+const { setTimeout: Timeout } = require('node:timers/promises');
 
 /**
  * Events class to handle various events related to the music player.
@@ -54,7 +54,7 @@ exports.Events = class Events {
             if (dispatcher.previous) dispatcher.history.push(dispatcher.previous);
             if (dispatcher.loop === 'song' && track instanceof Track) dispatcher.queue.unshift(track);
             else if (dispatcher.loop === 'queue' && track instanceof Track) dispatcher.queue.push(track);
-            else track instanceof Track ? (dispatcher.previous = track) : null;
+            else if (track instanceof Track) dispatcher.previous = track;
 
             if (dispatcher.autoplay) await dispatcher.Autoplay(track);
             if (!dispatcher.queue.length) client.emit('queueEnd', { player, track, dispatcher });

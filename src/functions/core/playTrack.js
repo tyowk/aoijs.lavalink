@@ -9,9 +9,9 @@ module.exports = async (d) => {
     let [query, type = d.client.music.searchEngine, debug = 'false'] = data.inside.splits;
     const manager = d.client.shoukaku;
 
-    if (!manager) return d.aoiError.fnError(d, 'custom', {}, `Voice manager is not defined.`);
+    if (!manager) return d.aoiError.fnError(d, 'custom', {}, 'Voice manager is not defined.');
     if (!query)
-        return d.aoiError.fnError(d, 'custom', {}, `Please provide the title or link of the song you want to play.`);
+        return d.aoiError.fnError(d, 'custom', {}, 'Please provide the title or link of the song you want to play.');
     if (!type) type = d.client.music.searchEngine;
 
     type = type
@@ -24,10 +24,10 @@ module.exports = async (d) => {
         .replace('applemusic', 'amsearch');
 
     if (!d.member?.voice?.channel)
-        return d.aoiError.fnError(d, 'custom', {}, `You are not connected to any voice channels.`);
+        return d.aoiError.fnError(d, 'custom', {}, 'You are not connected to any voice channels.');
 
     const player = d.client.queue.get(d.guild.id);
-    if (!player) return d.aoiError.fnError(d, 'custom', {}, `There is no player for this guild.`);
+    if (!player) return d.aoiError.fnError(d, 'custom', {}, 'There is no player for this guild.');
     if (player.channelId !== d.channel?.id && d.channel?.id) player.channelId = d.channel.id;
 
     let debugResult;

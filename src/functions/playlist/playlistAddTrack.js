@@ -12,10 +12,10 @@ module.exports = async (d) => {
     const manager = d.client.shoukaku;
     const playlist = d.client.playlist || manager?.playlist;
 
-    if (!manager) return d.aoiError.fnError(d, 'custom', {}, `Voice manager is not defined.`);
-    if (!playlist) return d.aoiError.fnError(d, 'custom', {}, `Playlist manager is not defined.`);
-    if (!name) return d.aoiError.fnError(d, 'custom', {}, `Playlist name is required.`);
-    if (!query) return d.aoiError.fnError(d, 'custom', {}, `Please provide the title or link of the song.`);
+    if (!manager) return d.aoiError.fnError(d, 'custom', {}, 'Voice manager is not defined.');
+    if (!playlist) return d.aoiError.fnError(d, 'custom', {}, 'Playlist manager is not defined.');
+    if (!name) return d.aoiError.fnError(d, 'custom', {}, 'Playlist name is required.');
+    if (!query) return d.aoiError.fnError(d, 'custom', {}, 'Please provide the title or link of the song.');
     if (!type) type = d.client.music.searchEngine;
 
     type = type

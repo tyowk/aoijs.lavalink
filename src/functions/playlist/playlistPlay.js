@@ -8,16 +8,16 @@ module.exports = async (d) => {
     index = Number(index);
 
     const manager = d.client.shoukaku;
-    if (!manager) return d.aoiError.fnError(d, 'custom', {}, `Voice manager is not defined.`);
+    if (!manager) return d.aoiError.fnError(d, 'custom', {}, 'Voice manager is not defined.');
 
     const playlist = d.client.playlist || manager.playlist;
-    if (!manager) return d.aoiError.fnError(d, 'custom', {}, `Playlist manager is not defined.`);
+    if (!manager) return d.aoiError.fnError(d, 'custom', {}, 'Playlist manager is not defined.');
 
     if (!d.member?.voice?.channel)
-        return d.aoiError.fnError(d, 'custom', {}, `You are not connected to any voice channels.`);
+        return d.aoiError.fnError(d, 'custom', {}, 'You are not connected to any voice channels.');
 
     const player = d.client.queue.get(d.guild.id);
-    if (!player) return d.aoiError.fnError(d, 'custom', {}, `There is no player for this guild.`);
+    if (!player) return d.aoiError.fnError(d, 'custom', {}, 'There is no player for this guild.');
     if (player.channelId !== d.channel?.id && d.channel?.id) player.channelId = d.channel.id;
     const { maxQueueSize, maxPlaylistSize } = d.client.music;
 

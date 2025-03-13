@@ -343,10 +343,10 @@ exports.Dispatcher = class Dispatcher {
      * @param {boolean} [autoplay=false] - True to enable autoplay, false to disable.
      * @param {string} [type] - The type of search engine to use for autoplay.
      */
-    async setAutoplay(autoplay = false, type) {
+    async setAutoplay(autoplay = false, type = this.autoplayType) {
         this.autoplay = autoplay === true;
         if (type) this.autoplayType = type;
-        if (autoplay === true) this.Autoplay(this.current ? this.current : this.queue[0], type || this.autoplayType);
+        if (autoplay === true) this.Autoplay(this.current ? this.current : this.queue[0], type);
     }
 
     /**
@@ -357,10 +357,10 @@ exports.Dispatcher = class Dispatcher {
      * @param {string} [type] - The type of search engine to use.
      * @returns {Object|null} - The search result or null if an error occurs.
      */
-    async search(query, type) {
+    async search(query, _type) {
         const node = this.client.shoukaku.getIdealNode();
         const regex = /^https?:\/\//;
-        type = type
+        const type = _type
             ?.toLowerCase()
             .replace('youtube', 'ytsearch')
             .replace('spotify', 'spsearch')
@@ -371,9 +371,9 @@ exports.Dispatcher = class Dispatcher {
 
         try {
             return await node.rest.resolve(
-                regex.test(query) ? query : `${(type ? type : this.options.searchEngine) || 'ytsearch'}:${query}`
+                regex.test(query) ? query : `${type ? type : this.client.music.searchEngine || 'ytsearch'}:${query}`
             );
-        } catch (err) {
+        } catch {
             return null;
         }
     }
@@ -398,7 +398,9 @@ exports.Dispatcher = class Dispatcher {
             if (!msg || !msg.deletable || msg.author.id !== this.client.user.id) return;
 
             await msg.delete();
-        } catch {}
+        } catch {
+            undefined;
+        }
 
         if (!this.nowPlaying.isDeleted && this.nowPlaying.message === nowPlaying.message) {
             this.nowPlaying.isDeleted = true;

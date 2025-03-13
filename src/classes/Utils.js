@@ -30,6 +30,7 @@ exports.AoiError = AoiError;
  *
  * @class Utils
  */
+// biome-ignore lint: static members
 class Utils {
     /**
      * Formats a duration in milliseconds into a human-readable string.
@@ -44,13 +45,14 @@ class Utils {
         const day = 24 * hour;
         if (ms < minute) {
             return `${(ms / 1000).toFixed()}s`;
-        } else if (ms < hour) {
-            return `${Math.floor(ms / minute)}m ${Math.floor((ms % minute) / 1000)}s`;
-        } else if (ms < day) {
-            return `${Math.floor(ms / hour)}h ${Math.floor((ms % hour) / minute)}m`;
-        } else {
-            return `${Math.floor(ms / day)}d ${Math.floor((ms % day) / hour)}h`;
         }
+        if (ms < hour) {
+            return `${Math.floor(ms / minute)}m ${Math.floor((ms % minute) / 1000)}s`;
+        }
+        if (ms < day) {
+            return `${Math.floor(ms / hour)}h ${Math.floor((ms % hour) / minute)}m`;
+        }
+        return `${Math.floor(ms / day)}d ${Math.floor((ms % day) / hour)}h`;
     }
 
     /**
@@ -79,8 +81,8 @@ class Utils {
      * @param {number} size - The size of each chunk.
      * @returns {Array[]} - An array of chunked text.
      */
-    static textChunk(text, maxLength = 1024) {
-        maxLength = Number(maxLength);
+    static textChunk(text, _maxLength = 1024) {
+        const maxLength = Number(_maxLength);
         if (!text || isNaN(maxLength)) return null;
         const chunks = [];
         let start = 0;
@@ -169,76 +171,68 @@ exports.Track = class Track {
     constructor(track, user, playlist) {
         if (!track || !track.info) throw new AoiError('Track not provided!', 'AOI_TRACK_INVALID');
 
-        (this.encoded = track.encoded),
-            (this.info = {
-                ...track.info,
-                artist: track.info.author,
-                thumbnail: track.info.artworkUrl,
-                url: track.info.uri,
-                duration: Utils.formatTime(track.info.length ?? 0),
-                durationMs: track.info.length ?? 0,
-                playlist: playlist ?? {},
-                userdata: track.userData ?? {},
-                plugininfo: track.pluginInfo ?? {},
-                requester: {
-                    ...user,
-                    avatar: typeof user?.displayAvatarURL === 'function' ? user?.displayAvatarURL() : user?.avatar,
-                    banner: typeof user?.bannerURL === 'function' ? user?.bannerURL() : user?.banner
-                }
-            });
+        this.encoded = track.encoded;
+        this.info = {
+            ...track.info,
+            artist: track.info.author,
+            thumbnail: track.info.artworkUrl,
+            url: track.info.uri,
+            duration: Utils.formatTime(track.info.length ?? 0),
+            durationMs: track.info.length ?? 0,
+            playlist: playlist ?? {},
+            userdata: track.userData ?? {},
+            plugininfo: track.pluginInfo ?? {},
+            requester: {
+                ...user,
+                avatar: typeof user?.displayAvatarURL === 'function' ? user?.displayAvatarURL() : user?.avatar,
+                banner: typeof user?.bannerURL === 'function' ? user?.bannerURL() : user?.banner
+            }
+        };
     }
 };
 
 /**
- * Lyrics class
+ * Search a lyrics of a given song.
  *
- * @class Lyrics
+ * @function
+ * @async
+ * @param {string} query - The song title.
+ * @returns {Object} - Return the lyrics and other information.
+ * @throws {AoiError} - Throws an error if the song is not provided.
  */
-exports.Lyrics = class Lyrics {
-    /**
-     * Search a lyrics of a given song.
-     *
-     * @static
-     * @async
-     * @param {string} query - The song title.
-     * @returns {Object} - Return the lyrics and other information.
-     * @throws {AoiError} - Throws an error if the song is not provided.
-     */
-    static async search(query) {
-        try {
-            if (!query && typeof query !== 'string')
-                throw new AoiError('Song title not provided!', 'AOI_TITLE_INVALID');
+exports.Lyrics = async (_query) => {
+    try {
+        if (!_query && typeof _query !== 'string') throw new AoiError('Song title not provided!', 'AOI_TITLE_INVALID');
 
-            query = query
-                ?.toLowerCase()
-                .replace(
-                    /((\[|\()(?!.*?(remix|edit|remake)).*?(\]|\))|\/+|-+| x |,|"|video oficial|official lyric video| ft.?|\|+|yhlqmdlg|x100pre|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF]|\u274C)/g,
-                    ''
-                )
-                .replace(/ {2,}/g, ' ')
-                .trim();
+        const query = _query
+            ?.toLowerCase()
+            .replace(
+                /((\[|\()(?!.*?(remix|edit|remake)).*?(\]|\))|\/+|-+| x |,|"|video oficial|official lyric video| ft.?|\|+|yhlqmdlg|x100pre|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF]|\u274C)/g,
+                ''
+            )
+            .replace(/ {2,}/g, ' ')
+            .trim();
 
-            const ytm = new YoutubeMusic();
-            await ytm.initialize();
-            const song = await ytm.searchSongs(query);
-            const data = song[0];
-            const lyrics_array = data?.videoId ? await ytm.getLyrics(data?.videoId) : [];
+        const ytm = new YoutubeMusic();
+        await ytm.initialize();
+        const song = await ytm.searchSongs(query);
+        const data = song[0];
+        const lyrics_array = data?.videoId ? await ytm.getLyrics(data?.videoId) : [];
 
-            return {
-                query,
-                title: data?.name,
-                artist: data?.artist?.name,
-                artistUrl: data?.artist?.artistId ? `https://youtube.com/channel/${data?.artist?.artistId}` : null,
-                thumbnail: data?.thumbnails?.[1]?.url,
-                id: data?.videoId,
-                duration: data?.duration ? Utils.formatTime((data?.duration * 1000).toFixed()) : null,
-                durationMs: data?.duration ? (data?.duration * 1000).toFixed() : null,
-                url: data?.videoId ? `https://youtube.com/watch?v=${data.videoId}` : null,
-                lyrics: lyrics_array?.length > 0 ? lyrics_array?.join('\n') : null
-            };
-        } catch (error) {
-            throw new AoiError(error.message, 'AOI_LYRICS_ERROR');
-        }
+        return {
+            query,
+            title: data?.name,
+            artist: data?.artist?.name,
+            artistUrl: data?.artist?.artistId ? `https://youtube.com/channel/${data?.artist?.artistId}` : null,
+            thumbnail: data?.thumbnails?.[1]?.url,
+            id: data?.videoId,
+            duration: data?.duration ? Utils.formatTime((data?.duration * 1000).toFixed()) : null,
+            durationMs: data?.duration ? (data?.duration * 1000).toFixed() : null,
+            url: data?.videoId ? `https://youtube.com/watch?v=${data.videoId}` : null,
+            lyrics: lyrics_array?.length > 0 ? lyrics_array?.join('\n') : null
+        };
+    } catch (error) {
+        throw new AoiError(error.message, 'AOI_LYRICS_ERROR');
     }
 };
 
@@ -248,11 +242,7 @@ exports.Lyrics = class Lyrics {
  * @class Queue
  * @extends Array
  */
-exports.Queue = class Queue extends Array {
-    constructor() {
-        super();
-    }
-};
+exports.Queue = class Queue extends Array {};
 
 /**
  * History class
@@ -260,8 +250,4 @@ exports.Queue = class Queue extends Array {
  * @class History
  * @extends Array
  */
-exports.History = class History extends Array {
-    constructor() {
-        super();
-    }
-};
+exports.History = class History extends Array {};

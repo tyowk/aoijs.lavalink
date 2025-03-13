@@ -16,8 +16,8 @@ module.exports = async (d) => {
     ] = data.inside.splits;
 
     const manager = d.client.shoukaku;
-    if (!manager) return d.aoiError.fnError(d, 'custom', {}, `Voice manager is not defined.`);
-    if (!query) return d.aoiError.fnError(d, 'custom', {}, `Please provide the title of the song you want to search.`);
+    if (!manager) return d.aoiError.fnError(d, 'custom', {}, 'Voice manager is not defined.');
+    if (!query) return d.aoiError.fnError(d, 'custom', {}, 'Please provide the title of the song you want to search.');
     type = type
         ?.toLowerCase()
         .replace('youtube', 'ytsearch')
@@ -37,16 +37,16 @@ module.exports = async (d) => {
 
     switch (res?.loadType) {
         case LoadType.ERROR: {
-            return d.aoiError.fnError(d, 'custom', {}, `There was an error while searching.`);
+            return d.aoiError.fnError(d, 'custom', {}, 'There was an error while searching.');
         }
 
         case LoadType.EMPTY: {
-            return d.aoiError.fnError(d, 'custom', {}, `There were no results found.`);
+            return d.aoiError.fnError(d, 'custom', {}, 'There were no results found.');
         }
 
         case LoadType.TRACK: {
             if (!res.data || typeof res.data !== 'object') {
-                return d.aoiError.fnError(d, 'custom', {}, `There were no results found.`);
+                return d.aoiError.fnError(d, 'custom', {}, 'There were no results found.');
             }
 
             const trackInfo = res.data.info ?? {};
@@ -81,7 +81,7 @@ module.exports = async (d) => {
 
         case LoadType.PLAYLIST: {
             if (!Array.isArray(res.data.tracks) || res.data.tracks.length === 0) {
-                return d.aoiError.fnError(d, 'custom', {}, `There were no results found.`);
+                return d.aoiError.fnError(d, 'custom', {}, 'There were no results found.');
             }
 
             const playlist = {
@@ -134,7 +134,7 @@ module.exports = async (d) => {
 
         case LoadType.SEARCH: {
             if (!Array.isArray(res.data) || res.data.length === 0) {
-                return d.aoiError.fnError(d, 'custom', {}, `There were no results found.`);
+                return d.aoiError.fnError(d, 'custom', {}, 'There were no results found.');
             }
 
             const result = res.data.map((track, index) => {

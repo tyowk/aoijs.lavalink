@@ -7,10 +7,10 @@ module.exports = (d) => {
     index = Number(index);
 
     const manager = d.client.shoukaku;
-    if (!manager) return d.aoiError.fnError(d, 'custom', {}, `Voice manager is not defined.`);
+    if (!manager) return d.aoiError.fnError(d, 'custom', {}, 'Voice manager is not defined.');
 
     const player = d.client.queue.get(d.guild.id);
-    if (!player) return d.aoiError.fnError(d, 'custom', {}, `There is no player for this guild.`);
+    if (!player) return d.aoiError.fnError(d, 'custom', {}, 'There is no player for this guild.');
 
     const getResult = (res) => {
         if (!res) return null;

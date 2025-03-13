@@ -10,15 +10,14 @@ module.exports = async (d) => {
     index = Number(index);
 
     const manager = d.client.shoukaku;
-    if (!manager) return d.aoiError.fnError(d, 'custom', {}, `Voice manager is not defined.`);
+    if (!manager) return d.aoiError.fnError(d, 'custom', {}, 'Voice manager is not defined.');
 
     const playlist = d.client.playlist || manager.playlist;
-    if (!playlist) return d.aoiError.fnError(d, 'custom', {}, `Playlist manager is not defined.`);
+    if (!playlist) return d.aoiError.fnError(d, 'custom', {}, 'Playlist manager is not defined.');
 
     const getResult = (res) => {
         if (!res?.info) return null;
-        const trackInfo = track.info;
-        const requester = trackInfo.requester;
+        const trackInfo = res.info;
         const pluginInfo = trackInfo.plugininfo;
         const playlistz = trackInfo.playlist;
 
@@ -51,7 +50,7 @@ module.exports = async (d) => {
         return trackData[type];
     };
 
-    if (isNaN(index)) return d.aoiError.fnError(d, 'custom', {}, `Please provide a valid number.`);
+    if (isNaN(index)) return d.aoiError.fnError(d, 'custom', {}, 'Please provide a valid number.');
     const res = await playlist.getTrack(name, id, index).catch((err) => {
         return d.aoiError.fnError(d, 'custom', {}, `${err.message}`);
     });

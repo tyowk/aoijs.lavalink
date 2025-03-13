@@ -16,6 +16,7 @@
         "aoi.music"
     ],
     "scripts": {
+        "lint": "biome lint src --fix",
         "format": "biome format src --write",
         "dev": "node test/index.js"
     },
@@ -23,13 +24,14 @@
     "license": "MIT",
     "dependencies": {
         "@aoijs/aoi.structures": "^1.0.0",
+        "axios": "^1.8.3",
         "chalk": "^4.1.2",
         "shoukaku": "^4.1.1",
-        "ytmusic-api": "^5.2.2"
+        "ytmusic-api": "^5.3.0"
     },
     "devDependencies": {
         "@biomejs/biome": "^1.9.4",
-        "aoi.js": "^6.9.0"
+        "aoi.js": "github:aoijs/aoi.js"
     },
     "repository": {
         "type": "git",
