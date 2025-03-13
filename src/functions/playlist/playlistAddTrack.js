@@ -48,7 +48,7 @@ module.exports = async (d) => {
                 break;
             }
 
-            const track = new Track(res.data, d.author, d.client);
+            const track = new Track(res.data, d.author);
             await playlist.addTrack(name, id, track).catch((err) => {
                 return d.aoiError.fnError(d, 'custom', {}, `${err.message}`);
             });
@@ -91,7 +91,7 @@ module.exports = async (d) => {
                 break;
             }
 
-            const track = new Track(res.data[0], d.author, d.client);
+            const track = new Track(res.data[0], d.author);
             await playlist.addTrack(name, id, track).catch((err) => {
                 return d.aoiError.fnError(d, 'custom', {}, `${err.message}`);
             });
