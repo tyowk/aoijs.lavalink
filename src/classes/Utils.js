@@ -17,7 +17,7 @@ class AoiError extends Error {
         this.message = message;
         this.package = 'aoijs.lavalink';
         this.version = `v${version ?? '0.0.0'}`;
-        this.support = 'discord.gg/hyQYXcVnmZ';
+        this.support = 'https://aoi.js.org/invite';
         this.time = new Date().toISOString();
         Error.captureStackTrace(this, this.constructor);
     }

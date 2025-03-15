@@ -15,7 +15,7 @@ module.exports = async (d) => {
 
     try {
         const result = await playlist.exists(name, id);
-        data.result = result === true;
+        data.result = !!result;
     } catch (err) {
         return d.aoiError.fnError(d, 'custom', {}, `${err.message}`);
     }

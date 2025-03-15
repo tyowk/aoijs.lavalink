@@ -10,12 +10,11 @@ module.exports = async (d) => {
     const manager = d.client.shoukaku;
     if (!manager) return d.aoiError.fnError(d, 'custom', {}, 'Voice manager is not defined.');
 
-    if (!voiceId) voiceId = d.member?.voice?.channel?.id;
+    if (!voiceId || voiceId === '') voiceId = d.member?.voice?.channel?.id;
     if (!voiceId) return d.aoiError.fnError(d, 'custom', {}, 'You are not connected to any voice channels.');
 
-    const voiceChannel =
-        d.client?.channels?.cache?.get(voiceId) || (await d.client?.channels?.fetch(voiceId).catch(d.noop));
-    const guild = d.client?.guilds?.cache?.get(guildId) || (await d.client?.guilds?.fetch(guildId).catch(d.noop));
+    const voiceChannel = await d.util.getChannel(d, voiceId, true);
+    const guild = await d.util.getGuild(d, guildId);
 
     if (!voiceChannel) return d.aoiError.fnError(d, 'custom', {}, 'Invalid voice channel id provided.');
     if (!(guild instanceof Guild)) return d.aoiError.fnError(d, 'custom', {}, 'Invalid guild id provided.');

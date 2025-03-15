@@ -10,9 +10,9 @@ module.exports = async (d) => {
     const manager = d.client.shoukaku;
 
     if (!manager) return d.aoiError.fnError(d, 'custom', {}, 'Voice manager is not defined.');
+    if (!type) type = d.client.music.searchEngine;
     if (!query)
         return d.aoiError.fnError(d, 'custom', {}, 'Please provide the title or link of the song you want to play.');
-    if (!type) type = d.client.music.searchEngine;
 
     type = type
         ?.toLowerCase()
@@ -26,7 +26,7 @@ module.exports = async (d) => {
     if (!d.member?.voice?.channel)
         return d.aoiError.fnError(d, 'custom', {}, 'You are not connected to any voice channels.');
 
-    const player = d.client.queue.get(d.guild.id);
+    const player = d.client.queue.get(d.guild?.id);
     if (!player) return d.aoiError.fnError(d, 'custom', {}, 'There is no player for this guild.');
     if (player.channelId !== d.channel?.id && d.channel?.id) player.channelId = d.channel.id;
 

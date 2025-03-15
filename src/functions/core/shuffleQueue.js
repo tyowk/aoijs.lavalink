@@ -6,7 +6,7 @@ module.exports = (d) => {
     const manager = d.client.shoukaku;
     if (!manager) return d.aoiError.fnError(d, 'custom', {}, 'Voice manager is not defined.');
 
-    const player = d.client.queue.get(d.guild.id);
+    const player = d.client.queue.get(d.guild?.id);
     if (!player) return d.aoiError.fnError(d, 'custom', {}, 'There is no player for this guild.');
     if (!player.queue.length) return d.aoiError.fnError(d, 'custom', {}, 'There is no songs in the queue.');
 

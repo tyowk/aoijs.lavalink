@@ -24,14 +24,12 @@
     "license": "MIT",
     "dependencies": {
         "@aoijs/aoi.structures": "^1.0.0",
-        "axios": "^1.8.3",
         "chalk": "^4.1.2",
         "shoukaku": "^4.1.1",
         "ytmusic-api": "^5.3.0"
     },
     "devDependencies": {
-        "@biomejs/biome": "^1.9.4",
-        "aoi.js": "github:aoijs/aoi.js"
+        "@biomejs/biome": "^1.9.4"
     },
     "repository": {
         "type": "git",
@@ -51,10 +49,5 @@
         "url": "https://github.com/tyowk/aoijs.lavalink/issues"
     },
     "homepage": "https://aoilavalink.vercel.app",
-    "files": [
-        "src",
-        "README.md",
-        "LICENSE",
-        "package.json"
-    ]
+    "files": ["src", "README.md", "LICENSE", "package.json"]
 }
