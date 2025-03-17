@@ -40,7 +40,7 @@ const voice = new Manager(client, {
 });
 ```
 
-<details>
+<details open>
 <summary><h2>Options</h2><p>Options who have a leading question mark (?) are optional and not required, however if you want to use them, make sure to remove it!</p></summary>
     
 ```js
