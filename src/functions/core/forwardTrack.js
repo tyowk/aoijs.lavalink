@@ -3,7 +3,6 @@
  */
 module.exports = (d) => {
     const data = d.util.aoiFunc(d);
-    if (data.err) return d.error(data.err);
     let [time = '10s'] = data.inside.splits;
 
     const manager = d.client.shoukaku;
