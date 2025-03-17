@@ -31,7 +31,7 @@ module.exports = async (d) => {
     if (player) player.destroy();
 
     player = await d.client.queue.create(
-        d.guild || guild,
+        guild ?? d.guild,
         voiceChannel,
         d.channel ?? null,
         d.client.shoukaku.getIdealNode(),
