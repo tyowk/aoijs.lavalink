@@ -110,17 +110,19 @@ exports.Playlist = class Playlist {
      * @returns {Promise<boolean>} - Whether the playlist was updated successfully.
      * @throws {AoiError} - Throws an error if the method failed to execute.
      */
-    async update(name, id, newData) {
+    async update(name, id, _newData) {
         if (!name) throw new AoiError('Playlist name is required', 'PLAYLIST_NAME_INVALID');
         if (!id) throw new AoiError('User  ID is required', 'PLAYLIST_ID_INVALID');
-        if (!newData || !Array.isArray(newData))
+        if (!_newData || !Array.isArray(_newData))
             throw new AoiError('New data is required to update the playlist', 'PLAYLIST_UPDATE_DATA_INVALID');
         if (!(await this.exists(name, id))) throw new AoiError(`Playlist "${name}" not found`, 'PLAYLIST_NOT_FOUND');
 
+        let newData = _newData;
         try {
-            newData = newData?.filter(Boolean);
-            newData = JSON.stringify(newData);
-        } catch {}
+            newData = JSON.stringify(_newData?.filter(Boolean));
+        } catch {
+            undefined;
+        }
 
         await this.database.set(this.options.table, name, id ? `playlist_${id}` : id, newData);
         return true;
@@ -257,7 +259,9 @@ exports.Playlist = class Playlist {
                   .map((row) => {
                       try {
                           row.value = JSON.parse(row.value);
-                      } catch {}
+                      } catch {
+                          undefined;
+                      }
 
                       return {
                           name: row.key?.replaceAll(id ? `_playlist_${id}` : id, ''),

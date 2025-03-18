@@ -6,6 +6,7 @@ const { Lyrics } = require('../../classes/Utils.js');
 module.exports = async (d) => {
     const data = d.util.aoiFunc(d);
     if (data.err) return d.error(data.err);
+
     let [title, property = 'lyrics'] = data.inside.splits;
     title = title
         ?.addBrackets()
@@ -17,9 +18,8 @@ module.exports = async (d) => {
         .replace(/ {2,}/g, ' ')
         .trim();
 
-    if (!title) return d.aoiError.fnError(d, 'custom', {}, `Please provide a song title you want to retrieve.`);
-
-    const result = d.data.lyrics && d.data.lyrics?.query === title ? d.data.lyrics : await Lyrics.search(title);
+    if (!title) return d.aoiError.fnError(d, 'custom', {}, 'Please provide a song title you want to retrieve.');
+    const result = d.data.lyrics && d.data.lyrics?.query === title ? d.data.lyrics : await Lyrics(title);
 
     d.data.lyrics = result;
     data.result = result?.[property];

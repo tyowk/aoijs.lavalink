@@ -13,8 +13,14 @@ A package for integrating Lavalink with Aoi.js to enable music streaming in Disc
 
 ## Installation
 
+**stable version:**
 ```bash
 npm install aoijs.lavalink
+```
+
+**development version:**
+```bash
+npm install tyowk/aoijs.lavalink
 ```
 
 ---
@@ -27,7 +33,7 @@ The setup is used to initialize the bot client and configure the Lavalink music 
 const { AoiClient } = require('aoi.js');
 const { Manager } = require('aoijs.lavalink');
 
-const client = new AoiClient({ ... });
+const client = new AoiClient({ /* ••• */ });
 
 const voice = new Manager(client, {
     nodes: [{
@@ -40,18 +46,21 @@ const voice = new Manager(client, {
 });
 ```
 
-<details>
-<summary><h2>Options</h2><p>Options who have a leading question mark (?) are optional and not required, however if you want to use them, make sure to remove it!</p></summary>
-    
+<details open>
+<summary>
+    <h2>Options</h2>
+    <p>Options who have a leading question mark (?) are optional and not required, however if you want to use them, make sure to remove it!</p>
+</summary>
+
 ```js
-new Manager(<Client>, {
+new Manager(<AoiClient>, {
     nodes: [{
         name: string,
         host: string,
         port: number,
         auth: string,
         secure: boolean
-    },{ /* add more node */ }],
+    },{ /* ••• */ }],
 
     maxQueueSize?: number,
     maxPlaylistSize?: number,
@@ -61,34 +70,55 @@ new Manager(<Client>, {
     defaultVolume?: number,
     maxVolume?: number,
     noLimitVolume?: boolean,
-    deleteNowPlaying?: boolean
-
+    deleteNowPlaying?: boolean,
+    playlist?: {
+        enable: boolean,
+        table: string,
+        database?: unknown,
+        maxSongs?: number,
+        maxPlaylist?: number
+    }
 });
 
-````
+```
 
 ### Default Options
-| Option           | Type                         | Default | Description                                                                     |
-|------------------|------------------------------|---------|---------------------------------------------------------------------------------|
-| nodes            | **[`Array`](#node-options)** |         | (see below)                                                                     |
-| maxQueueSize     | `number`                     | 100     | Maximum number of tracks that can be queued for playback.                       |
-| maxPlaylistSize  | `number`                     | 100     | Maximum number of tracks that can be in a playlist.                             |
-| maxHistorySize   | `number`                     | 100     | Maximum number of tracks that can be saved in the history.                      |
-| searchEngine     | `string`                     | youtube | Default search engine. You can set this to 'soundcloud' or 'spotify' or others. |
-| debug            | `boolean`                    | false   | Whether to enable debug logs for the music client.                              |
-| defaultVolume    | `number`                     | 100     | Set default volume when the player created.                                     |
-| maxVolume        | `number`                     | 200     | Maximum volume player can handle.                                               |
-| noLimitVolume    | `boolean`                    | false   | Whether to enable no limit volume (not recommended).                            |
-| deleteNowPlaying | `number`                     | 200     | Whether to enable auto-delete now playing message when track ends.              |
+
+| Option            | Type                                | Default | Description                                                                     |
+| ----------------- | ----------------------------------- | ------- | ------------------------------------------------------------------------------- |
+| nodes             | **[`Node[]`](#node-options)**       | -       | (see below)                                                                     |
+| playlist?         | **[`Playlist`](#playlist-options)** | -       | (see below)                                                                     |
+| maxQueueSize?     | `number`                            | 100     | Maximum number of tracks that can be queued for playback.                       |
+| maxPlaylistSize?  | `number`                            | 100     | Maximum number of tracks that can be in a playlist.                             |
+| maxHistorySize?   | `number`                            | 100     | Maximum number of tracks that can be saved in the history.                      |
+| searchEngine?     | `string`                            | youtube | Default search engine. You can set this to 'soundcloud' or 'spotify' or others. |
+| debug?            | `boolean`                           | false   | Whether to enable debug logs for the music client.                              |
+| defaultVolume?    | `number`                            | 100     | Set default volume when the player created.                                     |
+| maxVolume?        | `number`                            | 200     | Maximum volume player can handle.                                               |
+| noLimitVolume?    | `boolean`                           | false   | Whether to enable no limit volume (not recommended).                            |
+| deleteNowPlaying? | `number`                            | 200     | Whether to enable auto-delete now playing message when track ends.              |
+
 
 ### Node Options
+
 | Option | Type      | Description                                                              |
-|--------|-----------|--------------------------------------------------------------------------|
-| Name   | `string`  | custom name for the Lavalink node (can be any string)                    |
+| ------ | --------- | ------------------------------------------------------------------------ |
+| name?  | `string`  | custom name for the Lavalink node (can be any string)                    |
 | host   | `string`  | URL to your Lavalink node. Replace with your actual Lavalink server URL. |
 | port   | `number`  | Your lavalink server port.                                               |
 | auth   | `boolean` | Authentication password for the Lavalink node.                           |
 | secure | `boolean` | Set to true if your Lavalink server uses SSL/TLS (HTTPS).                |
+
+
+### Playlist Options
+
+| Option       | Type      | Description                                                           |
+| ------------ | --------- | --------------------------------------------------------------------- |
+| enable       | `boolean` | Whether to enable playlist feature or not.                            |
+| table        | `string`  | Name of the database table to store playlists.                        |
+| maxSongs?    | `number`  | Maximum number of songs allowed in a single playlist. (default is 20) |
+| maxPlaylist? | `number`  | Maximum number of playlist allowed per user. (default is 10)          |
+| database?    | `unknown` | Reference to the database instance                                    |
 
 **see [here](https://guide.shoukaku.shipgirl.moe/guides/2-options/) for more client options.**
 
@@ -109,11 +139,11 @@ This feature allows users to create and manage playlists, enhancing their music 
 You can listen to various events such as when a track starts, when the player is paused, etc., and respond to them with custom code.
 
 ```js
-const voice = new Manager(<Client>, { ... });
+const voice = new Manager(<AoiClient>, { /* ••• */ });
 
-voice.<eventName>({          // The event type, e.g., when a track starts playing ('trackStart').
-    channel: '$channelId',   // The ID of the channel where the event will trigger (can be dynamic or static).
-    code: `$songInfo[title]` // The action to take when the event is triggered. Here it will return the title of the song.
+voice.<eventName>({
+    channel: '$channelId',
+    code: `$songInfo[title]`
 });
 ````
 
@@ -149,7 +179,7 @@ This section will list all events.</p></summary>
 ## Handlers
 
 ```js
-const voice = new Manager(client, { ... });
+const voice = new Manager(client, { /* ••• */ });
 
 // Load custom music event handlers from a directory. 'false' disables debug logs.
 voice.loadVoiceEvents('./voice/', false);
@@ -158,11 +188,11 @@ voice.loadVoiceEvents('./voice/', false);
 **Example Event File** (in `/voice/trackStart.js`):
 
 ```js
-module.exports = {
-    channel: '$channelId', // The ID of the channel where the event will trigger (can be dynamic or static).
-    type: 'trackStart', // The event type, e.g., when a track starts playing ('trackStart').
-    code: `$songInfo[title]` // The action to take when the event is triggered. Here it will return the title of the song.
-};
+module.exports = [{
+    channel: '$channelId',
+    type: 'trackStart',
+    code: `$songInfo[title]`
+}];
 ```
 
 ---

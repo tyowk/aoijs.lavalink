@@ -6,12 +6,12 @@ module.exports = async (d) => {
     const [channelId] = data.inside.splits;
 
     const manager = d.client.shoukaku;
-    if (!manager) return d.aoiError.fnError(d, 'custom', {}, `Voice manager is not defined.`);
+    if (!manager) return d.aoiError.fnError(d, 'custom', {}, 'Voice manager is not defined.');
 
     const player = d.client.queue.get(d.guild.id);
     if (!player) return d.client.returnCode(d, data);
 
-    const channel = d.client.channels.cache.get(d, channelId);
+    const channel = d.util.getChannel(d, channelId, true);
     if (channel && channel?.id === channelId) {
         player.channelId = channel.id;
     } else {

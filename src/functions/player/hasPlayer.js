@@ -6,9 +6,9 @@ module.exports = (d) => {
     const [guildId] = data.inside.splits;
 
     const manager = d.client.shoukaku;
-    if (!manager) return d.aoiError.fnError(d, 'custom', {}, `Voice manager is not defined.`);
+    if (!manager) return d.aoiError.fnError(d, 'custom', {}, 'Voice manager is not defined.');
 
-    data.result = d.client.queue.get(guildId ? guildId : d.guild?.id) ? true : false;
+    data.result = Boolean(d.client.queue.get(guildId ? guildId : d.guild?.id));
 
     return {
         code: d.util.setCode(data)

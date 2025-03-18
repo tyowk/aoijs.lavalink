@@ -9,10 +9,10 @@ module.exports = async (d) => {
     let [query, type] = data.inside.splits;
 
     const manager = d.client.shoukaku;
-    if (!manager) return d.aoiError.fnError(d, 'custom', {}, `Voice manager is not defined.`);
+    if (!manager) return d.aoiError.fnError(d, 'custom', {}, 'Voice manager is not defined.');
 
     if (!query)
-        return d.aoiError.fnError(d, 'custom', {}, `Please provide the title or link of the song you want to play.`);
+        return d.aoiError.fnError(d, 'custom', {}, 'Please provide the title or link of the song you want to play.');
     if (!type) type = d.client.music.searchEngine;
     type = type
         ?.toLowerCase()

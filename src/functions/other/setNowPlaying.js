@@ -5,22 +5,18 @@ module.exports = async (d) => {
     const data = d.util.aoiFunc(d);
     if (data.err) return d.error(data.err);
     const [messageId] = data.inside.splits;
-    if (!messageId) return d.aoiError.fnError(d, 'custom', {}, `Please give a valid message id.`);
+    if (!messageId) return d.aoiError.fnError(d, 'custom', {}, 'Please give a valid message id.');
 
     const manager = d.client.shoukaku;
-    if (!manager) return d.aoiError.fnError(d, 'custom', {}, `Voice manager is not defined.`);
+    if (!manager) return d.aoiError.fnError(d, 'custom', {}, 'Voice manager is not defined.');
 
-    const player = d.client.queue.get(d.guild.id);
-    if (!player) return d.aoiError.fnError(d, 'custom', {}, `There is no player for this guild.`);
+    const player = d.client.queue.get(d.guild?.id);
+    if (!player) return d.aoiError.fnError(d, 'custom', {}, 'There is no player for this guild.');
 
     player.nowPlaying = {
         message: messageId,
         channel: player.channelId || d.channel.id,
-        isDeleted: false,
-        last: {
-            message: player.nowPlaying?.message,
-            channel: player.nowPlaying?.channel
-        }
+        isDeleted: false
     };
 
     return {

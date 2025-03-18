@@ -1,10 +1,10 @@
 ## Description
 
-> Please include a summary of the changes and also include relevant motivation and context. List any dependencies that are required for this change.
+Please include a summary of the changes and also include relevant motivation and context. List any dependencies that are required for this change.
 
 ## Issues
 
-> Fixes # (issue)
+Fixes # (issue)
 
 ## Type of change
 

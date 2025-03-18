@@ -1,6 +1,6 @@
 {
     "name": "aoijs.lavalink",
-    "version": "4.9.0",
+    "version": "4.10.0",
     "description": "A package for integrating Lavalink with Aoi.js to enable music streaming in Discord bots.",
     "type": "commonjs",
     "main": "src/index.js",
@@ -16,6 +16,7 @@
         "aoi.music"
     ],
     "scripts": {
+        "lint": "biome lint src --fix",
         "format": "biome format src --write",
         "dev": "node test/index.js"
     },
@@ -25,11 +26,10 @@
         "@aoijs/aoi.structures": "^1.0.0",
         "chalk": "^4.1.2",
         "shoukaku": "^4.1.1",
-        "ytmusic-api": "^5.2.2"
+        "ytmusic-api": "^5.3.0"
     },
     "devDependencies": {
-        "@biomejs/biome": "^1.9.4",
-        "aoi.js": "^6.9.0"
+        "@biomejs/biome": "^1.9.4"
     },
     "repository": {
         "type": "git",
@@ -49,10 +49,5 @@
         "url": "https://github.com/tyowk/aoijs.lavalink/issues"
     },
     "homepage": "https://aoilavalink.vercel.app",
-    "files": [
-        "src",
-        "README.md",
-        "LICENSE",
-        "package.json"
-    ]
+    "files": ["src", "README.md", "LICENSE", "package.json"]
 }

@@ -7,13 +7,13 @@ module.exports = (d) => {
         data.inside.splits;
 
     const manager = d.client.shoukaku;
-    if (!manager) return d.aoiError.fnError(d, 'custom', {}, `Voice manager is not defined.`);
+    if (!manager) return d.aoiError.fnError(d, 'custom', {}, 'Voice manager is not defined.');
 
-    const player = d.client.queue.get(d.guild.id);
-    if (!player) return d.aoiError.fnError(d, 'custom', {}, `There is no player for this guild.`);
-    if (!player.history.length) return d.aoiError.fnError(d, 'custom', {}, `There is no songs in the history.`);
+    const player = d.client.queue.get(d.guild?.id);
+    if (!player) return d.aoiError.fnError(d, 'custom', {}, 'There is no player for this guild.');
+    if (!player.history.length) return d.aoiError.fnError(d, 'custom', {}, 'There is no songs in the history.');
     if (isNaN(Number(page)) || isNaN(Number(limit)))
-        return d.aoiError.fnError(d, 'custom', {}, `Please provide a valid number.`);
+        return d.aoiError.fnError(d, 'custom', {}, 'Please provide a valid number.');
 
     const history = player.history.map((track, index) => {
         const trackInfo = track.info;
@@ -63,7 +63,7 @@ module.exports = (d) => {
     let chunks = d.client.music.utils.chunk(history, Number(limit));
     if (chunks.length === 0) chunks = [[]];
     if (Number(page) < 1 || Number(page) > chunks.length)
-        return d.aoiError.fnError(d, 'custom', {}, `Invalid page number.`);
+        return d.aoiError.fnError(d, 'custom', {}, 'Invalid page number.');
     const pages = chunks.map((chunk) => chunk.join(separator));
 
     data.result = pages[page - 1];

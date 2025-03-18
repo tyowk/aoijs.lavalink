@@ -7,7 +7,7 @@ module.exports = (d) => {
     const [property = 'name'] = data.inside.splits;
 
     const manager = d.client.shoukaku;
-    if (!manager) return d.aoiError.fnError(d, 'custom', {}, `Voice manager is not defined.`);
+    if (!manager) return d.aoiError.fnError(d, 'custom', {}, 'Voice manager is not defined.');
 
     const info = d.data.nodeEvent;
     if (!info && typeof info === 'object') return d.client.returnCode(d, data);

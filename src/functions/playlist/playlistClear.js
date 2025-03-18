@@ -8,10 +8,10 @@ module.exports = async (d) => {
     name = name?.addBrackets();
 
     const manager = d.client.shoukaku;
-    if (!manager) return d.aoiError.fnError(d, 'custom', {}, `Voice manager is not defined.`);
+    if (!manager) return d.aoiError.fnError(d, 'custom', {}, 'Voice manager is not defined.');
 
     const playlist = d.client.playlist || manager.playlist;
-    if (!playlist) return d.aoiError.fnError(d, 'custom', {}, `Playlist manager is not defined.`);
+    if (!playlist) return d.aoiError.fnError(d, 'custom', {}, 'Playlist manager is not defined.');
 
     try {
         await playlist.clear(name, id);

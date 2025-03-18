@@ -31,7 +31,6 @@ exports.Queue = class Queue extends Group {
     async create(guild, voice, channel, givenNode, deaf = true, mute = false) {
         let dispatcher = this.get(guild.id);
         if (!voice) throw new AoiError('No voice channel was provided', 'AOI_VOICE_INVALID');
-        if (!channel) throw new AoiError('No text channel was provided', 'AOI_TEXT_INVALID');
         if (!guild) throw new AoiError('No guild was provided', 'AOI_GUILD_INVALID');
 
         if (!dispatcher) {
@@ -47,7 +46,7 @@ exports.Queue = class Queue extends Group {
             dispatcher = new Dispatcher({
                 client: this.client,
                 guildId: guild.id,
-                channelId: channel.id,
+                channelId: channel?.id,
                 player,
                 node
             });
@@ -59,9 +58,9 @@ exports.Queue = class Queue extends Group {
                 dispatcher
             });
             return dispatcher;
-        } else {
-            return dispatcher;
         }
+
+        return dispatcher;
     }
 
     /**
@@ -72,10 +71,10 @@ exports.Queue = class Queue extends Group {
      * @param {string} [type] - The type of search engine to use (e.g., 'youtube', 'spotify').
      * @returns {Object|null} - The search result or null if an error occurs.
      */
-    async search(query, type) {
+    async search(query, _type) {
         const node = this.client.shoukaku.getIdealNode();
         const regex = /^https?:\/\//;
-        type = type
+        const type = _type
             ?.toLowerCase()
             .replace('youtube', 'ytsearch')
             .replace('spotify', 'spsearch')
@@ -86,9 +85,9 @@ exports.Queue = class Queue extends Group {
 
         try {
             return await node.rest.resolve(
-                regex.test(query) ? query : `${(type ? type : this.options.searchEngine) || 'ytsearch'}:${query}`
+                regex.test(query) ? query : `${type ? type : this.client.music.searchEngine || 'ytsearch'}:${query}`
             );
-        } catch (err) {
+        } catch {
             return null;
         }
     }
