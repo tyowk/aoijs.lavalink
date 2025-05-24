@@ -49,5 +49,10 @@
         "url": "https://github.com/tyowk/aoijs.lavalink/issues"
     },
     "homepage": "https://aoilavalink.vercel.app",
-    "files": ["src", "README.md", "LICENSE", "package.json"]
+    "files": [
+        "src",
+        "README.md",
+        "LICENSE",
+        "package.json"
+    ]
 }
