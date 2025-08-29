@@ -1,4 +1,4 @@
-<img src="https://cdn.noujs.my.id/guild/lavalink.png" width="150">
+<img src="https://aoilavalink.vercel.app/_astro/lavalink.YmUXcbpu_2mpBi3.webp" width="150">
 
 # aoijs.lavalink
 
@@ -210,7 +210,7 @@ module.exports = [{
 <br>
 <br>
 <br>
-<img src="https://cdn.noujs.my.id/guild/lavabird.png" width="100">
+<img src="https://aoilavalink.vercel.app/_astro/lavabird.DpnUPx13.png" width="100">
 <br>
 
 **[Documentation](https://aoilavalink.vercel.app)** <br>
