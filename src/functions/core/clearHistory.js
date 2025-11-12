@@ -1,20 +1,20 @@
-const { History } = require('../../classes/Utils.js');
+const { History } = require("../../classes/Utils.js");
 
 /**
  * @param {import("..").Data} d
  */
 module.exports = (d) => {
-    const data = d.util.aoiFunc(d);
-    const manager = d.client.shoukaku;
-    if (!manager) return d.aoiError.fnError(d, 'custom', {}, 'Voice manager is not defined.');
+	const data = d.util.aoiFunc(d);
+	const manager = d.client.shoukaku;
+	if (!manager) return d.aoiError.fnError(d, "custom", {}, "Voice manager is not defined.");
 
-    const player = d.client.queue.get(d.guild.id);
-    if (!player) return d.aoiError.fnError(d, 'custom', {}, 'There is no player for this guild.');
+	const player = d.client.queue.get(d.guild.id);
+	if (!player) return d.aoiError.fnError(d, "custom", {}, "There is no player for this guild.");
 
-    player.previous = null;
-    player.history = new History();
+	player.previous = null;
+	player.history = new History();
 
-    return {
-        code: d.util.setCode(data)
-    };
+	return {
+		code: d.util.setCode(data)
+	};
 };

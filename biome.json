@@ -1,31 +1,31 @@
 {
-    "$schema": "https://biomejs.dev/schemas/1.5.3/schema.json",
-    "formatter": {
-        "enabled": true,
-        "formatWithErrors": false,
-        "indentStyle": "space",
-        "indentWidth": 4,
-        "lineWidth": 120,
-        "lineEnding": "lf"
-    },
-    "javascript": {
-        "formatter": {
-            "enabled": true,
-            "quoteStyle": "single",
-            "quoteProperties": "asNeeded",
-            "trailingCommas": "none",
-            "semicolons": "always"
-        }
-    },
-    "linter": {
-        "rules": {
-            "suspicious": {
-                "noGlobalIsNan": "off"
-            }
-        }
-    },
-    "files": {
-        "ignoreUnknown": true,
-        "maxSize": 1000000
-    }
+	"$schema": "https://biomejs.dev/schemas/2.3.5/schema.json",
+	"formatter": {
+		"enabled": true,
+		"formatWithErrors": false,
+		"indentStyle": "tab",
+		"indentWidth": 4,
+		"lineWidth": 120,
+		"lineEnding": "lf"
+	},
+	"javascript": {
+		"formatter": {
+			"enabled": true,
+			"quoteStyle": "double",
+			"quoteProperties": "asNeeded",
+			"trailingCommas": "none",
+			"semicolons": "always"
+		}
+	},
+	"linter": {
+		"rules": {
+			"suspicious": {
+				"noGlobalIsNan": "off"
+			}
+		}
+	},
+	"files": {
+		"ignoreUnknown": true,
+		"maxSize": 1000000
+	}
 }
