@@ -49,7 +49,7 @@ module.exports = (d) => {
 			break;
 		}
 		case "status": {
-			result = node?.initialized === true && node?.destroyed === false ? "online" : "offline";
+			result = node?.state === 1 ? "online" : "offline";
 			break;
 		}
 		case "uptime": {
