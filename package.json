@@ -17,19 +17,18 @@
     ],
     "scripts": {
         "lint": "npx biome lint src --fix",
-        "format": "npx biome format src --write",
-        "dev": "node test/index.js"
+        "format": "npx biome format src --write"
     },
     "author": "Tyowk <tyowk@outlook.com>",
     "license": "MIT",
     "dependencies": {
         "@aoijs/aoi.structures": "^1.0.0",
         "chalk": "^4.1.2",
-        "shoukaku": "^4.2.0",
-        "ytmusic-api": "^5.3.0"
+        "shoukaku": "^4.3.0",
+        "ytmusic-api": "^5.3.1"
     },
     "devDependencies": {
-        "@biomejs/biome": "^2.3.5"
+        "@biomejs/biome": "^2.4.10"
     },
     "repository": {
         "type": "git",

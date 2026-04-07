@@ -21,8 +21,7 @@ const { join } = require("node:path");
 exports.Manager = class Manager extends Shoukaku {
 	constructor(client, options = {}) {
 		if (!client) throw new AoiError("Client instance is not defined.", "AOI_CLIENT_INVALID");
-		if (!options.nodes || !options.nodes.length)
-			throw new AoiError("No nodes provided to connect on.", "AOI_NODES_INVALID");
+		if (!options?.nodes?.length) throw new AoiError("No nodes provided to connect on.", "AOI_NODES_INVALID");
 
 		options.nodes = Array.isArray(options.nodes) ? options.nodes : [options.nodes];
 		options.nodes = options.nodes.map(({ host, port, url, ...nodes }) => ({
@@ -200,7 +199,7 @@ exports.Manager = class Manager extends Shoukaku {
 	 * @returns {Manager} - The current instance of the Manager.
 	 */
 	voiceEvent(name, evt = {}) {
-		if (!evt || !evt.code) return;
+		if (!evt?.code) return;
 		const cmd = this.cmd[name];
 		if (!cmd) return;
 		cmd.set(cmd.size, evt);

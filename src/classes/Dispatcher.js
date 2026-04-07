@@ -304,7 +304,7 @@ exports.Dispatcher = class Dispatcher {
 	async Autoplay(song, type) {
 		if (!song) return;
 		const resolve = await this.search(song?.info?.author || song?.info?.title, type || this.autoplayType);
-		if (!resolve || !resolve?.data || !Array.isArray(resolve.data)) return;
+		if (!resolve?.data || !Array.isArray(resolve.data)) return;
 		const metadata = resolve.data;
 		let choosed = null;
 		let maxAttempts = metadata.length > 15 ? 15 : metadata.length;
@@ -395,7 +395,7 @@ exports.Dispatcher = class Dispatcher {
 
 			const msg =
 				channel.messages.cache.get(nowPlaying.message) || (await channel.messages.fetch(nowPlaying.message));
-			if (!msg || !msg.deletable || msg.author.id !== this.client.user.id) return;
+			if (!msg?.deletable || msg?.author?.id !== this.client.user.id) return;
 
 			await msg.delete();
 		} catch {
